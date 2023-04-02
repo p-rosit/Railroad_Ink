@@ -1,0 +1,14 @@
+C: C C E E     # C with one cacti
+C: R R E E     # C with one cacti
+C: C C E E     # C with oasis
+C: R R E E     # C with oasis
+
+I: C E C E     # I with one cacti
+I: R E R E     # I with one cacti
+I: C E C E     # I with oasis
+I: R E R E     # I with oasis
+
+Ep: E E E E     # Two cacti on empty tile
+
+A: E E E E     # Arid phase
+

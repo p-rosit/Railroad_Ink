@@ -1,0 +1,15 @@
+EXTRA:
+Mp;              # Meteor position
+
+Cr: E E E E E
+
+Mm: E P E E E
+Mm: E E P E E
+Mm: E E E P E
+Mm: E E E E P
+Mm: E P P P P
+
+Mc: E P E E E
+Mc: E P P E E
+Mc: E P P P E
+
