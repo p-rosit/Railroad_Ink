@@ -1,5 +1,5 @@
-#ifndef EXPANSION_HELP_H
-#define EXPANSION_HELP_H
+#ifndef EXPANSION_UTILS_H
+#define EXPANSION_UTILS_H
 #include <stdint.h>
 
 enum expansion_id {

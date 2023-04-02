@@ -2,7 +2,7 @@
 #define LONGEST_H
 #include <stdlib.h>
 #include <stdint.h>
-#include "expansion_help.h"
+#include "../expansion_utils.h"
 
 typedef struct longest_expansion {
     expansion_list_t* exp_list;

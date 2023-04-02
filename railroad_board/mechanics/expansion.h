@@ -3,15 +3,15 @@
 #include <stdlib.h>
 #include <stdint.h>
 
-#include "expansion_help.h"
-#include "standard.h"
-#include "network.h"
-#include "longest.h"
-#include "center.h"
-#include "error.h"
-#include "special.h"
-#include "mountain.h"
-#include "building.h"
+#include "expansion_utils.h"
+#include "expansions/standard.h"
+#include "expansions/network.h"
+#include "expansions/longest.h"
+#include "expansions/center.h"
+#include "expansions/error.h"
+#include "expansions/special.h"
+#include "expansions/mountain.h"
+#include "expansions/building.h"
 
 expansion_list_t* init_expansion_list(size_t, uint8_t*);
 init_func_t       get_init_function(uint8_t);
