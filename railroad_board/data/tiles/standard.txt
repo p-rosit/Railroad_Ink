@@ -1,0 +1,23 @@
+C: C C E E
+C: R R E E
+C: C R E E S
+
+i: C E E E S
+i: R E E E S
+
+I: C E C E
+I: R E R E
+I: C E R E S
+
+T: C C C E
+T: R R R E
+T: C R C E S
+T: R C R E S
+T: C C R E S
+T: C R R E S
+
+CC: C C C C
+CC: R R R R
+
+O: C R C R
+
