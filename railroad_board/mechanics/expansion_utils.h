@@ -1,6 +1,7 @@
 #ifndef EXPANSION_UTILS_H
 #define EXPANSION_UTILS_H
 #include <stdint.h>
+#include "../utils.h"
 
 enum expansion_id {
     STANDARD,
@@ -16,7 +17,6 @@ enum expansion_id {
 typedef struct expansion expansion_t;
 typedef struct expansion_list expansion_list_t;
 
-typedef void (*free_func_t)(void*);
 typedef expansion_t* (*init_func_t)(expansion_list_t*);
 
 struct expansion {
