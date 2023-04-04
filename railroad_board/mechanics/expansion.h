@@ -47,6 +47,9 @@ init_func_t get_init_function(uint8_t id) {
         case LONGEST:
             func = init_longest_expansion;
             break;
+        default:
+            printf("InvalidIdError: tried to initialize expansion with id %d.", id);
+            exit(1);
     }
 
     return func;

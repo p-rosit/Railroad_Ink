@@ -1,6 +1,6 @@
 TILES:             # Valid tiles
-E                        # Empty tile
-Ep                       # Empty tiles that can't be placed on
+E                        # Tile that can be placed on
+Ep                       # Tile that cannot be placed on
 C                        # C connection
 i                        # i connection
 I                        # I connection
@@ -8,35 +8,10 @@ T                        # T junction: |-
 dT                       # disconnected T: |x-
 CC                       # CC connection
 O                        # Overpass
-
-Cr                       # Crater
-Mm                       # Meteor movement
-Mc                       # Meteor crash distance
-
-A                        # Arid dice
-Cy                       # Canyon tile
-
 S                        # Special tile
-G                        # Goal tile
-MC                       # Mountain that can have C placed in it
-MI                       # Mountain that can have I placed in it
-M                        # Mountain tile
-
-PLACEABLE:         # Tile types that can be placed on
-E                        # Empty tile
-Cr                       # Crater
-MC                       # C Mountain
-MI                       # I Mountain
 
 EXTRA:             # Extra types
 E                        # Empty
-C                        # Center
-V                        # Village
-F                        # Factory
-U                        # University
-VC                       # Center with village
-FC                       # Center with factory
-UC                       # Center with university
 
 NETWORKS_IN_TILES: # What direction are connected to each other
 E:  ()
@@ -44,23 +19,11 @@ Ep: ()
 C:  (North, East)
 i:  (North)
 I:  (North, South)
-T:  (North,  East, South)
+T:  (North,  East , South)
 dT: (North, South), (East)
 CC: (North,  East), (South, West)
 O:  (North, South), (East, West)
-
-Cr: ()
-Mm: ()
-Mc: ()
-
-A:  ()
-Cy: ()
-
 S:  (North, East, South, West)
-G:  (North)
-MC: ()
-MI: ()
-M:  ()
 
 CONNECTIONS:       # Valid connections
 E                        # Empty connection

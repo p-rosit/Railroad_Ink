@@ -5,7 +5,8 @@
 
 typedef struct list_element list_element_t;
 typedef struct linked_list  linked_list_t;
-typedef void (*free_func_t)(void*);
+typedef struct array        array_t;
+typedef void   (*free_func_t)(void*);
 
 struct linked_list {
     size_t size;
@@ -18,9 +19,16 @@ struct list_element {
     list_element_t* next;
 };
 
+struct array {
+    size_t size;
+    void** data;
+}
+
 linked_list_t* init_list();
 void           append(linked_list_t*, void*);
 void           free_list(linked_list_t*, free_func_t);
+array_t*       init_array();
+void           free_array(array_t*);
 
 linked_list_t* init_list() {
     linked_list_t* list = malloc(sizeof(linked_list_t));
@@ -59,6 +67,16 @@ void free_list(linked_list_t* list, free_func_t func) {
     }
 
     free(list);
+}
+
+array_t* init_array() {
+    array_t* arr = malloc(sizeof(array_t));
+    array_t->size = 0;
+    array_t->data = NULL;
+}
+
+void free_array(array_t* arr) {
+    free(arr);
 }
 
 #endif
