@@ -3,7 +3,7 @@
 #include <stdint.h>
 #include "../utils.h"
 
-enum expansion_id {
+typedef enum expansion_id {
     STANDARD,
     NETWORK,
     LONGEST,
@@ -12,7 +12,7 @@ enum expansion_id {
     SPECIAL,
     MOUNTAIN,
     BUILDING
-};
+} expansion_id_t;
 
 typedef struct expansion expansion_t;
 typedef struct expansion_list expansion_list_t;
