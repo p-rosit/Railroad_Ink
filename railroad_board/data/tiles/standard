@@ -1,23 +1,28 @@
-C: C C E E
-C: R R E E
-C: C R E E S
+EXTRA: # Extra types
+E;     # Empty (name *cannot* be changed)
 
-i: C E E E S
-i: R E E E S
+# id: type (north_connection, east_connection, south_connection, west_connection)
+# an S is added to the last part of the tile if it contains a station
+C: E (C C E E)
+C: E (R R E E)
+C: E (C R E E) S
 
-I: C E C E
-I: R E R E
-I: C E R E S
+i: E (C E E E) S
+i: E (R E E E) S
 
-T: C C C E
-T: R R R E
-T: C R C E S
-T: R C R E S
-T: C C R E S
-T: C R R E S
+I: E (C E C E)
+I: E (R E R E)
+I: E (C E R E) S
 
-CC: C C C C
-CC: R R R R
+T: E (C C C E)
+T: E (R R R E)
+T: E (C R C E) S
+T: E (R C R E) S
+T: E (C C R E) S
+T: E (C R R E) S
 
-O: C R C R
+CC: E (C C C C)
+CC: E (R R R R)
+
+O: E (C R C R)
 

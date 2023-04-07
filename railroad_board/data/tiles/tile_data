@@ -1,44 +1,29 @@
-TILES:             # Valid tiles
-E                        # Tile that can be placed on
-Ep                       # Tile that cannot be placed on
-C                        # C connection
-i                        # i connection
-I                        # I connection
-T                        # T junction: |-
-dT                       # disconnected T: |x-
-CC                       # CC connection
-O                        # Overpass
-S                        # Special tile
-
-EXTRA:             # Extra types
-E                        # Empty
-
-NETWORKS_IN_TILES: # What direction are connected to each other
-E:  ()
-Ep: ()
-C:  (North, East)
-i:  (North)
-I:  (North, South)
-T:  (North,  East , South)
-dT: (North, South), (East)
-CC: (North,  East), (South, West)
-O:  (North, South), (East, West)
-S:  (North, East, South, West)
+TILES:             # Valid tiles and their default inner networks
+E:  ()                               # Tile that can be placed on
+Ep: ()                               # Tile that cannot be placed on
+C:  (North, East)                    # C connection
+i:  (North)                          # i connection
+I:  (North, South)                   # I connection
+T:  (North,  East , South)           # T junction: |-
+dT: (North, South), (East)           # disconnected T: |x-
+CC: (North,  East), (South, West)    # CC connection
+O:  (North, South), (East, West)     # Overpass
+S:  (North, East, South, West)       # Special tile
 
 CONNECTIONS:       # Valid connections
-E                        # Empty connection
-C                        # Car connection
-R                        # Rail connection
-M                        # Mountain face
-P                        # Placeholder connection for mountains
+E                                    # Empty connection
+C                                    # Car connection
+R                                    # Rail connection
+M                                    # Mountain face
+P                                    # Placeholder connection for mountains
 
-Ri                       # River connection
-La                       # Lake connection
-Lv                       # Lava connection
+Ri                                   # River connection
+La                                   # Lake connection
+Lv                                   # Lava connection
 
 TRAVERSABLE:       # Traversable connections
-C                        # Car road
-R                        # Railroad
+C                                    # Car road
+R                                    # Railroad
 
 NON_CONNECTIONS:   # Connections that don't connect networks
 E

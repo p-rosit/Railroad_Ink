@@ -1,0 +1,29 @@
+standard        # standard tiles
+special         # special tile logic
+#network         # point counting for network
+#longest         # point counting for longest road or railroad
+#center          # point counting for center
+#error           # point counting for errors
+#building        # building logic
+#mountain        # mountain tile logic
+
+#river
+#lake
+
+#lava
+#meteor
+
+#forest
+#trail
+
+#desert
+#canyon
+
+#airline
+#weather
+
+#investigation
+#tentacle
+#portal
+#ritual
+

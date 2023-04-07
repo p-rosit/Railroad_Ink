@@ -2,56 +2,35 @@
 
 #include "data_utils.h"
 #include "load_data.h"
-#include "../debug_utils.h"
+#include "../utils/hash_map.h"
+#include "../utils/debug_utils.h"
 
 int main() {
+    uint8_t amount;
+    char** expansion_name;
     game_data_t* data;
     tile_data_t* tiles;
+    hash_map_t* map;
 
     data = malloc(sizeof(game_data_t));
-    tiles = malloc(sizeof(tile_data_t));
 
+    load_info(&amount, &expansion_name, &map);
+
+    tiles = load_tiles(amount, expansion_name);
     data->tiles = tiles;
 
-    FILE* fptr;
-
-    if ((fptr = fopen("./tiles/standard", "r")) == NULL) {
-        printf("Could not open file.\n");
-        exit(1);
+    printf("Expansions (%d): (%s", amount, expansion_name[0]);
+    for (int i = 1; i < amount; ++i) {
+        printf(", %s", expansion_name[i]);
     }
+    printf(")\n");
+    print_hash_map(map);
 
-    dictionary_t* dict = init_dictionary(100);
-
-    print_dictionary(dict);
-
-    add_num(dict, "C", 0);
-
-    print_dictionary(dict);
-
-    add_num(dict, "CC", 1);
-
-    print_dictionary(dict);
-
-    add_num(dict, "T", 2);
-
-    print_dictionary(dict);
-
-    add_num(dict, "O", 3);
-
-    print_dictionary(dict);
-
-    add_num(dict, "i", 4);
-
-    print_dictionary(dict);
-
-    add_num(dict, "I", 5);
-
-    print_dictionary(dict);
-
-    fclose(fptr);
     free(data);
     free(tiles);
-    free_dictionary(dict);
+    free_hash_map(map);
+    for (int i = 0; i < amount; ++i) free(expansion_name[i]);
+    free(expansion_name);
 
     return 0;
 }

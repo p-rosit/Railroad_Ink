@@ -1,12 +1,6 @@
 #ifndef BOARD_H
 #define BOARD_H
 
-#ifdef DEBUG
-# define DEBUG_PRINT(fmt, ...) printf(fmt, __VA_ARGS__);
-#else
-# define DEBUG_PRINT(fmt, ...) /* Do nothing */
-#endif
-
 #include <stdint.h>
 #include "mechanics/expansion.h"
 
