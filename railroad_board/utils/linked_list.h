@@ -3,6 +3,7 @@
 
 #include <stdlib.h>
 
+#include <stdio.h>
 typedef struct linked_list  linked_list_t;
 typedef struct list_element list_element_t;
 
@@ -37,25 +38,33 @@ void append(linked_list_t* list, void* data) {
     elm->next = NULL;
 
     list->size += 1;
-    list->last->next = elm;
+    if (list->frst == NULL) list->frst = elm;
+    if (list->last != NULL) list->last->next = elm;
     list->last = elm;
 }
 
 void free_list(linked_list_t* list, free_func_t func) {
     if (list == NULL) return;
+    if (list->frst == NULL) {
+        free(list);
+        return;
+    }
     list_element_t *elm, *nxt;
     elm = list->frst;
+
 
     if (func != NULL) {
         for (int i = 0; i < list->size; ++i) {
             nxt = elm->next;
             func(elm->data);
             free(elm);
+            elm = nxt;
         }
     } else {
         for (int i = 0; i < list->size; ++i) {
             nxt = elm->next;
             free(elm);
+            elm = nxt;
         }
     }
 

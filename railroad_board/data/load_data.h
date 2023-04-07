@@ -20,7 +20,7 @@ void           load_info();
 tile_data_t*   load_tiles(uint8_t, char**);
 linked_list_t* load_expansion_tiles(char*);
 
-const char* tile_path = "./tiles";
+char* tile_path = "./tiles";
 
 void load_info(uint8_t* amount, char*** expansion_name, hash_map_t** map) {
     FILE* fptr;
@@ -58,8 +58,101 @@ void load_info(uint8_t* amount, char*** expansion_name, hash_map_t** map) {
 }
 
 void load_tile_info(hash_map_t** tile_ids, hash_map_t** connections) {
+    FILE* fptr;
+    int state, id_amount, connection_amount, i;
+    char line[500], *file_name, name[5];
+    bool* internal_networks;
+    linked_list_t* tile_networks;
+
     *tile_ids = init_hash_map(1, MAX_ID_HASH);
     *connections = init_hash_map(1, MAX_CONNECTION_HASH);
+
+    file_name = concat_string(tile_path, "tile_data");
+    if ((fptr = fopen(file_name, "r")) == NULL) {
+        printf("Fatal error: could not find tile data.\n");
+        exit(1);
+    }
+    free(file_name);
+
+    state = -1;
+    tile_networks = init_list();
+    while (fgets(line, sizeof line, fptr) != NULL) {
+        switch (state) {
+            case -1:
+                if (string_starts_with("TILES", line)) {
+                    state++;
+                    id_amount = 0;
+                    continue;
+                }
+                break;
+            case 0:
+                if (string_starts_with("CONNECTIONS", line)) {
+                    state++;
+                    connection_amount = 0;
+                    continue;
+                }
+
+                i = 0;
+                while (line[i] != ':' && i < 5) {
+                    if (line[i] == '\0') {
+                        i = 6;
+                        break;
+                    }
+                    name[i] = line[i];
+                    i++;
+                }
+                if (i < 4) {
+                    name[i] = '\0';
+                    printf("(%s)\n", name);
+                    add_num(*tile_ids, name, id_amount++);
+
+                    append(tile_networks, parse_internal_networks(line));
+                }
+
+                break;
+            case 1:
+                if (string_starts_with("TRAVERSABLE", line)) {
+                    state++;
+                    continue;
+                }
+
+                i = 0;
+                while (line[i] != ' ' && i < 5) {
+                    if (line[i] == '\0') {
+                        i = 6;
+                        break;
+                    }
+                    name[i] = line[i];
+                    i++;
+                }
+                if (i < 4) {
+                    name[i] = '\0';
+                    printf("-(%s)\n", name);
+                    add_num(*connections, name, connection_amount++);
+                }
+                break;
+            case 2:
+                if (string_starts_with("NON_CONNECTIONS", line)) {
+                    state++;
+                    continue;
+                }
+                break;
+            case 3:
+                if (string_starts_with("VALID_CONNECTIONS", line)) {
+                    state++;
+                    continue;
+                }
+            case 4:
+                break;
+        }
+    }
+
+    DEBUG_PRINT("Found %d different tile ids.\n", id_amount);
+    DEBUG_PRINT("Found %d different connection types.\n", connection_amount);
+
+    fclose(fptr);
+    free_list(tile_networks, free);
+    return;
 }
 
 tile_data_t* load_tiles(uint8_t amount, char** expansion_name) {
@@ -101,6 +194,8 @@ linked_list_t* load_expansion_tiles(char* expansion_name) {
     while (fgets(line, sizeof line, fptr) != NULL) {
         printf("%s", line);
     }
+
+    fclose(fptr);
 
     DEBUG_PRINT("Loaded %d tiles from %s.\n", 0, expansion_name);
     return list;

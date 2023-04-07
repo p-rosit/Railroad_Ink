@@ -2,6 +2,7 @@
 #define UTILS_H
 
 #include <stdlib.h>
+#include <string.h>
 
 typedef struct array array_t;
 typedef int    bool;
@@ -16,6 +17,9 @@ char*          copy_string(char*);
 array_t*       init_array();
 void           free_array(array_t*);
 
+const bool false = 0;
+const bool true = 1;
+
 char* copy_string(char* string) {
     size_t size;
     char c, *traverse, *copy;
@@ -29,6 +33,10 @@ char* copy_string(char* string) {
     }
 
     return copy;
+}
+
+bool streq(char* a, char* b) {
+    return strcmp(a, b) == 0;
 }
 
 array_t* init_array() {
