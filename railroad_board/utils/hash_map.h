@@ -52,10 +52,12 @@ size_t hash_string(char* key) {
 void add_num(hash_map_t* map, char* key, uint8_t num) {
     size_t ind;
 
+    #ifdef DEBUG
     if (num == 255) {
-        printf("Tried to insert value 255 into hash table. Invalid value.\n");
+        printf("Fatal error: Tried to insert value 255 into hash table. Invalid value.\n");
         exit(1);
     }
+    #endif
 
     ind = hash_string(key);
     if (map->vals[ind % map->size] != 255) {
@@ -92,7 +94,7 @@ void increase_hash_map_size(hash_map_t* map, size_t ind, uint8_t num) {
     size_t new_size;
     uint8_t* new_vals;
 
-    DEBUG_PRINT("hash_map: increasing at size %lu ", map->size);
+    DEBUG_PRINT(0, "hash_map: increasing at size %lu ", map->size);
 
     new_size = map->size;
     new_vals = map->vals;
@@ -120,10 +122,10 @@ void increase_hash_map_size(hash_map_t* map, size_t ind, uint8_t num) {
         free(new_vals);
     }
 
-    DEBUG_PRINT("to %lu, entering (%d)\n", new_size, num);
+    DEBUG_PRINT(0, "to %lu, entering (%d)\n", new_size, num);
 
     if (map->max_size <= new_size) {
-        printf("hash_map tried to grow past %lu.\n", map->max_size);
+        printf("Fatal error: hash_map tried to grow past %lu.\n", map->max_size);
         exit(1);
     }
 

@@ -1,9 +1,9 @@
-C: Lv Lv E E
+C: E (Lv Lv E E)
 
-I: Lv E Lv E
+I: E (Lv E Lv E)
 
-T: Lv Lv Lv E
+T: E (Lv Lv Lv E)
 
-dT: C Lv C E
-dT: R Lv R E
+dT: E (C Lv C E)
+dT: E (R Lv R E)
 

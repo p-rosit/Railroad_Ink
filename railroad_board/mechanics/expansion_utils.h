@@ -4,14 +4,14 @@
 #include "../utils/utils.h"
 
 typedef enum expansion_id {
-    STANDARD,
-    NETWORK,
-    LONGEST,
-    CENTER,
-    ERROR,
-    SPECIAL,
-    MOUNTAIN,
-    BUILDING
+    standard,
+    network,
+    longest,
+    center,
+    error,
+    special,
+    mountain,
+    building
 } expansion_id_t;
 
 typedef struct expansion expansion_t;

@@ -1,9 +1,9 @@
-C: C C E E
-C: R R E E
+C: E (C C E E)
+C: E (R R E E)
 
-I: C E C E
-I: R E R E
+I: E (C E C E)
+I: E (R E R E)
 
-T: C C C E
-T: R R R E
+T: E (C C C E)
+T: E (R R R E)
 

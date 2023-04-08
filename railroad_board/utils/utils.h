@@ -8,6 +8,14 @@ typedef struct array array_t;
 typedef int    bool;
 typedef void   (*free_func_t)(void*);
 
+enum debug_levels {
+    DEBUG = 0,
+    INFO  = 1,
+    WARN  = 2,
+    ERROR = 3,
+    FATAL = 4
+};
+
 struct array {
     size_t size;
     void** data;
