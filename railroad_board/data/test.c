@@ -1,4 +1,4 @@
-#define DEBUG
+#define DEBUG_LEVEL (0)
 
 #include "data_utils.h"
 #include "load_data.h"
@@ -20,7 +20,7 @@ int main() {
 
     tile_info = load_tile_info(&tile_ids, &connections);
 
-//    tiles = load_tiles(amount, expansion_name);
+    tiles = load_tiles(amount, expansion_name, tile_ids, connections);
 //    data->tiles = tiles;
 
     printf("Expansions (%d): (%s", amount, expansion_name[0]);
@@ -29,42 +29,6 @@ int main() {
     }
     printf(")\n\n");
     //print_hash_map(map);
-
-    printf("Internal networks:\n");
-    for (int i = 0; i < 10; i++) {
-        for (int j = 0; j < 4; j++) {
-            printf("%d", tile_info->networks[8 * i + j]);
-        }
-        printf(" ");
-        for (int j = 0; j < 4; j++) {
-            printf("%d", tile_info->networks[8 * i + 4 + j]);
-        }
-        printf("\n");
-    }
-    printf("\n");
-
-    printf("Traversable:\n");
-    for (int i = 0; i < 8; i++) {
-        printf("%d", tile_info->traversable[i]);
-    }
-    printf("\n\n");
-
-    printf("Non connections:\n");
-    for (int i = 0; i < 8; i++) {
-        printf("%d", tile_info->non_connection[i]);
-    }
-    printf("\n\n");
-
-    printf("Valid connections: \n");
-    for (int i = 0; i < 8; i++) {
-        printf("%d: ", i);
-        for (int j = 0; j < 8; j++) {
-            printf("%d", tile_info->valid_connection[j]);
-        }
-        printf("\n");
-    }
-    printf("\n");
-
     free(data);
 //    free(tiles);
     free(tile_info);

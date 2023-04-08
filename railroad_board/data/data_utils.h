@@ -17,6 +17,8 @@ struct game_data {
 };
 
 struct tile_info {
+    uint8_t id_amount;
+    uint8_t connection_amount;
     bool* networks;
     bool* traversable;
     bool* non_connection;

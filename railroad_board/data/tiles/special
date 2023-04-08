@@ -1,12 +1,12 @@
-E: E E E E
+E: E (E E E E)
 
-S: C C C C
-S: C C C R S
-S: C C R R S
-S: C R C R S
-S: C R R R S
-S: R R R R
+S: E (C C C C)
+S: E (C C C R) S
+S: E (C C R R) S
+S: E (C R C R) S
+S: E (C R R R) S
+S: E (R R R R)
 
-G: C E E E
-G: R E E E
+G: E (C E E E)
+G: E (R E E E)
 
