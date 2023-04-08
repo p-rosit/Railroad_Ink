@@ -7,12 +7,20 @@
 #include <stdio.h>
 
 typedef struct game_data     game_data_t;
+typedef struct tile_info     tile_info_t;
 typedef struct tile_data     tile_data_t;
 typedef struct single_tile   single_tile_t;
 typedef struct tile_textures tile_textures_t;
 
 struct game_data {
     tile_data_t* tiles;
+};
+
+struct tile_info {
+    bool* networks;
+    bool* traversable;
+    bool* non_connection;
+    bool* valid_connection;
 };
 
 struct single_tile {

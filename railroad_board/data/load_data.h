@@ -57,12 +57,14 @@ void load_info(uint8_t* amount, char*** expansion_name, hash_map_t** map) {
     fclose(fptr);
 }
 
-void load_tile_info(hash_map_t** tile_ids, hash_map_t** connections) {
+tile_info_t* load_tile_info(hash_map_t** tile_ids, hash_map_t** connections) {
     FILE* fptr;
-    int state, id_amount, connection_amount, i;
+    tile_info_t* tile_info;
+    void* data;
+    int state, id_amount, connection_amount, num, ind, i, j;
     char line[500], *file_name, name[5];
-    bool* internal_networks;
     linked_list_t* tile_networks;
+    list_element_t* elm;
 
     *tile_ids = init_hash_map(1, MAX_ID_HASH);
     *connections = init_hash_map(1, MAX_CONNECTION_HASH);
@@ -95,15 +97,15 @@ void load_tile_info(hash_map_t** tile_ids, hash_map_t** connections) {
                 i = 0;
                 while (line[i] != ':' && i < 5) {
                     if (line[i] == '\0') {
-                        i = 6;
+                        i = 5;
                         break;
                     }
                     name[i] = line[i];
                     i++;
                 }
-                if (i < 4) {
-                    name[i] = '\0';
-                    printf("(%s)\n", name);
+                name[i * (i < 4)] = '\0';
+                if (name[0] != '\0') {
+                    printf("tile id: (%s)\n", name);
                     add_num(*tile_ids, name, id_amount++);
 
                     append(tile_networks, parse_internal_networks(line));
@@ -113,21 +115,50 @@ void load_tile_info(hash_map_t** tile_ids, hash_map_t** connections) {
             case 1:
                 if (string_starts_with("TRAVERSABLE", line)) {
                     state++;
+                    
+                    data = malloc(sizeof(tile_info_t) + (8 * tile_networks->size + 2 * connection_amount + connection_amount * connection_amount) * sizeof(bool));
+
+                    tile_info = data;
+                    data += sizeof(tile_info_t);
+                    for (i = 0; i < 8 * tile_networks->size + 2 * connection_amount + connection_amount * connection_amount; i++) {
+                        ((bool*) data)[i] = false;
+                    }
+
+                    tile_info->networks = data;
+                    data += 8 * tile_networks->size * sizeof(bool);
+                    
+                    tile_info->traversable = data;
+                    data += connection_amount * sizeof(bool);
+
+                    tile_info->non_connection = data;
+                    data += connection_amount * sizeof(bool);
+
+                    tile_info->valid_connection = data;
+
+                    elm = tile_networks->frst;
+                    for (i = 0; i < tile_networks->size; i++) {
+                        for (j = 0; j < 8; j++) {
+                            tile_info->networks[8 * i + j] = ((bool*) elm->data)[j];
+                        }
+                        elm = elm->next;
+                    }
+
+                    free_list(tile_networks, free); 
                     continue;
                 }
 
                 i = 0;
-                while (line[i] != ' ' && i < 5) {
+                while (line[i] != ' ' && line[i] != '\n' && line[i] != '#' && i < 5) {
                     if (line[i] == '\0') {
-                        i = 6;
+                        i = 5;
                         break;
                     }
                     name[i] = line[i];
                     i++;
                 }
-                if (i < 4) {
-                    name[i] = '\0';
-                    printf("-(%s)\n", name);
+                name[i * (i < 4)] = '\0';
+                if (name[0] != '\0') {
+                    printf("connection: (%s)\n", name);
                     add_num(*connections, name, connection_amount++);
                 }
                 break;
@@ -136,13 +167,82 @@ void load_tile_info(hash_map_t** tile_ids, hash_map_t** connections) {
                     state++;
                     continue;
                 }
+
+                i = 0;
+                while (line[i] != ' ' && line[i] != '\n' && line[i] != '#' && i < 5) {
+                    if (line[i] == '\0') {
+                        i = 5;
+                        break;
+                    }
+                    name[i] = line[i];
+                    i++;
+                }
+                name[i * i < 4] = '\0';
+                if (name[0] != '\0') {
+                    printf("traversable: (%s)\n", name);
+                    tile_info->traversable[get_num(*connections, name)] = true;
+                }
                 break;
             case 3:
                 if (string_starts_with("VALID_CONNECTIONS", line)) {
                     state++;
                     continue;
                 }
+
+                i = 0;
+                while (line[i] != ' ' && line[i] != '\n' && line[i] != '#' && i < 5) {
+                    if (line[i] == '\0') {
+                        i = 5;
+                        break;
+                    }
+                    name[i] = line[i];
+                    i++;
+                }
+                name[i * (i < 4)] = '\0';
+                if (name[0] != '\0') {
+                    printf("non_connection: (%s)\n", name);
+                    tile_info->non_connection[get_num(*connections, name)] = true;
+                }
+                
+                break;
             case 4:
+                if (line[0] != '(') continue;
+
+                i = 0; j = 1;
+                while (line[j] != ' ' && line[j] != ',' && line[i] != '#' && i < 5) {
+                    if (line[j] == '\0') {
+                        i = 5;
+                        break;
+                    }
+                    name[i++] = line[j++];
+                }
+                name[i * (i < 4)] = '\0';
+                if (name[0] != '\0') {
+                    printf("(%s", name);
+                    num = get_num(*connections, name);
+                    printf("%d): ", num);
+                }
+
+                while (line[j] != ')') {
+                    while (line[j] == ' ' || line[j] == ',') j++;
+
+                    i = 0;
+                    while (line[j] != ' ' && line[j] != ')' && i < 5) {
+                        if (line[j] == '\0') {
+                            i = 5;
+                            break;
+                        }
+                        name[i++] = line[j++];
+                    }
+                    name[i * (i < 4)] = '\0';
+                    if (name[0] != '\0') {
+                        printf(", (%s,%d)", name, get_num(*connections, name));
+                        ind = num * connection_amount + get_num(*connections, name);
+                        tile_info->valid_connection[ind] = true;
+                        //    tile_info->valid_connection[num * connection_amount + get_num(*connections, name)] = true;
+                    }
+                }
+                printf("\n");
                 break;
         }
     }
@@ -151,8 +251,7 @@ void load_tile_info(hash_map_t** tile_ids, hash_map_t** connections) {
     DEBUG_PRINT("Found %d different connection types.\n", connection_amount);
 
     fclose(fptr);
-    free_list(tile_networks, free);
-    return;
+    return tile_info;
 }
 
 tile_data_t* load_tiles(uint8_t amount, char** expansion_name) {

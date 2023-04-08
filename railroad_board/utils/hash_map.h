@@ -66,6 +66,10 @@ void add_num(hash_map_t* map, char* key, uint8_t num) {
     map->vals[ind % map->size] = num;
 }
 
+uint8_t get_num(hash_map_t* map, char* key) {
+    return map->vals[hash_string(key) % map->size];
+}
+
 void add_key(hash_map_t* map, size_t ind) {
     size_t* new_inds = realloc(map->inds, (map->key_amount + 1) * sizeof(size_t));
 
