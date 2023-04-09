@@ -28,7 +28,7 @@ struct tile_info {
 struct single_tile {
     uint8_t id;
     uint8_t type;
-    uint8_t connections;
+    uint8_t connections[4];
     bool station;
 };
 
@@ -47,7 +47,6 @@ char*        concat_string(char*, char*);
 bool         string_starts_with(char*, char*);
 bool*        parse_internal_networks(char*); 
 int          parse_single_network(char*, int, bool*);
-tile_data_t* assemble_tile_data(uint8_t, linked_list_t**);
  
 char* concat_string(char* a, char* b) {
     size_t len;
@@ -123,6 +122,7 @@ int parse_single_network(char* line, int ind, bool* network) {
             network[j - 1] = true;
         } else {
             printf("Unreachable error: %s is an invalid direction.", word);
+            exit(1);
         }
 
         if (line[ind] == ')') break;
@@ -132,10 +132,6 @@ int parse_single_network(char* line, int ind, bool* network) {
     }
 
     return ind;
-}
-
-tile_data_t* assemble_tile_data(uint8_t amount, linked_list_t** expansion_tiles) {
-    return NULL;
 }
 
 #endif
