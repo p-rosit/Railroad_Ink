@@ -17,6 +17,7 @@ struct hash_map {
 hash_map_t*    init_hash_map(size_t, size_t);
 size_t         hash_string(char*);
 void           add_num(hash_map_t*, char*, uint8_t);
+uint8_t        get_num(hash_map_t*, char*);
 void           add_key(hash_map_t*, size_t);
 void           increase_hash_map_size(hash_map_t*, size_t, uint8_t);
 void           free_hash_map(hash_map_t*);
@@ -52,7 +53,8 @@ size_t hash_string(char* key) {
 void add_num(hash_map_t* map, char* key, uint8_t num) {
     size_t ind;
 
-    #ifdef DEBUG
+    DEBUG_PRINT(DEBUG, "(%s) = (%d)\n", key, num);
+    #ifdef DEBUG_LEVEL
     if (num == 255) {
         printf("Fatal error: Tried to insert value 255 into hash table. Invalid value.\n");
         exit(1);

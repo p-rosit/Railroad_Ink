@@ -12,7 +12,7 @@
 
 void print_hash_map(hash_map_t*);
 
-#ifdef DEBUG
+#ifdef DEBUG_LEVEL
 
 void print_hash_map(hash_map_t* map) {
     printf("map (size: %lu, max_size: %lu): ", map->size, map->max_size);

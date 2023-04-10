@@ -25,7 +25,7 @@ tile_info_t* load_tile_info(hash_map_t** tile_ids, hash_map_t** connections) {
     *tile_ids = init_hash_map(23, MAX_ID_HASH);
     *connections = init_hash_map(18, MAX_CONNECTION_HASH);
 
-    file_name = concat_string(tile_path, "tile_data");
+    file_name = concat_string(tile_path, "tile_info");
     if ((fptr = fopen(file_name, "r")) == NULL) {
         printf("Fatal error: could not find tile data.\n");
         exit(1);
@@ -202,7 +202,7 @@ tile_info_t* allocate_tile_info(linked_list_t* tile_networks, uint8_t id_amount,
 
 size_t parse_name(size_t j, char* line, char* name) {
     int i = 0;
-    while (line[j] != ' ' && line[j] != ')' && line[j] != '\n' && line[j] != '\0' && line[j] != '#' && line[j] != ',' && i < 5) {
+    while (line[j] != ' ' && line[j] != ')' && line[j] != ':' && line[j] != '\n' && line[j] != '\0' && line[j] != '#' && line[j] != ',' && i < 5) {
         if (line[j] == '\0') {
             i = 5;
             break;

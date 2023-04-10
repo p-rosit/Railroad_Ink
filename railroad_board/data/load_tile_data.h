@@ -20,7 +20,7 @@ tile_data_t* load_tiles(uint8_t amount, char** expansion_name, hash_map_t* tile_
     int i;
     tile_data_t* tiles;
     linked_list_t** list;
-    
+
     list = calloc(amount, sizeof(linked_list_t*));
     *types = init_hash_map(1, 1000);
     
@@ -82,7 +82,7 @@ single_tile_t* parse_single_tile(char* line, hash_map_t* tile_ids, hash_map_t* c
     int i, j, k;
     char name[5];
     single_tile_t* tile;
-    tile = malloc(sizeof(single_tile_t) + 4 * sizeof(uint8_t));
+    tile = malloc(sizeof(single_tile_t));
 
     i = 0; j = 0;
     while (line[j] != ':' && j < 5) {
@@ -104,15 +104,30 @@ single_tile_t* parse_single_tile(char* line, hash_map_t* tile_ids, hash_map_t* c
 
     while (line[j++] != '(');
     for (k = 0; k < 4; k++) {
+        while (line[j] == ' ') j++;
         i = 0;
-        while (line[j] != ' ' && j < 5) {
+        while (line[j] != ' ' && line[j] != ')' && i < 5) {
             name[i++] = line[j++];
         }
         name[i * (i < 5)] = '\0';
-        tile->connection[k] = get_num(connections, name);
+        
+        tile->connections[k] = get_num(connections, name);
+
+        if (k > 0) DEBUG_PRINT(DEBUG, "%c", ' ');
+        DEBUG_PRINT(DEBUG, "%s", name);
+    }
+    DEBUG_PRINT(DEBUG, ")%c", ' ');
+
+    while (line[j] == ' ' || line[j] == ')') j++;
+    if (line[j] == 'S') {
+        tile->station = true;
+    } else {
+        tile->station = false;
     }
 
-    DEBUG_PRINT(DEBUG, "%d: %d (%d %d %d %d) %d\n", tile->id, tile->type, 0, 0, 0, 0, 0)
+    DEBUG_PRINT(DEBUG, "=> %d: %d ", tile->id, tile->type);
+    DEBUG_PRINT(DEBUG, "(%d %d %d %d) ", tile->connections[0], tile->connections[1], tile->connections[2], tile->connections[3]);
+    DEBUG_PRINT(DEBUG, "%d\n", tile->station);
 
     return tile;
 }
