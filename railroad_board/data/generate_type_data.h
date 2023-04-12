@@ -22,7 +22,7 @@ type_data_t* generate_type_data(uint8_t max_combinations, uint8_t expansion_amou
     }
 
     j = 0;
-    non_zero_types = malloc(expansions_with_types * sizeof(uint8_t));
+    non_zero_types = (uint8_t*) malloc(expansions_with_types * sizeof(uint8_t));
     for (i = 1; i < expansion_amount; i++) {
         if (types[i] != 0) non_zero_types[j++] = types[i];
     }
@@ -43,7 +43,7 @@ void find_type_combinations(type_data_t* type_data, uint8_t expansion_amount, ui
 uint16_t* count_type_combinations(uint8_t max_combinations, uint8_t expansion_amount, uint8_t* types) {
     uint16_t* num_combinations;
 
-    num_combinations = calloc(max_combinations, sizeof(uint16_t));
+    num_combinations = (uint16_t*) calloc(max_combinations, sizeof(uint16_t));
     num_combinations[0] += 1;
     for (int i = 0; i < max_combinations; i++) {
         for (int j = 0; j < expansion_amount - i; j++) {

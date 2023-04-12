@@ -2,8 +2,8 @@
 #define LINKED_LIST_H
 
 #include <stdlib.h>
-
 #include <stdio.h>
+
 typedef struct linked_list  linked_list_t;
 typedef struct list_element list_element_t;
 

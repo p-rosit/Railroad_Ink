@@ -2,6 +2,8 @@
 #define HASH_MAP_H
 
 #include <stdlib.h>
+#include <stdio.h>
+#include <stdint.h>
 
 typedef struct hash_map hash_map_t;
 

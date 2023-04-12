@@ -4,6 +4,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define true  (1)
+#define false (0)
+
 typedef struct array array_t;
 typedef int    bool;
 typedef void   (*free_func_t)(void*);
@@ -25,9 +28,6 @@ char*          copy_string(char*);
 array_t*       init_array();
 void           free_array(array_t*);
 
-const bool false = 0;
-const bool true = 1;
-
 char* copy_string(char* string) {
     size_t size;
     char c, *traverse, *copy;
@@ -35,7 +35,7 @@ char* copy_string(char* string) {
     size = 0;
     while ((c = string[size++]) != '\0');
 
-    copy = malloc(size * sizeof(char));
+    copy = (char*) malloc(size * sizeof(char));
     for (int i = 0; i < size; ++i) {
         copy[i] = string[i];
     }
@@ -48,7 +48,7 @@ bool streq(char* a, char* b) {
 }
 
 array_t* init_array() {
-    array_t* arr = malloc(sizeof(array_t));
+    array_t* arr = (array_t*) malloc(sizeof(array_t));
     arr->size = 0;
     arr->data = NULL;
 }
