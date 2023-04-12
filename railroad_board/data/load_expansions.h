@@ -10,11 +10,9 @@
 #define MAX_EXP_HASH (1000)
 #define MAX_EXPS     (50)
 
-char* tile_path = "./tiles";
+void load_info(char*, uint8_t*, char***, hash_map_t** map, uint8_t*);
 
-void load_info(uint8_t*, char***, hash_map_t** map);
-
-void load_info(uint8_t* amount, char*** expansion_name, hash_map_t** map) {
+void load_info(char* tile_path, uint8_t* amount, char*** expansion_name, hash_map_t** map, uint8_t* max_combinations) {
     FILE* fptr;
     size_t i, j;
     char line[100], name[30], *file_name, c;
@@ -29,7 +27,36 @@ void load_info(uint8_t* amount, char*** expansion_name, hash_map_t** map) {
     *map = init_hash_map(59, MAX_EXP_HASH);
     *expansion_name = malloc(MAX_EXPS * sizeof(char*));
 
-    while (fgets(line, sizeof line, fptr) != NULL) {
+    if (fgets(line, sizeof line, fptr) == NULL) {
+        printf("Fatal error: unexpected EOF.\n");
+        exit(1);
+    }
+
+    if (string_starts_with("MAX_COMBINATIONS:", line)) {
+        i = 0; j = 0;
+        while (line[j++] != ':');
+        c = line[j];
+        while (c != '\n' && c != '\0' && c != '#') {
+            name[i++] = line[j++];
+            c = line[j];
+        }
+        name[i] = '\0';
+        *max_combinations = atoi(name);
+
+    } else {
+        *max_combinations = 3;
+    }
+
+    DEBUG_PRINT(INFO, "Maximal allowed expansions: %d\n", *max_combinations);
+
+    while (!string_starts_with("EXPANSIONS:", line)) {
+        if (fgets(line, sizeof line, fptr) == NULL) {
+            printf("Fatal error: unexpected EOF.\n");
+            exit(1);
+        }
+    }
+
+    while (fgets(line, sizeof line, fptr) != NULL){
         i = 0; j = 0;
         c = line[j];
         while (c != '\n' && c != '\0') {
@@ -43,7 +70,7 @@ void load_info(uint8_t* amount, char*** expansion_name, hash_map_t** map) {
         name[i] = '\0';
         (*expansion_name)[*amount] = copy_string(name);
         add_num(*map, name, (*amount)++);
-    }
+    } 
 
     fclose(fptr);
 

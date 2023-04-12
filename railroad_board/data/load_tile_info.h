@@ -10,11 +10,11 @@
 #define MAX_ID_HASH         (100)
 #define MAX_CONNECTION_HASH (1000)
 
-tile_info_t* load_tile_info(hash_map_t**, hash_map_t**);
+tile_info_t* load_tile_info(char*, hash_map_t**, hash_map_t**);
 tile_info_t* allocate_tile_info(linked_list_t*, uint8_t, uint8_t);
 size_t       parse_name(size_t, char*, char*);
 
-tile_info_t* load_tile_info(hash_map_t** tile_ids, hash_map_t** connections) {
+tile_info_t* load_tile_info(char* tile_path, hash_map_t** tile_ids, hash_map_t** connections) {
     FILE* fptr;
     tile_info_t* tile_info;
     int state, id_amount, connection_amount, num, ind, i, j;

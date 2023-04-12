@@ -1,15 +1,15 @@
 EXTRA:
 Mp;              # Meteor position
 
-Cr: E (E E E E)
+E: E (E E E E)      # Crater
 
-Mm: E (P E E E)
-Mm: E (E P E E)
-Mm: E (E E P E)
-Mm: E (E E E P)
-Mm: E (P P P P)
+Ep: E (P E E E)     # Meteor movement north
+Ep: E (E P E E)     # Meteor movement east
+Ep: E (E E P E)     # Meteor movement south
+Ep: E (E E E P)     # Meteor movement west
+Ep: E (P P P P)     # Meteor movement, free choice
 
-Mc: E (P E E E)
-Mc: E (P P E E)
-Mc: E (P P P E)
+Ep: E (P E E E)     # Meteor crash 1 tile from current
+Ep: E (P P E E)     # Meteor crash 2 tiles from current
+Ep: E (P P P E)     # Meteor crash 3 tiles from current
 

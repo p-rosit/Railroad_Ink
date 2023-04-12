@@ -1,4 +1,4 @@
-M: E (M M M M)
-MC: E (P P M M)
-MI: E (P M P M)
+Ep: E (M M M M)     # Mountain tile
+C: E (P P M M)      # Mountain tile that can have C placed in it
+I: E (P M P M)      # Mountain tile that can have I placed in it
 

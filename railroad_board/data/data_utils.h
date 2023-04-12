@@ -10,10 +10,14 @@ typedef struct game_data     game_data_t;
 typedef struct tile_info     tile_info_t;
 typedef struct tile_data     tile_data_t;
 typedef struct single_tile   single_tile_t;
+typedef struct type_data     type_data_t;
 typedef struct tile_textures tile_textures_t;
 
 struct game_data {
+    tile_info_t* info;
     tile_data_t* tiles;
+    type_data_t* types;
+    tile_textures_t* tile_textures;
 };
 
 struct tile_info {
@@ -33,10 +37,19 @@ struct single_tile {
 };
 
 struct tile_data {
+    uint8_t expansion_amount;
+    uint16_t* expansion_ind;
     uint8_t* ids;
     uint8_t* types;
     uint8_t* connections;
     bool* stations;
+};
+
+struct type_data {
+    uint8_t max_combinations;
+    uint16_t* combination_ind;
+    uint8_t* index2types;
+    uint8_t* types2index;
 };
 
 struct tile_textures {

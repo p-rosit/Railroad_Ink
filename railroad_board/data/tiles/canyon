@@ -3,10 +3,10 @@ C_N          # Canyon in north face of tile
 C_E          # Canyon in east face of tile
 C_NE;        # Canyons in north and east faces of tiles
 
-Cy: E (E E E E)  # One straight segment
-Cy: E (E E E E)  # Two straight segments
-Cy: E (E E E E)  # Three straight segments
-Cy: E (E E E E)  # Two segment bend
-Cy: E (E E E E)  # Three segment bend
-Cy: E (E E E E)  # Four segment two bend
+Ep: E (E E E E)  # One straight segment
+Ep: E (E E E E)  # Two straight segments
+Ep: E (E E E E)  # Three straight segments
+Ep: E (E E E E)  # Two segment bend
+Ep: E (E E E E)  # Three segment bend
+Ep: E (E E E E)  # Four segment two bend
 
