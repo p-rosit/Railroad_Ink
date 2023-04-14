@@ -5,6 +5,7 @@
 #include <stdio.h>
 
 #include "../utils/debug_utils.h"
+#include "data_utils.h"
 #include "../utils/hash_map.h"
 
 #define MAX_EXP_HASH (1000)
@@ -25,7 +26,7 @@ void load_info(char* tile_path, uint8_t* amount, char*** expansion_name, hash_ma
     free(file_name);
 
     *map = init_hash_map(59, MAX_EXP_HASH);
-    *expansion_name = malloc(MAX_EXPS * sizeof(char*));
+    *expansion_name = (char**) malloc(MAX_EXPS * sizeof(char*));
 
     if (fgets(line, sizeof line, fptr) == NULL) {
         printf("Fatal error: unexpected EOF.\n");
