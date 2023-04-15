@@ -82,28 +82,29 @@ uint16_t combinations_of_n_types(int amount, int ind, uint8_t expansion_amount, 
 type_data_t* allocate_type_data(uint8_t max_combinations, uint16_t* combinations) {
     int i;
     size_t size;
-    void* data;
     type_data_t* type_data;
 
-    size = sizeof(type_data);
-    size += max_combinations * sizeof(uint16_t);
+    size = 0;
     for (i = 0; i < max_combinations; i++) {
-        size += (i + 1) * combinations[i] * sizeof(uint16_t);
+        size += (i + 1) * combinations[i];
     }
-    data = malloc(size);
 
-    type_data = (type_data_t*) data;
+    type_data = (type_data_t*) malloc(sizeof(type_data_t));
+
     type_data->max_combinations = max_combinations;
-
-    data += sizeof(type_data_t);
-    type_data->combination_ind = (uint16_t*) data;
-
-    data += max_combinations * sizeof(uint16_t);
-    type_data->index2types = (uint8_t*) data;
-
+    type_data->combination_ind = (uint16_t*) malloc((max_combinations - 1) * sizeof(uint16_t));
+    type_data->index2types = (uint8_t*) malloc(size * sizeof(uint8_t));
     type_data->types2index = NULL;
 
     return type_data;
+}
+
+void free_type_data(type_data_t* type_data) {
+    if (type_data == NULL) return;
+
+    free(type_data->combination_ind);
+    free(type_data->index2types);
+    free(type_data);
 }
 
 #endif

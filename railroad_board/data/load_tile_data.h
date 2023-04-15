@@ -22,9 +22,9 @@ tile_data_t* load_tiles(char* tile_path, uint8_t amount, char** expansion_name, 
     tile_data_t* tiles;
     linked_list_t** list;
 
-    list = calloc(amount, sizeof(linked_list_t*));
+    list = (linked_list_t**) calloc(amount, sizeof(linked_list_t*));
     *types = init_hash_map(1, 1000);
-    *types_in_expansion = calloc(amount, sizeof(uint8_t));
+    *types_in_expansion = (uint8_t*) calloc(amount, sizeof(uint8_t));
     
     for (i = 0; i < amount; i++) {
         list[i] = load_expansion_tiles(tile_path, expansion_name[i], tile_ids, connections, type_amount, *types, &(*types_in_expansion)[i]);
@@ -67,7 +67,7 @@ tile_data_t* assemble_tile_data(uint8_t expansion_amount, linked_list_t** list) 
     for (i = 0; i < expansion_amount; i++) {
         elm = list[i]->frst;
         for (j = 0; j < list[i]->size; j++) {
-            tile = elm->data;
+            tile = (single_tile_t*) elm->data;
 
             tile_data->ids[ind] = tile->id;
             tile_data->types[ind] = tile->type;
@@ -126,7 +126,7 @@ single_tile_t* parse_single_tile(char* line, hash_map_t* tile_ids, hash_map_t* c
     int i, j, k;
     char name[5];
     single_tile_t* tile;
-    tile = malloc(sizeof(single_tile_t));
+    tile = (single_tile_t*) malloc(sizeof(single_tile_t));
 
     i = 0; j = 0;
     while (line[j] != ':' && j < 5) {
@@ -201,38 +201,28 @@ uint16_t load_types(FILE* fptr, uint16_t* type_amount, hash_map_t* types) {
 }
 
 tile_data_t* allocate_tile_data(uint8_t expansion_amount, size_t tile_amount) {
-    size_t size;
-    void* data;
+    uint8_t* data;
     tile_data_t* tile_data;
 
-    size = sizeof(tile_data_t);
-    size += expansion_amount * sizeof(uint16_t);
-    size += tile_amount * sizeof(uint8_t);
-    size += tile_amount * sizeof(uint8_t);
-    size += 4 * tile_amount * sizeof(uint8_t);
-    size += tile_amount * sizeof(bool);
-
-    data = malloc(size);
-
-    tile_data = data;
+    tile_data = (tile_data_t*) malloc(sizeof(tile_data_t));
     tile_data->expansion_amount = expansion_amount;
 
-    data += sizeof(tile_data_t);
-    tile_data->expansion_ind = data;
-
-    data += expansion_amount * sizeof(uint16_t);
+    tile_data->expansion_ind = (uint16_t*) calloc(expansion_amount, sizeof(uint16_t));
+    data = (uint8_t*) calloc(7 * tile_amount, sizeof(uint8_t));
     tile_data->ids = data;
-
-    data += tile_amount * sizeof(uint8_t);
-    tile_data->types = data;
-    
-    data += tile_amount * sizeof(uint8_t);
-    tile_data->connections = data;
-
-    data += 4 * tile_amount * sizeof(uint8_t);
-    tile_data->stations = data;
+    tile_data->types = data + tile_amount;
+    tile_data->connections = data + 2 * tile_amount;
+    tile_data->stations = data + 6 * tile_amount;
 
     return tile_data;
+}
+
+void free_tile_data(tile_data_t* tile_data) {
+    if (tile_data == NULL) return;
+
+    free(tile_data->expansion_ind);
+    free(tile_data->ids);
+    free(tile_data);
 }
 
 #endif

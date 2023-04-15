@@ -42,7 +42,7 @@ struct tile_data {
     uint8_t* ids;
     uint8_t* types;
     uint8_t* connections;
-    bool* stations;
+    uint8_t* stations;
 };
 
 struct type_data {
@@ -71,7 +71,7 @@ char* concat_string(char* a, char* b) {
     while(b[j++] != '\0') len++;
     len += 2;
 
-    res = malloc(len * sizeof(char));
+    res = (char*) malloc(len * sizeof(char));
 
     i = 0; j = 0;
     while ((c = a[i++]) != '\0') res[j++] = c;
@@ -105,7 +105,7 @@ bool* parse_internal_networks(char* line) {
     char c;
     bool* networks;
 
-    networks = calloc(8, sizeof(bool));
+    networks = (bool*) calloc(8, sizeof(bool));
 
     i = 0;
     while (line[i++] != '(');

@@ -3,6 +3,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include "data_utils.h"
 
 #include "../utils/linked_list.h"
 #include "../utils/hash_map.h"
@@ -167,37 +168,38 @@ tile_info_t* load_tile_info(char* tile_path, hash_map_t** tile_ids, hash_map_t**
 }
 
 tile_info_t* allocate_tile_info(linked_list_t* tile_networks, uint8_t id_amount, uint8_t connection_amount) {
-    int data_size;
-    void* data;
+    size_t size;
+    bool* data;
     tile_info_t* tile_info;
     
-    data_size = sizeof(tile_info_t);
-    data_size += 2 * sizeof(uint8_t);
-    data_size += 8 * tile_networks->size * sizeof(bool);
-    data_size += 2 * connection_amount * sizeof(bool);
-    data_size += connection_amount * connection_amount * sizeof(bool);
-    data = malloc(data_size);
-
-    tile_info = data;
+    tile_info = (tile_info_t*) malloc(sizeof(tile_info_t));
     tile_info->id_amount = id_amount;
     tile_info->connection_amount = connection_amount;
-    data += sizeof(tile_info_t) + 2 * sizeof(uint8_t);
-    for (int i = 0; i < 8 * tile_networks->size + 2 * connection_amount + connection_amount * connection_amount; i++) {
-        ((bool*) data)[i] = false;
-    }
-
-    tile_info->networks = data;
-    data += 8 * tile_networks->size * sizeof(bool);
-
-    tile_info->traversable = data;
-    data += connection_amount * sizeof(bool);
-
-    tile_info->non_connection = data;
-    data += connection_amount * sizeof(bool);
-
-    tile_info->valid_connection = data;
     
+    size = 8 * tile_networks->size;
+    size += 2 * connection_amount;
+    size += connection_amount * connection_amount;
+
+    data = (bool*) calloc(size, sizeof(bool));
+    tile_info->networks = data;
+
+    data += 8 * tile_networks->size;
+    tile_info->traversable = data;
+
+    data += connection_amount;
+    tile_info->non_connection = data;
+
+    data += connection_amount;
+    tile_info->valid_connection = data;
+
     return tile_info;
+}
+
+void free_tile_info(tile_info_t* tile_info) {
+    if (tile_info == NULL) return;
+
+    free(tile_info->networks);
+    free(tile_info);
 }
 
 size_t parse_name(size_t j, char* line, char* name) {

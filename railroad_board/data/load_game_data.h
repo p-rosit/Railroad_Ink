@@ -38,9 +38,9 @@ game_data_t* load_game_data(char* directory_name) {
     for (int i = 0; i < expansion_amount; i++) free(expansion_names[i]);
     free(expansion_names);
 
-    free(tile_info);
-    free(tile_data);
-    free(type_data);
+    free_tile_info(tile_info);
+    free_tile_data(tile_data);
+    free_type_data(type_data);
 
     free_hash_map(expansion2int);
     free_hash_map(tile_id2int);
