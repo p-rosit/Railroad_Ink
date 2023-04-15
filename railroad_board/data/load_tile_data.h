@@ -45,7 +45,7 @@ tile_data_t* load_tiles(char* tile_path, uint8_t amount, char** expansion_name, 
         DEBUG_PRINT(DEBUG, ") %d\n", tiles->stations[i]);
     }
 
-    DEBUG_PRINT(INFO, "\nLoaded %d types and %d tiles from %d expansions.\n", *type_amount, tiles->expansion_ind[tiles->expansion_amount - 1], tiles->expansion_amount);
+    DEBUG_PRINT(INFO, "\nLoaded %d types and %d tiles from %d expansions.\n\n", *type_amount, tiles->expansion_ind[tiles->expansion_amount - 1], tiles->expansion_amount);
 
     return tiles;
 }

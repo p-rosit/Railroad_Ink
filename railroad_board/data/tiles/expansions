@@ -1,4 +1,4 @@
-MAX_COMBINATIONS: 3     # The maximal amount of combined expansions that can be used in one game
+MAX_COMBINATIONS: 2     # The maximal amount of combined expansions that can be used in one game
 
 EXPANSIONS:
 

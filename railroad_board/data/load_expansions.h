@@ -42,13 +42,13 @@ void load_info(char* tile_path, uint8_t* amount, char*** expansion_name, hash_ma
             c = line[j];
         }
         name[i] = '\0';
-        *max_combinations = atoi(name);
+        *max_combinations = atoi(name) + 2;
 
     } else {
-        *max_combinations = 3;
+        *max_combinations = 4;
     }
 
-    DEBUG_PRINT(INFO, "Maximal allowed expansions: %d\n", *max_combinations);
+    DEBUG_PRINT(INFO, "Maximal allowed expansions: %d\n\n", *max_combinations);
 
     while (!string_starts_with("EXPANSIONS:", line)) {
         if (fgets(line, sizeof line, fptr) == NULL) {
