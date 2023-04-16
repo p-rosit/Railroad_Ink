@@ -38,8 +38,8 @@ type_data_t* generate_type_data(uint8_t max_combinations, uint8_t expansion_amou
     j = 0;
     DEBUG_PRINT(INFO, "The following combinations of tile types were%cconstructed:\n", ' ');
     DEBUG_PRINT(INFO, "1%ctype:  ", ' ');
-    for (i = 0; i < type_data->combination_ind[max_combinations - 1]; i++) {
-        if (i == type_data->combination_ind[j]) {
+    for (i = 0; i < type_data->start_index[max_combinations - 1]; i++) {
+        if (i == type_data->start_index[j]) {
             j++;
             DEBUG_PRINT(INFO, "%d types: ", j + 1);
         }
@@ -48,7 +48,7 @@ type_data_t* generate_type_data(uint8_t max_combinations, uint8_t expansion_amou
         k += 1;
 
         if (k > j) {
-            if (i + 1 != type_data->combination_ind[j]) {
+            if (i + 1 != type_data->start_index[j]) {
                 DEBUG_PRINT(INFO, "\n        %c", ' ');
             } else {
                 DEBUG_PRINT(INFO, "%c", '\n');
@@ -100,7 +100,8 @@ void find_type_combinations(type_data_t* type_data, uint8_t max_combinations, ui
 
     type_data->types2index = temp_map->types2index;
     type_data->hash_size = temp_map->hash_size;
-
+    
+    /*
     uint8_t tt[2] = {2, 4};
     uint8_t ta[1] = {2};
     uint8_t tb[1] = {4};
@@ -122,6 +123,7 @@ void find_type_combinations(type_data_t* type_data, uint8_t max_combinations, ui
     for (i = 0; i < gg; i++) printf(" %d", th[i]);
     printf("\n");
     free(th);
+    */
 
     free(prev_types);
     free(type_indices);
@@ -195,7 +197,7 @@ uint16_t combinations_of_n_types(int amount, int ind, uint8_t expansion_amount, 
 
 type_data_t* allocate_type_data(uint8_t max_combinations, uint16_t* combinations) {
     int i;
-    uint16_t ind;
+    uint16_t ind, vec_ind;
     size_t size;
     type_data_t* type_data;
 
@@ -207,16 +209,22 @@ type_data_t* allocate_type_data(uint8_t max_combinations, uint16_t* combinations
     type_data = (type_data_t*) malloc(sizeof(type_data_t));
 
     type_data->max_combinations = max_combinations;
-    type_data->combination_ind = (uint16_t*) malloc(max_combinations * sizeof(uint16_t));
+    type_data->combination_ind = (uint16_t*) malloc(2 * max_combinations * sizeof(uint16_t));
+    type_data->start_index = type_data->combination_ind + max_combinations;
     type_data->index2types = (uint8_t*) calloc(size, sizeof(uint8_t));
     type_data->types2index = NULL;
 
     ind = 1 * combinations[0];
+    vec_ind = 1 * combinations[0];
     for (i = 1; i < max_combinations; i++) {
         type_data->combination_ind[i - 1] = ind;
-        ind += (i + 1) * combinations[i];
+        type_data->start_index[i - 1] = vec_ind;
+
+        ind += combinations[i];
+        vec_ind += (i + 1) * combinations[i];
     }
     type_data->combination_ind[max_combinations - 1] = ind;
+    type_data->start_index[max_combinations - 1] = vec_ind;
 
     return type_data;
 }

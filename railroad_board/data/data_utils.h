@@ -19,7 +19,7 @@ struct game_data {
     tile_info_t* info;
     tile_data_t* tiles;
     type_data_t* types;
-    tile_textures_t* tile_textures;
+    tile_textures_t* textures;
 };
 
 struct tile_info {
@@ -40,6 +40,7 @@ struct single_tile {
 
 struct tile_data {
     uint8_t expansion_amount;
+    uint16_t tile_amount;
     uint16_t* expansion_ind;
     uint8_t* ids;
     uint8_t* types;
@@ -50,6 +51,7 @@ struct tile_data {
 struct type_data {
     uint8_t max_combinations;
     uint16_t* combination_ind;
+    uint16_t* start_index;
     uint8_t* index2types;
     uint16_t* types2index;
     size_t hash_size;
@@ -165,21 +167,20 @@ uint16_t index_from_types(type_data_t* type_data, uint8_t na, uint8_t* as, uint8
 }
 
 uint8_t types_from_index(type_data_t* type_data, uint16_t ind, uint8_t* types) {
-    int i = 0;
+    int i;
     uint8_t amount_of_types;
-    uint16_t combination_index;
+    uint16_t combination_index, prev_start_ind, prev_comb_ind;
 
     amount_of_types = 0;
-    combination_index = 0;
+    prev_start_ind = 0;
+    prev_comb_ind = 0;
     while (type_data->combination_ind[amount_of_types] < ind) {
-        combination_index += (amount_of_types + 1) * type_data->combination_ind[amount_of_types];
-        amount_of_types += 1;
+        prev_start_ind = type_data->start_index[amount_of_types];
+        prev_comb_ind = type_data->combination_ind[amount_of_types];
+        amount_of_types++;
     }
-    if (amount_of_types > 0) {
-        combination_index += amount_of_types * (ind - type_data->combination_ind[amount_of_types - 1]);
-    } else {
-        combination_index += ind;
-    }
+    
+    combination_index = prev_start_ind + (amount_of_types + 1) * (ind - prev_comb_ind);
 
     for (i = 0; i < amount_of_types + 1; i++) {
         types[i] = type_data->index2types[combination_index + i];
@@ -203,16 +204,16 @@ size_t commutative_hash(uint8_t na, uint8_t* as, uint8_t nb, uint8_t* bs) {
     hash = 7333;
     int primes[10] = {7, 524287, 3010349, 991, 7669, 4241, 23497, 47629, 115249, 35317};
     for (i = 0; i < 10; i++) {
-        temp = primes[i] ^ as[0];
+        temp = primes[i] * as[0];
         for (j = 1; j < na; j++) {
-            temp *= primes[i] ^ as[j];
+            temp ^= primes[i] * as[j];
         }
         for (j = 0; j < nb; j++) {
-            temp *= primes[i] ^ bs[j];
+            temp ^= primes[i] * bs[j];
         }
 
-        //hash = (16777619 * hash) ^ temp;
-        hash = ((hash << 5) + hash) + temp;
+        hash = (16777619 * hash) ^ temp;
+        //hash = ((hash << 5) + hash) + temp;
     }
 /*
     hash = 0;
@@ -225,6 +226,13 @@ size_t commutative_hash(uint8_t na, uint8_t* as, uint8_t nb, uint8_t* bs) {
 
 void add_commutative_pair(temp_type_hash_t* temp_map, uint8_t na, uint8_t* as, uint16_t index) {
     size_t ind, *saved_index;
+
+    DEBUG_PRINT(DEBUG, "Adding:%c(", ' ');
+    for (int i = na; 0 < i; i--) {
+        if (i != na) DEBUG_PRINT(DEBUG, ",%c", ' ');
+        DEBUG_PRINT(DEBUG, "%d", as[i - 1]);
+    }
+    DEBUG_PRINT(DEBUG, ") = (%d)\n", index);
 /*
     printf("Current:");
     for (list_element_t* elm = temp_map->inds->frst; elm != NULL; elm = elm->next) {

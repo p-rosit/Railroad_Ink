@@ -206,6 +206,7 @@ tile_data_t* allocate_tile_data(uint8_t expansion_amount, size_t tile_amount) {
 
     tile_data = (tile_data_t*) malloc(sizeof(tile_data_t));
     tile_data->expansion_amount = expansion_amount;
+    tile_data->tile_amount = tile_amount;
 
     tile_data->expansion_ind = (uint16_t*) calloc(expansion_amount, sizeof(uint16_t));
     data = (uint8_t*) calloc(7 * tile_amount, sizeof(uint8_t));

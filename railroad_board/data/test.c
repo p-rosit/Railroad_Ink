@@ -9,6 +9,6 @@ int main() {
 
     game_data = load_game_data("./tiles");
 
-    free(game_data);
+    free_game_data(game_data);
     return 0;
 }
