@@ -14,13 +14,13 @@ mountain                # mountain tile logic
 river                   # river expansion
 lake                    # lake expansion
 
-#lava
+lava
 meteor
 
-#forest
-#trail
+forest
+trail
 
-#desert
+desert
 canyon
 
 #airline
