@@ -1,28 +1,52 @@
 EXTRA: # Extra types
-E;     # Empty (name *cannot* be changed)
+E      # Empty type
+# More types *cannot* be added to this expansion
 
-# id: type (north_connection, east_connection, south_connection, west_connection)
-# an S is added to the last part of the tile if it contains a station
-C: E (C C E E)
-C: E (R R E E)
-C: E (C R E E) S
+TILES: # Tiles that are included in this expansion
+# Tiles have the following structure:
+#
+#   <identifier> id: type, (north, east, south, west), station
+#
+# An S is added to the last part of the tile if it contains a station.
+# The id decides which inner network the tile has, the type signifies
+# what is on the tile and the cardinal directions signify what type of
+# road the tile has in that direction.
+#
+# The identifier is used to build the dice that belong to this expansion.
+# An identifier can be accessed outside this file by writing the name
+# of the expansion and the identifier in the expansion. I.e. standard_A
+# or standard_F.
 
-i: E (C E E E) S
-i: E (R E E E) S
+<A> C: E, (C, C, E, E),
+<B> C: E, (R, R, E, E),
+<C> C: E, (C, R, E, E), S
 
-I: E (C E C E)
-I: E (R E R E)
-I: E (C E R E) S
+<D> i: E, (C, E, E, E), S
+<E> i: E, (R, E, E, E), S
 
-T: E (C C C E)
-T: E (R R R E)
-T: E (C R C E) S
-T: E (R C R E) S
-T: E (C C R E) S
-T: E (C R R E) S
+<F> I: E, (C, E, C, E),
+<G> I: E, (R, E, R, E),
+<H> I: E, (C, E, R, E), S
 
-CC: E (C C C C)
-CC: E (R R R R)
+<I> T: E, (C, C, C, E),
+<J> T: E, (R, R, R, E),
+<K> T: E, (C, R, C, E), S
+<L> T: E, (R, C, R, E), S
+<M> T: E, (C, C, R, E), S
+<N> T: E, (C, R, R, E), S
 
-O: E (C R C R)
+<O> CC: E, (C, C, C, C),
+<P> CC: E, (R, R, R, R),
+
+<Q> O: E, (C, R, C, R),
+
+DICE:  # Dice that are included in this expansion. A die always has six sides.
+
+# Classic dice
+classic_simple:  A, B, F, G, I, J
+classic_special: C, C, H, H, Q, Q
+
+# Challenge dice
+challenge_simple:  I, J, O, P, Q, Q
+challenge_special: D, E, C, H, K, L
 

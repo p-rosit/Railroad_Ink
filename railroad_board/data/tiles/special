@@ -1,12 +1,20 @@
-E: E (E E E E)
+EXTRA:
 
-S: E (C C C C)
-S: E (C C C R) S
-S: E (C C R R) S
-S: E (C R C R) S
-S: E (C R R R) S
-S: E (R R R R)
+TILES:
+<A> E: E, (E, E, E, E),
 
-i: E (C E E E)
-i: E (R E E E)
+<B> S: E, (C, C, C, C),
+<C> S: E, (C, C, C, R), S
+<D> S: E, (C, C, R, R), S
+<E> S: E, (C, R, C, R), S
+<F> S: E, (C, R, R, R), S
+<G> S: E, (R, R, R, R),
+
+<H> i: E, (C, E, E, E),
+<I> i: E, (R, E, E, E),
+
+DICE:
+
+# Special tiles
+special_dice: B, C, D, E, F, G
 
