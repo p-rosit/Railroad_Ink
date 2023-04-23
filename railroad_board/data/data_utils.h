@@ -1,6 +1,9 @@
 #ifndef DATA_UTILS_H
 #define DATA_UTILS_H
 
+#define IDENTIFIER_SIZE (20)
+#define NAME_SIZE       (20)
+
 #include <stdio.h>
 #include <stdint.h>
 
