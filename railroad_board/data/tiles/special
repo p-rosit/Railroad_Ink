@@ -1,20 +1,20 @@
-EXTRA:
+<spc>
 
-TILES:
-<A> E: E, (E, E, E, E),
+TILES {
+    <a> E: E, (E, E, E, E), _ _     # Empty tile
 
-<B> S: E, (C, C, C, C),
-<C> S: E, (C, C, C, R), S
-<D> S: E, (C, C, R, R), S
-<E> S: E, (C, R, C, R), S
-<F> S: E, (C, R, R, R), S
-<G> S: E, (R, R, R, R),
+    <b> S: E, (C, C, C, C), _ _     # Special tiles
+    <c> S: E, (C, C, C, R), S _
+    <d> S: E, (C, C, R, R), S _
+    <e> S: E, (C, R, C, R), S _
+    <f> S: E, (C, R, R, R), S _
+    <g> S: E, (R, R, R, R), _ _
 
-<H> i: E, (C, E, E, E),
-<I> i: E, (R, E, E, E),
+    <h> i: E, (C, E, E, E), _ _     # Goal tiles
+    <i> i: E, (R, E, E, E), _ _
+}
 
-DICE:
-
-# Special tiles
-special_dice: B, C, D, E, F, G
+DICE {
+    <special_dice> (b, c, d, e, f, g)
+}
 

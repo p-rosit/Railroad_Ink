@@ -1,52 +1,61 @@
-EXTRA: # Extra types
-E      # Empty type
-# More types *cannot* be added to this expansion
+<std>   # This expansions identifier which can be used to refer
+        # to tiles from this expansion outside this expansion.
 
-TILES: # Tiles that are included in this expansion
+TYPES { # Types a tile can have
+    E   # Empty type
+# More types *cannot* be added to this expansion
+}
+
+TILES { # Tiles that are included in this expansion
 # Tiles have the following structure:
 #
-#   <identifier> id: type, (north, east, south, west), station
+#   <identifier> id: type, (north, east, south, west), station1 station2
 #
-# An S is added to the last part of the tile if it contains a station.
+# The stations determine if the first and second inner networks in the tile
+# has a station or not, S denotes a station and _ denotes a lack of one.
+# 
 # The id decides which inner network the tile has, the type signifies
 # what is on the tile and the cardinal directions signify what type of
 # road the tile has in that direction.
 #
 # The identifier is used to build the dice that belong to this expansion.
 # An identifier can be accessed outside this file by writing the name
-# of the expansion and the identifier in the expansion. I.e. standard_A
-# or standard_F.
+# of the expansion and the identifier in the expansion. I.e. std_a
+# or std_f.
 
-<A> C: E, (C, C, E, E),
-<B> C: E, (R, R, E, E),
-<C> C: E, (C, R, E, E), S
+    <a> C: E, (C, C, E, E), _ _
+    <b> C: E, (R, R, E, E), _ _
+    <c> C: E, (C, R, E, E), S _
 
-<D> i: E, (C, E, E, E), S
-<E> i: E, (R, E, E, E), S
+    <d> i: E, (C, E, E, E), S _
+    <e> i: E, (R, E, E, E), S _
 
-<F> I: E, (C, E, C, E),
-<G> I: E, (R, E, R, E),
-<H> I: E, (C, E, R, E), S
+    <f> I: E, (C, E, C, E), _ _
+    <g> I: E, (R, E, R, E), _ _
+    <h> I: E, (C, E, R, E), S _
 
-<I> T: E, (C, C, C, E),
-<J> T: E, (R, R, R, E),
-<K> T: E, (C, R, C, E), S
-<L> T: E, (R, C, R, E), S
-<M> T: E, (C, C, R, E), S
-<N> T: E, (C, R, R, E), S
+    <i> T: E, (C, C, C, E), _ _
+    <j> T: E, (R, R, R, E), _ _
+    <k> T: E, (C, R, C, E), S _
+    <l> T: E, (R, C, R, E), S _
+    <m> T: E, (C, C, R, E), S _
+    <n> T: E, (C, R, R, E), S _
 
-<O> CC: E, (C, C, C, C),
-<P> CC: E, (R, R, R, R),
+    <o> CC: E, (C, C, C, C), _ _
+    <p> CC: E, (R, R, R, R), _ _
 
-<Q> O: E, (C, R, C, R),
+    <q> O: E, (C, R, C, R), _ _
+}
 
-DICE:  # Dice that are included in this expansion. A die always has six sides.
+DICE { # Dice that are included in this expansion. A die always has six sides.
 
-# Classic dice
-classic_simple:  A, B, F, G, I, J
-classic_special: C, C, H, H, Q, Q
+    # Classic dice
+    <classic_simple>  (a, b, f, g, i, j)
+    <classic_special> (c, c, h, h, q, q)
 
-# Challenge dice
-challenge_simple:  I, J, O, P, Q, Q
-challenge_special: D, E, C, H, K, L
+    # Challenge dice
+    <challenge_simple>  (i, j, o, p, q, q)
+    <challenge_special> (d, e, c, h, k, l)
+
+}
 

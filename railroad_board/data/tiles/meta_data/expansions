@@ -1,0 +1,35 @@
+SETTINGS {
+    max_combinations: 2     # The maximal amount of combined expansions that can be used in one game
+}
+
+EXPANSIONS {
+    standard                # standard tiles
+    special                 # special tile logic
+    #network                 # point counting for network
+    #longest                 # point counting for longest road or railroad
+    #center                  # point counting for center
+    #error                   # point counting for errors
+    #building                # building logic
+    #mountain                # mountain tile logic
+
+    #river                   # river expansion
+    #lake                    # lake expansion
+
+    #lava
+    #meteor
+
+    #forest
+    #trail
+
+    #desert
+    #canyon
+
+    #airline
+    #weather
+
+    #investigation
+    #tentacle
+    #portal
+    #ritual
+}
+
