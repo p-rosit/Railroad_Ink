@@ -1,42 +1,46 @@
-TILES:             # Valid tiles and their default inner networks
-E:  ()                               # Tile that can be placed on
-Ep: ()                               # Tile that cannot be placed on
-C:  (North, East)                    # C connection
-i:  (North)                          # i connection
-I:  (North, South)                   # I connection
-T:  (North,  East , South)           # T junction: |-
-dT: (North, South), (East)           # disconnected T: |x-
-CC: (North,  East), (South, West)    # CC connection
-O:  (North, South), (East, West)     # Overpass
-S:  (North, East, South, West)       # Special tile
+TILES {             # Valid tiles and their default inner networks
+    E:  ()                              # Tile that can be placed on
+    Ep: ()                              # Tile that cannot be placed on
+    C:  (North, East)                   # C connection
+    i:  (North)                         # i connection
+    I:  (North, South)                  # I connection
+    T:  (North,  East, South)           # T junction: |-
+    dT: (North, South), (East)          # disconnected T: |x-
+    CC: (North,  East), (South, West)   # CC connection
+    O:  (North, South), (East, West)    # Overpass
+    S:  (North,  East, South, West)     # Special tile
+}
 
-CONNECTIONS:       # Valid connections
-E                                    # Empty connection
-C                                    # Car connection
-R                                    # Rail connection
-M                                    # Mountain face
-P                                    # Placeholder connection for mountains
+CONNECTIONS {       # Valid connections
+    E                                   # Empty connection
+    C                                   # Car connection
+    R                                   # Rail connection
+    M                                   # Mountain face
+    P                                   # Placeholder connection for mountains
 
-Ri                                   # River connection
-La                                   # Lake connection
-Lv                                   # Lava connection
+    Ri                                  # River connection
+    La                                  # Lake connection
+    Lv                                  # Lava connection
+}
 
-TRAVERSABLE:       # Traversable connections
-C                                    # Car road
-R                                    # Railroad
+TRAVERSABLE {       # Traversable connections
+    C                                   # Car road
+    R                                   # Railroad
+}
 
-NON_CONNECTIONS:   # Connections that don't connect networks
-E
-M
-P
+NON_CONNECTIONS {   # Connections that don't connect networks
+    E
+    M
+    P
+}
 
-VALID_CONNECTIONS: # Which connections can be connected to which, not commutative
-(E,  E C R M P Ri La Lv)
-(C,  E C   M P         )
-(R,  E   R M P         )
-(M,  E                 )
-(P,    C R             )
-(Ri, E     M P Ri      )
-(La, E     M P    La   )
-(Lv, E     M P       Lv)
-
+VALID_CONNECTIONS { # Which connections can be connected to which, not commutative
+    (E,  E C R M P Ri La Lv)
+    (C,  E C   M P         )
+    (R,  E   R M P         )
+    (M,  E                 )
+    (P,    C R             )
+    (Ri, E     M P Ri      )
+    (La, E     M P    La   )
+    (Lv, E     M P       Lv)
+}
