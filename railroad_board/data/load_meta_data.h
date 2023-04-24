@@ -12,7 +12,7 @@
 #include "data_utils.h"
 
 temp_meta_data_t*   load_meta_data(game_data_t*);
-void                determine_scope(string_t, temp_meta_data_t*);
+void                determine_expansion_scope(string_t, temp_meta_data_t*);
 void                parse_settings(string_t, settings_t*, temp_meta_data_t*);
 void                parse_expansions(string_t, settings_t*, temp_meta_data_t*);
 
@@ -41,7 +41,7 @@ temp_meta_data_t* load_meta_data(game_data_t* game_data) {
     while (fgets(line, sizeof line, fptr) != NULL) {
         switch (tmd->mode) {
             case OUTER_SCOPE:
-                determine_scope(line, tmd);
+                determine_expansion_scope(line, tmd);
                 break;
             case SETTING_SCOPE:
                 parse_settings(line, settings, tmd);
@@ -86,18 +86,20 @@ temp_meta_data_t* load_meta_data(game_data_t* game_data) {
     return tmd;
 }
 
-void determine_scope(string_t line, temp_meta_data_t* tmd) {
+void determine_expansion_scope(string_t line, temp_meta_data_t* tmd) {
     string_t string = strip_while(line, ' ');
 
     if (strstart("SETTINGS", string)) {
         if (tmd->setting_scope) {
-            DEBUG_PRINT(WARN, "Entering setting scope more than once.%c", '\n');
+            printf("Fatal error: Settings scope encountered more than once.\n");
+            exit(1);
         }
         tmd->setting_scope = true;
         tmd->mode = SETTING_SCOPE;
     } else if (strstart("EXPANSIONS", string)) {
         if (tmd->expansion_scope) {
-            DEBUG_PRINT(WARN, "Entering expansion scope more than once.%c", '\n');
+            printf("Fatal error: Expansions scope encountered more than once.\n");
+            exit(1);
         }
         tmd->expansion_scope = true;
         tmd->mode = EXPANSION_SCOPE;
