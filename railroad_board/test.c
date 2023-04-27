@@ -3,6 +3,8 @@
 #include <stdint.h>
 #include "board.h"
 
+typedef int bool;
+
 int main() {
     size_t amount;
     uint8_t* exps;

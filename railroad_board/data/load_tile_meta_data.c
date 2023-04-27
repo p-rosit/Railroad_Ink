@@ -40,10 +40,12 @@ temp_tile_data_t* load_tile_meta_data(game_data_t* game_data) {
     ttd->non_connections_scope = false;
     ttd->valid_connections_scope = false;
 
+    ttd->tile_ids = init_list();
+    ttd->tile_networks = init_list();
+
     while (fgets(line, sizeof line, fptr) != NULL) {
         switch (ttd->mode) {
             case OUTER_SCOPE:
-                printf("%s", line);
                 determine_tile_meta_data_scope(line, ttd);
                 break;
             case TILES_SCOPE:
@@ -117,12 +119,13 @@ void determine_tile_meta_data_scope(string_t line, temp_tile_data_t* ttd) {
 }
 
 void parse_tiles(string_t line, temp_tile_data_t* ttd) {
-    //printf("%s", line);
     line = strip_while(line, ' ');
     if (line[0] == '}') {
         ttd->mode = OUTER_SCOPE;
         return;
     }
+
+    printf("%s", line);
 }
 
 void parse_connections(string_t line, temp_tile_data_t* ttd) {
@@ -169,6 +172,8 @@ void free_tile_meta_data(game_data_t* game_data) {
 }
 
 void free_temp_tile_data(temp_tile_data_t* ttd) {
+    free_list(ttd->tile_ids, free);
+    free_list(ttd->tile_networks, free);
     free(ttd);
 }
 

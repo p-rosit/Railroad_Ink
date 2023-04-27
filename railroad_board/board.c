@@ -23,8 +23,7 @@
 typedef struct Board {
     uint8_t width;                              /*!< Width of the board */
     uint8_t height;                             /*!< Height of the board */
-    uint16_t* board;                            /*!< Flattened three-dimensional array of
-                                                     size (height + 2) x (width + 2) x 3 */
+    uint16_t* board;                            /*!< Flattened three-dimensional array of size (height + 2) x (width + 2) x 3 */
     expansion_list_t* exp_list;
 } Board_t;
 
@@ -32,8 +31,7 @@ typedef struct Board {
  * \brief       Represents the settings needed to randomize the board.
  */
 typedef struct RandomizeSettings {
-    uint8_t m;                                  /*!< Some setting for randomizing
-                                                     the board */
+    uint8_t m;                                  /*!< Some setting for randomizing the board */
 } RandomizeSettings_t;
 
 #endif
