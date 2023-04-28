@@ -7,9 +7,9 @@
 #include <stdio.h>
 #include <stdint.h>
 
-#include "../utils/utils.h"
-#include "../utils/debug_utils.h"
-#include "../utils/linked_list.h"
+#include "../utils/utils.c"
+#include "../utils/debug_utils.c"
+#include "../utils/linked_list.c"
 
 typedef struct temp_meta_data   temp_meta_data_t;
 typedef struct temp_tile_data   temp_tile_data_t;

@@ -8,7 +8,7 @@
 #endif
 
 #include <stdlib.h>
-#include "hash_map.h"
+#include "hash_map.c"
 
 void print_hash_map(hash_map_t*);
 

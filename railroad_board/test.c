@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdint.h>
-#include "board.h"
+#include "board.c"
 
 typedef int bool;
 

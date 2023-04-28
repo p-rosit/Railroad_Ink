@@ -24,7 +24,7 @@ void           add_key(hash_map_t*, size_t);
 void           increase_hash_map_size(hash_map_t*, size_t, uint8_t);
 void           free_hash_map(hash_map_t*);
 
-#include "debug_utils.h"
+#include "debug_utils.c"
 
 hash_map_t* init_hash_map(size_t initial_size, size_t max_size) {
     hash_map_t* map = (hash_map_t*) malloc(sizeof(hash_map_t));

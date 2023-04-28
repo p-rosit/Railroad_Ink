@@ -2,7 +2,7 @@
 #define STANDARD_H
 #include <stdlib.h>
 #include <stdint.h>
-#include "../expansion_utils.h"
+#include "../expansion_utils.c"
 
 typedef struct standard_expansion {
     expansion_list_t* exp_list;

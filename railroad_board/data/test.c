@@ -1,7 +1,7 @@
 #define DEBUG_LEVEL (1)
 
-#include "data_utils.h"
-#include "load_game_data.h"
+#include "data_utils.c"
+#include "load_game_data.c"
 
 int main() {
     game_data_t* game_data;

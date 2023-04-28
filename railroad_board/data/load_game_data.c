@@ -1,11 +1,11 @@
 #ifndef LOAD_GAME_DATA_H
 #define LOAD_GAME_DATA_H
 
-#include "../utils/utils.h"
-#include "data_utils.h"
+#include "../utils/utils.c"
+#include "data_utils.c"
 
-#include "load_meta_data.h"
-#include "load_tile_meta_data.h"
+#include "load_meta_data.c"
+#include "load_tile_meta_data.c"
 
 game_data_t*    load_game_data(string_t);
 void            free_game_data(game_data_t*);

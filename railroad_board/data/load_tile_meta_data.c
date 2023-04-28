@@ -7,8 +7,8 @@
 #define NON_CONNECTIONS_SCOPE       (4)
 #define VALID_CONNECTIONS_SCOPE     (5)
 
-#include "../utils/utils.h"
-#include "data_utils.h"
+#include "../utils/utils.c"
+#include "data_utils.c"
 
 temp_tile_data_t*   load_tile_meta_data(game_data_t*);
 void                determine_tile_meta_data_scope(string_t, temp_tile_data_t*);

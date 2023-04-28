@@ -6,10 +6,10 @@
 
 #include <stdint.h>
 
-#include "../utils/utils.h"
-#include "../utils/debug_utils.h"
-#include "../utils/linked_list.h"
-#include "data_utils.h"
+#include "../utils/utils.c"
+#include "../utils/debug_utils.c"
+#include "../utils/linked_list.c"
+#include "data_utils.c"
 
 temp_meta_data_t*   load_meta_data(game_data_t*);
 void                determine_expansion_scope(string_t, temp_meta_data_t*);

@@ -1,7 +1,7 @@
 #ifndef EXPANSION_UTILS_H
 #define EXPANSION_UTILS_H
 #include <stdint.h>
-#include "../utils/utils.h"
+#include "../utils/utils.c"
 
 typedef enum expansion_id {
     standard,

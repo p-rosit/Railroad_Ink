@@ -1,5 +1,5 @@
 #ifndef SPECIAL_H
 #define SPECIAL_H
-#include "../expansion_utils.h"
+#include "../expansion_utils.c"
 
 #endif

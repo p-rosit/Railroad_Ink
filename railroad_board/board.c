@@ -2,7 +2,7 @@
 #define BOARD_H
 
 #include <stdint.h>
-#include "mechanics/expansion.h"
+#include "mechanics/expansion.c"
 
 /**
  * \brief       Represents the game board.
