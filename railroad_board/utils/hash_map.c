@@ -27,14 +27,14 @@ void           free_hash_map(hash_map_t*);
 #include "debug_utils.c"
 
 hash_map_t* init_hash_map(size_t initial_size, size_t max_size) {
-    hash_map_t* map = (hash_map_t*) malloc(sizeof(hash_map_t));
+    hash_map_t* map = malloc(sizeof(hash_map_t));
     map->max_size = max_size;
     map->size = initial_size;
 
     map->key_amount = 0;
     map->inds = NULL;
     
-    map->vals = (uint8_t*) malloc(initial_size * sizeof(uint8_t));
+    map->vals = malloc(initial_size * sizeof(uint8_t));
     for (int i = 0; i < initial_size; ++i) map->vals[i] = 255;
 
     return map;
@@ -77,12 +77,12 @@ uint8_t get_num(hash_map_t* map, char* key) {
 }
 
 void add_key(hash_map_t* map, size_t ind) {
-    size_t* new_inds = (size_t*) realloc(map->inds, (map->key_amount + 1) * sizeof(size_t));
+    size_t* new_inds = realloc(map->inds, (map->key_amount + 1) * sizeof(size_t));
 
     if (new_inds != NULL) {
         new_inds[map->key_amount] = ind;
     } else {
-        new_inds = (size_t*) malloc((map->key_amount + 1) * sizeof(size_t));
+        new_inds = malloc((map->key_amount + 1) * sizeof(size_t));
         for (int i = 0; i < map->key_amount; ++i) {
             new_inds[i] = map->inds[i];
         }
@@ -104,7 +104,7 @@ void increase_hash_map_size(hash_map_t* map, size_t ind, uint8_t num) {
     new_vals = map->vals;
     while (new_size < map->max_size) {
         new_size += 1;
-        new_vals = (uint8_t*) malloc(new_size * sizeof(uint8_t));
+        new_vals = malloc(new_size * sizeof(uint8_t));
 
         for (int i = 0; i < new_size; ++i) {
             new_vals[i] = 255;

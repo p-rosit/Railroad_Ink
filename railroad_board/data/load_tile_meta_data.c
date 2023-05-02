@@ -1,6 +1,8 @@
 #ifndef LOAD_TILE_META_DATA_H
 #define LOAD_TILE_META_DATA_H
 
+#include <stdlib.h>
+#include <string.h>
 #define TILES_SCOPE                 (1)
 #define CONNECTIONS_SCOPE           (2)
 #define TRAVERSABLE_SCOPE           (3)
@@ -11,18 +13,18 @@
 #include "data_utils.c"
 
 temp_tile_data_t*   load_tile_meta_data(game_data_t*);
-void                determine_tile_meta_data_scope(string_t, temp_tile_data_t*);
-void                parse_tiles(string_t, temp_tile_data_t*);
-void                parse_connections(string_t, temp_tile_data_t*);
-void                parse_traversable(string_t, temp_tile_data_t*);
-void                parse_non_connections(string_t, temp_tile_data_t*);
-void                parse_valid_connections(string_t, temp_tile_data_t*);
+void                determine_tile_meta_data_scope(string, temp_tile_data_t*);
+void                parse_tiles(string, temp_tile_data_t*);
+void                parse_connections(string, temp_tile_data_t*);
+void                parse_traversable(string, temp_tile_data_t*);
+void                parse_non_connections(string, temp_tile_data_t*);
+void                parse_valid_connections(string, temp_tile_data_t*);
 
 temp_tile_data_t* load_tile_meta_data(game_data_t* game_data) {
     FILE*               fptr;
     char                line[MAX_LINE_LENGTH];
     temp_tile_data_t*   ttd;
-    string_t            path;
+    string              path;
 
     path = join_path(3, game_data->data_path, "meta_data", "tile_info");
 
@@ -32,7 +34,7 @@ temp_tile_data_t* load_tile_meta_data(game_data_t* game_data) {
     }
     free(path);
 
-    ttd = (temp_tile_data_t*) malloc(sizeof(temp_tile_data_t));
+    ttd = malloc(sizeof(temp_tile_data_t));
     ttd->mode = OUTER_SCOPE;
     ttd->tiles_scope = false;
     ttd->connections_scope = false;
@@ -70,12 +72,18 @@ temp_tile_data_t* load_tile_meta_data(game_data_t* game_data) {
     }
     fclose(fptr);
 
+    list_element_t* elm = ttd->tile_ids->frst;
+    for (int i = 0; i < ttd->tile_ids->size; i++, elm = elm->next) {
+        printf("%s ", (string) elm->data);
+    }
+    printf("\n");
+
     game_data->expansions = NULL;
     return ttd;
 }
 
-void determine_tile_meta_data_scope(string_t line, temp_tile_data_t* ttd) {
-    string_t string = strip_while(line, ' ');
+void determine_tile_meta_data_scope(string line, temp_tile_data_t* ttd) {
+    string string = strip_while(line, ' ');
 
     if (strstart("TILES", string)) {
         if (ttd->tiles_scope) {
@@ -118,17 +126,72 @@ void determine_tile_meta_data_scope(string_t line, temp_tile_data_t* ttd) {
     }
 }
 
-void parse_tiles(string_t line, temp_tile_data_t* ttd) {
+void parse_tiles(string line, temp_tile_data_t* ttd) {
+    string name, temp;
+    linked_list_t* nets;
+    bool* net;
+    char c;
+
     line = strip_while(line, ' ');
     if (line[0] == '}') {
         ttd->mode = OUTER_SCOPE;
         return;
     }
 
-    printf("%s", line);
+    temp = strip_to(line, ':');
+    *(temp - 1) = '\0';
+
+    name = copy_str(line);
+    append(ttd->tile_ids, name);
+    line = strip_while(strip_to(temp, '('), ' ');
+
+    //printf("%s", temp);
+    //line = strip_to(temp, '(');
+    
+    nets = init_list();
+    c = line[0];
+    while (c != ')' && c != '\0') {
+        net = calloc(4, sizeof(bool));
+
+        c = line[0];
+        while (c != ')' && c != '\0') {
+            line = strip_while(line, ' ');
+            temp = line;
+            c = *temp;
+
+            while (c != ',' && c != ')' && c != '\0') {
+                c = *(temp++);
+            }
+            if (c == '\0') {
+                printf("Fatal error: Unexpected end of line, network should end with \")\"\n");
+                exit(1);
+            }
+            *(temp - 1) = '\0';
+            
+            if (streq(line, "North")) {
+                net[0] = true;
+            } else if (streq(line, "East")) {
+                net[1] = true;
+            } else if (streq(line, "South")) {
+                net[2] = true;
+            } else if (streq(line, "West")) {
+                net[3] = true;
+            } else {
+                printf("Fatal error: Unknown direction in network encountered. Expected \"North\", \"East\", \"South\" or \"West\" but got \"%s\".\n", line);
+                exit(1);
+            }
+            line = temp;
+            if (c == ')') break;
+        }
+
+        append(nets, net);
+    }
+    //append(ttd->tile_networks, nets);
+
+    //printf("%s", line);
 }
 
-void parse_connections(string_t line, temp_tile_data_t* ttd) {
+void parse_connections(string line, temp_tile_data_t* ttd) {
     line = strip_while(line, ' ');
     if (line[0] == '}') {
         ttd->mode = OUTER_SCOPE;
@@ -136,7 +199,7 @@ void parse_connections(string_t line, temp_tile_data_t* ttd) {
     }
 }
 
-void parse_traversable(string_t line, temp_tile_data_t* ttd) {
+void parse_traversable(string line, temp_tile_data_t* ttd) {
     line = strip_while(line, ' ');
     if (line[0] == '}') {
         ttd->mode = OUTER_SCOPE;
@@ -144,7 +207,7 @@ void parse_traversable(string_t line, temp_tile_data_t* ttd) {
     }
 }
 
-void parse_non_connections(string_t line, temp_tile_data_t* ttd) {
+void parse_non_connections(string line, temp_tile_data_t* ttd) {
     line = strip_while(line, ' ');
     if (line[0] == '}') {
         ttd->mode = OUTER_SCOPE;
@@ -152,7 +215,7 @@ void parse_non_connections(string_t line, temp_tile_data_t* ttd) {
     }
 }
 
-void parse_valid_connections(string_t line, temp_tile_data_t* ttd) {
+void parse_valid_connections(string line, temp_tile_data_t* ttd) {
     //printf("%s", line);
     line = strip_while(line, ' ');
     if (line[0] == '}') {

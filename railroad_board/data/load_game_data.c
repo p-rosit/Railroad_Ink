@@ -7,16 +7,16 @@
 #include "load_meta_data.c"
 #include "load_tile_meta_data.c"
 
-game_data_t*    load_game_data(string_t);
+game_data_t*    load_game_data(string);
 void            free_game_data(game_data_t*);
 
-game_data_t* load_game_data(string_t directory_name) {
+game_data_t* load_game_data(string directory_name) {
     game_data_t* game_data;
     temp_meta_data_t* tmd;
     temp_tile_data_t* ttd;
 
     game_data = (game_data_t*) malloc(sizeof(game_data_t));
-    game_data->data_path = copy_string(directory_name);
+    game_data->data_path = copy_str(directory_name);
 
     tmd = load_meta_data(game_data);
     ttd = load_tile_meta_data(game_data);

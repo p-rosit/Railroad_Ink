@@ -12,14 +12,14 @@
 #include "data_utils.c"
 
 temp_meta_data_t*   load_meta_data(game_data_t*);
-void                determine_expansion_scope(string_t, temp_meta_data_t*);
-void                parse_settings(string_t, settings_t*, temp_meta_data_t*);
-void                parse_expansions(string_t, settings_t*, temp_meta_data_t*);
+void                determine_expansion_scope(string, temp_meta_data_t*);
+void                parse_settings(string, settings_t*, temp_meta_data_t*);
+void                parse_expansions(string, settings_t*, temp_meta_data_t*);
 
 temp_meta_data_t* load_meta_data(game_data_t* game_data) {
     FILE*               fptr;
     char                line[MAX_LINE_LENGTH];
-    string_t            path;
+    string              path;
     temp_meta_data_t*   tmd;
     settings_t*         settings;
 
@@ -31,9 +31,9 @@ temp_meta_data_t* load_meta_data(game_data_t* game_data) {
     }
     free(path);
 
-    tmd = (temp_meta_data_t*) malloc(sizeof(temp_meta_data_t));
+    tmd = malloc(sizeof(temp_meta_data_t));
     tmd->expansion_files = init_list();
-    settings = (settings_t*) malloc(sizeof(settings_t));
+    settings = malloc(sizeof(settings_t));
 
     tmd->mode = OUTER_SCOPE;
     tmd->setting_scope = false;
@@ -76,7 +76,7 @@ temp_meta_data_t* load_meta_data(game_data_t* game_data) {
 
     list_element_t* elm = tmd->expansion_files->frst;
     for (int i = 0; i < tmd->expansion_files->size; i++) {
-        DEBUG_PRINT(INFO, "%s", (string_t) elm->data);
+        DEBUG_PRINT(INFO, "%s", (string) elm->data);
         if (i != tmd->expansion_files->size - 1) DEBUG_PRINT(INFO, ",%c", ' ');
         elm = elm->next;
     }
@@ -86,31 +86,31 @@ temp_meta_data_t* load_meta_data(game_data_t* game_data) {
     return tmd;
 }
 
-void determine_expansion_scope(string_t line, temp_meta_data_t* tmd) {
-    string_t string = strip_while(line, ' ');
+void determine_expansion_scope(string line, temp_meta_data_t* tmd) {
+    string str = strip_while(line, ' ');
 
-    if (strstart("SETTINGS", string)) {
+    if (strstart("SETTINGS", str)) {
         if (tmd->setting_scope) {
             printf("Fatal error: Settings scope encountered more than once.\n");
             exit(1);
         }
         tmd->setting_scope = true;
         tmd->mode = SETTING_SCOPE;
-    } else if (strstart("EXPANSIONS", string)) {
+    } else if (strstart("EXPANSIONS", str)) {
         if (tmd->expansion_scope) {
             printf("Fatal error: Expansions scope encountered more than once.\n");
             exit(1);
         }
         tmd->expansion_scope = true;
         tmd->mode = EXPANSION_SCOPE;
-    } else if (!strstart("#", string) && !strstart("\n", string)) {
+    } else if (!strstart("#", str) && !strstart("\n", str)) {
         printf("Fatal error: Unknown read mode found, got \"%s\".\n", line);
         exit(1);
     }
 }
 
-void parse_settings(string_t line, settings_t* settings, temp_meta_data_t* tmd) {
-    string_t pre_line, post_line;
+void parse_settings(string line, settings_t* settings, temp_meta_data_t* tmd) {
+    string pre_line, post_line;
 
     pre_line = strip_while(line, ' ');
     if (pre_line[0] == '}') {
@@ -127,10 +127,10 @@ void parse_settings(string_t line, settings_t* settings, temp_meta_data_t* tmd) 
     }
 }
 
-void parse_expansions(string_t line, settings_t* settings, temp_meta_data_t* tmd) {
+void parse_expansions(string line, settings_t* settings, temp_meta_data_t* tmd) {
     size_t size;
     char c;
-    string_t expansion;
+    string expansion;
 
     line = strip_while(line, ' ');
     if (line[0] == '}') {
@@ -150,7 +150,7 @@ void parse_expansions(string_t line, settings_t* settings, temp_meta_data_t* tmd
         c = line[size++];
     }
 
-    expansion = (string_t) malloc(size * sizeof(char));
+    expansion = malloc(size * sizeof(char));
     for (int i = 0; i < size; i++) {
         expansion[i] = line[i];
     }

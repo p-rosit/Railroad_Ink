@@ -3,6 +3,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include "utils.c"
 
 typedef struct linked_list  linked_list_t;
 typedef struct list_element list_element_t;

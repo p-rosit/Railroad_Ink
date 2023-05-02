@@ -14,8 +14,8 @@
 #define true  (1)
 #define false (0)
 
-typedef uint8_t     bool_t;
-typedef char*       string_t;
+typedef uint8_t     bool;
+typedef char*       string;
 typedef void        (*free_func_t)(void*);
 
 enum debug_levels {
@@ -26,73 +26,74 @@ enum debug_levels {
     FATAL = 4
 };
 
-string_t       join_path(int nargs, ...);
-string_t       copy_string(string_t);
-bool_t         strstart(string_t, string_t);
-bool_t         streq(string_t, string_t);
+string         join_path(int nargs, ...);
+string         copy_string(string);
+bool           strstart(string, string);
+bool           streq(string, string);
 
-string_t join_path(int nargs, ...) {
+string join_path(int nargs, ...) {
     va_list valist;
     int i, j, k;
-    string_t *strings, res;
+    string *strs, res;
     size_t total_size;
 
-    strings = (string_t*) malloc(nargs * sizeof(string_t));
+    strs = malloc(nargs * sizeof(string));
     va_start(valist, nargs);
 
     total_size = 0;
     for (i = 0; i < nargs; i++) {
         j = 0;
-        strings[i] = va_arg(valist, string_t);
+        strs[i] = va_arg(valist, string);
 
-        while (strings[i][j] != '\0') j++;
+        while (strs[i][j] != '\0') j++;
         total_size += j + 1;
     }
 
     va_end(valist);
 
     k = 0;
-    res = (string_t) malloc(total_size * sizeof(char));
+    res = malloc(total_size * sizeof(char));
     for (i = 0; i < nargs; i++) {
         j = 0;
-        while (strings[i][j] != '\0') {
-            res[k++] = strings[i][j++];
+        while (strs[i][j] != '\0') {
+            res[k++] = strs[i][j++];
         }
         res[k++] = FILE_SEP;
     }
 
-    free(strings);
+    free(strs);
     res[k - 1] = '\0';
     return res;
 }
 
-string_t copy_string(string_t string) {
+string copy_str(string str) {
     size_t size;
     char c;
-    string_t copy;
+    string copy;
 
     size = 0;
-    while ((c = string[size++]) != '\0');
+    while ((c = str[size++]) != '\0');
 
-    copy = (string_t) malloc(size * sizeof(char));
+    copy = malloc(size * sizeof(char));
     for (int i = 0; i < size; ++i) {
-        copy[i] = string[i];
+        copy[i] = str[i];
     }
 
     return copy;
 }
 
-string_t strip_while(string_t string, char c) {
-    while (*string == c) string++;
-    return string;
+string strip_while(string str, char c) {
+    while (*str == c) str++;
+    return str;
 }
 
-string_t strip_to(string_t string, char c) {
-    while (*(string++) != c);
-    return string;
+string strip_to(string str, char c) {
+    char s;
+    while ((s = *(str++)) != c && s != '\0');
+    return str - (s == '\0');
 }
 
-string_t strconcat(string_t a, string_t b) {
+string strconcat(string a, string b) {
     size_t len;
     int i, j;
     char c, *res;
@@ -102,7 +103,7 @@ string_t strconcat(string_t a, string_t b) {
     while(b[j++] != '\0') len++;
     len += 2;
 
-    res = (char*) malloc(len * sizeof(char));
+    res = malloc(len * sizeof(char));
 
     i = 0; j = 0;
     while ((c = a[i++]) != '\0') res[j++] = c;
@@ -114,9 +115,9 @@ string_t strconcat(string_t a, string_t b) {
     return res;
 }
 
-bool_t strstart(string_t sub, string_t string) {
+bool strstart(string sub, string string) {
     int i;
-    bool_t match;
+    bool match;
 
     i = 0;
     match = true;
@@ -131,11 +132,11 @@ bool_t strstart(string_t sub, string_t string) {
     return match;
 }
 
-bool_t streq(string_t a, string_t b) {
+bool streq(string a, string b) {
     return strcmp(a, b) == 0;
 }
 
-int parse_uint(string_t line) {
+int parse_uint(string line) {
     char c;
     int num = 0;
 

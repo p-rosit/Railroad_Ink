@@ -21,7 +21,7 @@ typedef struct expansions       expansions_t;
 typedef struct game_data        game_data_t;
 
 struct game_data {
-    string_t data_path;
+    string data_path;
     settings_t* settings;
     expansions_t* expansions;
 };
@@ -31,24 +31,24 @@ struct settings {
 };
 
 struct expansions {
-    string_t* expansions;
-    string_t* expansion_identifiers;
+    string* expansions;
+    string* expansion_identifiers;
 };
 
 struct temp_meta_data {
     int mode;
-    bool_t setting_scope;
-    bool_t expansion_scope;
+    bool setting_scope;
+    bool expansion_scope;
     linked_list_t* expansion_files;
 };
 
 struct temp_tile_data {
     int mode;
-    bool_t tiles_scope;
-    bool_t connections_scope;
-    bool_t traversable_scope;
-    bool_t non_connections_scope;
-    bool_t valid_connections_scope;
+    bool tiles_scope;
+    bool connections_scope;
+    bool traversable_scope;
+    bool non_connections_scope;
+    bool valid_connections_scope;
     linked_list_t* tile_ids;
     linked_list_t* tile_networks;
 };

@@ -1,6 +1,6 @@
 TILES {             # Valid tiles and their default inner networks
-    E:  ()                              # Tile that can be placed on
-    Ep: ()                              # Tile that cannot be placed on
+    E:                                  # Tile that can be placed on
+    Ep:                                 # Tile that cannot be placed on
     C:  (North, East)                   # C connection
     i:  (North)                         # i connection
     I:  (North, South)                  # I connection
