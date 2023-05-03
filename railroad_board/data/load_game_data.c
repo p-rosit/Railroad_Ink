@@ -18,9 +18,9 @@ game_data_t* load_game_data(string directory_name) {
     game_data = (game_data_t*) malloc(sizeof(game_data_t));
     game_data->data_path = copy_str(directory_name);
 
-    tmd = load_meta_data(game_data);
     ttd = load_tile_meta_data(game_data);
-
+    tmd = load_meta_data(game_data);
+    
     free_temp_meta_data(tmd);
     free_temp_tile_data(ttd);
     return game_data;

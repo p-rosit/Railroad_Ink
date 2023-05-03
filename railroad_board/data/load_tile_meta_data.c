@@ -10,6 +10,7 @@
 #define VALID_CONNECTIONS_SCOPE     (5)
 
 #include "../utils/utils.c"
+#include "../utils/tuple.c"
 #include "data_utils.c"
 
 temp_tile_data_t*   load_tile_meta_data(game_data_t*);
@@ -76,40 +77,53 @@ temp_tile_data_t* load_tile_meta_data(game_data_t* game_data) {
     }
     fclose(fptr);
 
-    list_element_t* elm = ttd->tile_ids->frst;
-    printf("Ids: ");
-    for (int i = 0; i < ttd->tile_ids->size; i++, elm = elm->next) {
-        printf("%s ", (string) elm->data);
-    }
-    printf("\n");
+    linked_list_t *lst, *nlst;
+    list_element_t *elm, *nelm;
+    tuple2_t* tup;
 
-    printf("Connections: ");
-    elm = ttd->tile_connections->frst;
-    for (int i = 0; i < ttd->tile_connections->size; i++, elm = elm->next) {
-        printf("%s ", (string) elm->data);
+    lst = ttd->tile_ids;
+    DEBUG_PRINT(INFO, "Found %lu tile ids: ", lst->size);
+    for (elm = lst->frst; elm != NULL; elm = elm->next) {
+        if (elm != lst->frst) {
+            DEBUG_PRINT(INFO, ",%c", ' ');
+        }
+        DEBUG_PRINT(INFO, "%s", (string) elm->data);
     }
-    printf("\n");
+    DEBUG_PRINT(INFO, "%c", '\n');
 
-    printf("Traversable: ");
-    elm = ttd->traversable_connections->frst;
-    for (int i = 0; i < ttd->traversable_connections->size; i++, elm = elm->next) {
+    lst = ttd->tile_connections;
+    DEBUG_PRINT(INFO, "Found %lu connection types: ", lst->size);
+    for (elm = lst->frst; elm != NULL; elm = elm->next) {
+        if (elm != lst->frst) {
+            DEBUG_PRINT(INFO, ",%c", ' ');
+        }
+        DEBUG_PRINT(INFO, "%s", (string) elm->data);
+    }
+    DEBUG_PRINT(INFO, "%c", '\n');
+
+    lst = ttd->traversable_connections;
+    DEBUG_PRINT(INFO, "Found %lu traversable connections: ", lst->size);
+    for (elm = lst->frst; elm != NULL; elm = elm->next) {
         printf("%s ", (string) elm->data);
     }
     printf("\n");
 
     printf("Non Connections: ");
-    elm = ttd->non_connections->frst;
-    for (int i = 0; i < ttd->non_connections->size; i++, elm = elm->next) {
+    lst = ttd->non_connections;
+    for (elm = lst->frst; elm != NULL; elm = elm->next) {
         printf("%s ", (string) elm->data);
     }
     printf("\n");
 
-    elm = ttd->tile_networks->frst;
-    list_element_t* nelm;
-    for (int i = 0; i < ttd->tile_networks->size; i++, elm = elm->next) {
-        nelm = ((linked_list_t*) (elm->data))->frst;
-        printf("%d: ", i);
-        for (int j = 0; j < ((linked_list_t*) (elm->data))->size; j++, nelm = nelm->next) {
+    printf("Tile networks:\n");
+    lst = ttd->tile_networks;
+    for (elm = lst->frst; elm != NULL; elm = elm->next) {
+        tup = elm->data;
+        nlst = tup->data2;
+
+        printf("(%2s, %lu): ", (string) tup->data1, nlst->size);
+
+        for (nelm = nlst->frst; nelm != NULL; nelm = nelm->next) {
             for (int k = 0; k < 4; k++) {
                 if (((bool*) nelm->data)[k]) {
                     printf("1");
@@ -118,6 +132,20 @@ temp_tile_data_t* load_tile_meta_data(game_data_t* game_data) {
                 }
             }
             printf(" ");
+        }
+        printf("\n");
+    }
+
+    printf("Valid connections: \n");
+    lst = ttd->valid_connections;
+    for (elm = lst->frst; elm != NULL; elm = elm->next) {
+        tup = elm->data;
+        nlst = tup->data2;
+
+        printf("%2s:", (string) tup->data1);
+
+        for (nelm = nlst->frst; nelm != NULL; nelm = nelm->next) {
+            printf(" %s", (string) nelm->data);
         }
         printf("\n");
     }
@@ -171,7 +199,8 @@ void determine_tile_meta_data_scope(string line, temp_tile_data_t* ttd) {
 }
 
 void parse_tiles(string line, temp_tile_data_t* ttd) {
-    string name, temp;
+    string temp;
+    tuple2_t* tup;
     linked_list_t *nets;
     bool* net;
     char c;
@@ -182,11 +211,13 @@ void parse_tiles(string line, temp_tile_data_t* ttd) {
         return;
     }
 
+    tup = init_tuple2();
+
     temp = strip_to(line, ':');
     *(temp - 1) = '\0';
 
-    name = copy_str(line);
-    append(ttd->tile_ids, name);
+    tup->data1 = copy_str(line);
+    append(ttd->tile_ids, copy_str(line));
     line = strip_while(strip_to(temp, '('), ' ');
 
     nets = init_list();
@@ -233,7 +264,8 @@ void parse_tiles(string line, temp_tile_data_t* ttd) {
             }
         }
     }
-    append(ttd->tile_networks, nets);
+    tup->data2 = nets;
+    append(ttd->tile_networks, tup);
 }
 
 void parse_connections(string line, temp_tile_data_t* ttd) {
@@ -288,7 +320,11 @@ void parse_non_connections(string line, temp_tile_data_t* ttd) {
 }
 
 void parse_valid_connections(string line, temp_tile_data_t* ttd) {
+    char c;
     string temp;
+    tuple2_t* tup;
+    linked_list_t* list;
+
 
     line = strip_while(line, ' ');
     if (line[0] == '}') {
@@ -300,10 +336,38 @@ void parse_valid_connections(string line, temp_tile_data_t* ttd) {
         return;
     }
 
-    temp = separate_name(line);
-    append(ttd->valid_connections, copy_str(line));
+    tup = init_tuple2();
 
-    printf("%s\n", line);
+    temp = separate_name(line);
+    tup->data1 = copy_str(line);
+    list = init_list();
+
+    line = temp;
+    c = *line;
+    while (c != ')' && c != '\0') {
+        line = strip_while(line, ' ');
+        temp = line;
+        c = *line;
+
+        if (c == ')') {
+            break;
+        }
+
+        while (c != ' ' && c != ')' && c != '\0') {
+            c = *(temp++);
+        }
+        if (c == '\0') {
+            printf("Fatal error: Unexpected end of line, valid connections should end with \")\"\n");
+            exit(1);
+        }
+        *(temp - 1) = '\0';
+
+        append(list, copy_str(line));
+        line = temp;
+    }
+
+    tup->data2 = list;
+    append(ttd->valid_connections, tup);
 }
 
 void free_tile_meta_data(game_data_t* game_data) {
@@ -317,20 +381,42 @@ void free_tile_meta_data(game_data_t* game_data) {
 }
 
 void free_temp_tile_data(temp_tile_data_t* ttd) {
+    linked_list_t *list, *temp;
     list_element_t *elm, *nxt, *e, *n;
+    tuple2_t* tup;
 
     free_list(ttd->tile_ids, free);
     free_list(ttd->tile_connections, free);
     free_list(ttd->traversable_connections, free);
     free_list(ttd->non_connections, free);
-    free_list(ttd->valid_connections, free);
-    elm = ttd->tile_networks->frst;
-    for (elm = ttd->tile_networks->frst; elm != NULL; elm = nxt) {
+
+    list = ttd->tile_networks;
+    elm = list->frst;
+    for (elm = list->frst; elm != NULL; elm = nxt) {
+        tup = elm->data;
         nxt = elm->next;
-        free_list((linked_list_t*) elm->data, free);
+
+        free(tup->data1);
+        temp = tup->data2;
+        free(tup);
+        free_list(temp, free);
         free(elm);
     }
-    free(ttd->tile_networks);
+    free(list);
+
+    list = ttd->valid_connections;
+    elm = list->frst;
+    for (elm = list->frst; elm != NULL; elm = nxt) {
+        tup = elm->data;
+        nxt = elm->next;
+
+        free(tup->data1);
+        temp = tup->data2;
+        free(tup);
+        free_list(temp, free);
+        free(elm);
+    }
+    free(list);
 
     free(ttd);
 }

@@ -10,6 +10,7 @@
 #include "../utils/utils.c"
 #include "../utils/debug_utils.c"
 #include "../utils/linked_list.c"
+#include "../utils/tuple.c"
 
 typedef struct temp_meta_data   temp_meta_data_t;
 typedef struct temp_tile_data   temp_tile_data_t;
