@@ -3,6 +3,7 @@
 
 #include <stdlib.h>
 #include <stdarg.h>
+#include <ctype.h>
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
@@ -97,9 +98,8 @@ string separate_name(string str) {
     char c;
 
     c = *str;
-    while (('a' <= c && c <= 'z' && 'A' <= c && c <= 'Z') || c == '_') {
-        str++;
-        c = *str;
+    while (isalpha(c) || c == '_') {
+        c = *(++str);
     }
     *(str++) = '\0';
     return str;
