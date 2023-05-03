@@ -35,15 +35,16 @@ temp_tile_data_t* load_tile_meta_data(game_data_t* game_data) {
     free(path);
 
     ttd = malloc(sizeof(temp_tile_data_t));
-    ttd->mode = OUTER_SCOPE;
-    ttd->tiles_scope = false;
-    ttd->connections_scope = false;
-    ttd->traversable_scope = false;
-    ttd->non_connections_scope = false;
-    ttd->valid_connections_scope = false;
+    ttd->mode =                     OUTER_SCOPE;
+    ttd->tiles_scope =              false;
+    ttd->connections_scope =        false;
+    ttd->traversable_scope =        false;
+    ttd->non_connections_scope =    false;
+    ttd->valid_connections_scope =  false;
 
-    ttd->tile_ids = init_list();
-    ttd->tile_networks = init_list();
+    ttd->tile_ids =                 init_list();
+    ttd->tile_networks =            init_list();
+    ttd->tile_connections =         init_list();
 
     while (fgets(line, sizeof line, fptr) != NULL) {
         switch (ttd->mode) {
@@ -73,10 +74,50 @@ temp_tile_data_t* load_tile_meta_data(game_data_t* game_data) {
     fclose(fptr);
 
     list_element_t* elm = ttd->tile_ids->frst;
+    printf("Ids: ");
     for (int i = 0; i < ttd->tile_ids->size; i++, elm = elm->next) {
         printf("%s ", (string) elm->data);
     }
     printf("\n");
+
+    printf("Connections: ");
+    elm = ttd->tile_connections->frst;
+    for (int i = 0; i < ttd->tile_connections->size; i++, elm = elm->next) {
+        printf("%s ", (string) elm->data);
+    }
+    printf("\n");
+
+    printf("Traversable: ");
+    elm = ttd->traversable_connections->frst;
+    for (int i = 0; i < ttd->traversable_connections->size; i++, elm = elm->next) {
+        printf("%s ", (string) elm->data);
+    }
+    printf("\n");
+
+    printf("Non Connections: ");
+    elm = ttd->non_connections->frst;
+    for (int i = 0; i < ttd->non_connections->size; i++, elm = elm->next) {
+        printf("%s ", (string) elm->data);
+    }
+    printf("\n");
+
+    elm = ttd->tile_networks->frst;
+    list_element_t* nelm;
+    for (int i = 0; i < ttd->tile_networks->size; i++, elm = elm->next) {
+        nelm = ((linked_list_t*) (elm->data))->frst;
+        for (int j = 0; j < ((linked_list_t*) (elm->data))->size; j++, nelm = nelm->next) {
+            for (int k = 0; k < 4; k++) {
+                if (((bool*) nelm->data)[k]) {
+                    printf("1");
+                } else {
+                    printf("0");
+                }
+            }
+            printf(" ");
+        }
+        printf("\n");
+    }
+
 
     game_data->expansions = NULL;
     return ttd;
@@ -128,7 +169,7 @@ void determine_tile_meta_data_scope(string line, temp_tile_data_t* ttd) {
 
 void parse_tiles(string line, temp_tile_data_t* ttd) {
     string name, temp;
-    linked_list_t* nets;
+    linked_list_t *nets;
     bool* net;
     char c;
 
@@ -145,9 +186,6 @@ void parse_tiles(string line, temp_tile_data_t* ttd) {
     append(ttd->tile_ids, name);
     line = strip_while(strip_to(temp, '('), ' ');
 
-    //printf("%s", temp);
-    //line = strip_to(temp, '(');
-    
     nets = init_list();
     c = line[0];
     while (c != ')' && c != '\0') {
@@ -181,42 +219,79 @@ void parse_tiles(string line, temp_tile_data_t* ttd) {
                 exit(1);
             }
             line = temp;
-            if (c == ')') break;
+            if (c == ')') {
+                append(nets, net);
+                line = strip_to(line, '(');
+                
+                if (line[0] != '\0') {
+                    c = '(';
+                }
+                break;
+            }
         }
-
-        append(nets, net);
     }
-    //append(ttd->tile_networks, nets);
-
-    //printf("%s", line);
+    append(ttd->tile_networks, nets);
 }
 
 void parse_connections(string line, temp_tile_data_t* ttd) {
+    string temp;
+
     line = strip_while(line, ' ');
     if (line[0] == '}') {
         ttd->mode = OUTER_SCOPE;
         return;
     }
+
+    temp = strip_to(line, ' ');
+    *(temp - 1) = '\0';
+
+    if (line[0] == '\0') {
+        return;
+    }
+
+    append(ttd->tile_connections, copy_str(line));
 }
 
 void parse_traversable(string line, temp_tile_data_t* ttd) {
+    string temp;
+
     line = strip_while(line, ' ');
     if (line[0] == '}') {
         ttd->mode = OUTER_SCOPE;
         return;
     }
+
+    temp = strip_to(line, ' ');
+    *(temp - 1) = '\0';
+
+    if (line[0] == '\0') {
+        return;
+    }
+
+    append(ttd->traversable_connections, copy_str(line));
 }
 
 void parse_non_connections(string line, temp_tile_data_t* ttd) {
+    string temp;
+
     line = strip_while(line, ' ');
     if (line[0] == '}') {
         ttd->mode = OUTER_SCOPE;
         return;
     }
+
+    temp = separate_name(line);
+
+    if (line[0] == '\0') {
+        return;
+    }
+
+    append(ttd->non_connections, copy_str(line));
 }
 
 void parse_valid_connections(string line, temp_tile_data_t* ttd) {
-    //printf("%s", line);
+    string temp;
+
     line = strip_while(line, ' ');
     if (line[0] == '}') {
         ttd->mode = OUTER_SCOPE;
@@ -235,8 +310,18 @@ void free_tile_meta_data(game_data_t* game_data) {
 }
 
 void free_temp_tile_data(temp_tile_data_t* ttd) {
+    list_element_t *elm, *nxt, *e, *n;
+
     free_list(ttd->tile_ids, free);
-    free_list(ttd->tile_networks, free);
+    free_list(ttd->tile_connections, free);
+    elm = ttd->tile_networks->frst;
+    for (elm = ttd->tile_networks->frst; elm != NULL; elm = nxt) {
+        nxt = elm->next;
+        free_list((linked_list_t*) elm->data, free);
+        free(elm);
+    }
+    free(ttd->tile_networks);
+
     free(ttd);
 }
 

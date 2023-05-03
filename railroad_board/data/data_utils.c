@@ -51,6 +51,10 @@ struct temp_tile_data {
     bool valid_connections_scope;
     linked_list_t* tile_ids;
     linked_list_t* tile_networks;
+    linked_list_t* tile_connections;
+    linked_list_t* traversable_connections;
+    linked_list_t* non_connections;
+    linked_list_t* valid_connections;
 };
 
 #endif

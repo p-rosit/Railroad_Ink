@@ -93,6 +93,18 @@ string strip_to(string str, char c) {
     return str - (s == '\0');
 }
 
+string separate_name(string str) {
+    char c;
+
+    c = *str;
+    while (('a' <= c && c <= 'z' && 'A' <= c && c <= 'Z') || c == '_') {
+        str++;
+        c = *str;
+    }
+    *(str++) = '\0';
+    return str;
+}
+
 string strconcat(string a, string b) {
     size_t len;
     int i, j;
