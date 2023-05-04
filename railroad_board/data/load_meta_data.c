@@ -77,10 +77,10 @@ temp_meta_data_t* load_meta_data(game_data_t* game_data) {
     list_element_t* elm = tmd->expansion_files->frst;
     for (int i = 0; i < tmd->expansion_files->size; i++) {
         DEBUG_PRINT(INFO, "%s", (string) elm->data);
-        if (i != tmd->expansion_files->size - 1) DEBUG_PRINT(INFO, ",%c", ' ');
+        if (i != tmd->expansion_files->size - 1) DEBUG_PRINT(INFO, ", ");
         elm = elm->next;
     }
-    DEBUG_PRINT(INFO, "%c", '\n');
+    DEBUG_PRINT(INFO, "\n");
 
     game_data->settings = settings;
     return tmd;

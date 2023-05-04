@@ -85,69 +85,75 @@ temp_tile_data_t* load_tile_meta_data(game_data_t* game_data) {
     DEBUG_PRINT(INFO, "Found %lu tile ids: ", lst->size);
     for (elm = lst->frst; elm != NULL; elm = elm->next) {
         if (elm != lst->frst) {
-            DEBUG_PRINT(INFO, ",%c", ' ');
+            DEBUG_PRINT(INFO, ", ");
         }
         DEBUG_PRINT(INFO, "%s", (string) elm->data);
     }
-    DEBUG_PRINT(INFO, "%c", '\n');
+    DEBUG_PRINT(INFO, "\n");
 
     lst = ttd->tile_connections;
     DEBUG_PRINT(INFO, "Found %lu connection types: ", lst->size);
     for (elm = lst->frst; elm != NULL; elm = elm->next) {
         if (elm != lst->frst) {
-            DEBUG_PRINT(INFO, ",%c", ' ');
+            DEBUG_PRINT(INFO, ", ");
         }
         DEBUG_PRINT(INFO, "%s", (string) elm->data);
     }
-    DEBUG_PRINT(INFO, "%c", '\n');
+    DEBUG_PRINT(INFO, "\n");
 
     lst = ttd->traversable_connections;
     DEBUG_PRINT(INFO, "Found %lu traversable connections: ", lst->size);
     for (elm = lst->frst; elm != NULL; elm = elm->next) {
-        printf("%s ", (string) elm->data);
+        if (elm != lst->frst) {
+            DEBUG_PRINT(INFO, ", ");
+        }
+        DEBUG_PRINT(INFO, "%s ", (string) elm->data);
     }
-    printf("\n");
+    DEBUG_PRINT(INFO, "\n");
 
-    printf("Non Connections: ");
     lst = ttd->non_connections;
+    DEBUG_PRINT(INFO, "Found %lu non connections: ", lst->size);
     for (elm = lst->frst; elm != NULL; elm = elm->next) {
-        printf("%s ", (string) elm->data);
+        if (elm != lst->frst) {
+            DEBUG_PRINT(INFO, ", ");
+        }
+        DEBUG_PRINT(INFO, "%s ", (string) elm->data);
     }
-    printf("\n");
+    DEBUG_PRINT(INFO, "\n");
 
-    printf("Tile networks:\n");
     lst = ttd->tile_networks;
+    DEBUG_PRINT(INFO, "Corresponding tile networks for ids: ");
     for (elm = lst->frst; elm != NULL; elm = elm->next) {
         tup = elm->data;
         nlst = tup->data2;
 
-        printf("(%2s, %lu): ", (string) tup->data1, nlst->size);
+        DEBUG_PRINT(INFO, "(%2s, %lu): ", (string) tup->data1, nlst->size);
 
         for (nelm = nlst->frst; nelm != NULL; nelm = nelm->next) {
             for (int k = 0; k < 4; k++) {
                 if (((bool*) nelm->data)[k]) {
-                    printf("1");
+                    DEBUG_PRINT(INFO, "1");
                 } else {
-                    printf("0");
+                    DEBUG_PRINT(INFO, "0");
                 }
             }
-            printf(" ");
+            DEBUG_PRINT(INFO, " ");
         }
-        printf("\n");
+        DEBUG_PRINT(INFO, "\n");
     }
 
-    printf("Valid connections: \n");
     lst = ttd->valid_connections;
+    DEBUG_PRINT(INFO, "Valid connections:\n");
     for (elm = lst->frst; elm != NULL; elm = elm->next) {
         tup = elm->data;
         nlst = tup->data2;
 
-        printf("%2s:", (string) tup->data1);
+        DEBUG_PRINT(INFO, "%2s:", (string) tup->data1);
 
         for (nelm = nlst->frst; nelm != NULL; nelm = nelm->next) {
-            printf(" %s", (string) nelm->data);
+            DEBUG_PRINT(INFO, " %s", (string) nelm->data);
         }
-        printf("\n");
+        DEBUG_PRINT(INFO, "\n");
     }
 
     game_data->expansions = NULL;
