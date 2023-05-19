@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <math.h>
+#include "utils.c"
 
 typedef struct robin_hash       robin_hash_t;
 typedef struct hash_element     hash_element_t;
@@ -47,13 +48,41 @@ robin_hash_t* init_robin_hash(size_t size, size_t max_size) {
     map->size = size;
     map->max_size = max_size;
     map->max_dist = log2(size);
-    map->data = calloc(size, sizeof(hash_element_t));
+    map->data = calloc(size + map->max_dist, sizeof(hash_element_t));
+    for (i = 0; i < map->max_size + map->max_dist; i++) {
+        map->data[i].dist = map->max_dist;
+    }
 
     return map;
 }
 
 void add_key_robin(robin_hash_t* map, size_t hash, hash_data_t data) {
-    
+    size_t ind;
+    hash_element_t* prev_elm;
+    hash_element_t temp_elm;
+    dist_t curr_dist, prev_dist;
+    int i;
+    bool placed;
+
+    ind = hash % map->size;
+    temp_elm.data = data;
+    temp_elm.hash = hash;
+    temp_elm.dist = 0;
+    for (i = 0; i < map->max_dist; i++) {
+        if (map->data[ind + i].dist < temp_elm.dist) {
+            temp_elm.data = map->data[ind + i].data;
+            temp_elm.hash = map->data[ind + i].hash;
+            temp_elm.dist = map->data[ind + i].dist;
+
+            map->data[ind + 1].data = t;
+        }
+        if (map->data[ind + i].dist == map->max_dist) {
+            placed = true;
+        }
+
+        prev_dist = map->data[ind + i].dist;
+        curr_dist += 1;
+    }
 }
 
 hash_data_t* get_val_robin(robin_hash_t* map, size_t hash) {
@@ -63,7 +92,7 @@ hash_data_t* get_val_robin(robin_hash_t* map, size_t hash) {
     data = NULL;
     ind = hash % map->size;
     for (int i = ind; i < ind + map->max_dist; i++) {
-        if (map->data[i].hash == 0) {
+        if (map->data[i].dist == map->max_dist) {
             break;
         }
         if (map->data[i].hash == hash) {

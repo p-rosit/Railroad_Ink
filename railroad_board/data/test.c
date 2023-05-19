@@ -1,4 +1,4 @@
-#define DEBUG_LEVEL (10)
+#define DEBUG_LEVEL (0)
 
 #include "data_utils.c"
 #include "load_game_data.c"
