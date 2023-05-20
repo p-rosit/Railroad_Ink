@@ -2,6 +2,7 @@
 #define LOAD_GAME_DATA_H
 
 #include "../utils/utils.c"
+#include "../utils/string_map.c"
 #include "data_utils.c"
 
 #include "load_meta_data.c"
@@ -14,6 +15,7 @@ game_data_t* load_game_data(string directory_name) {
     game_data_t* game_data;
     temp_meta_data_t* tmd;
     temp_tile_data_t* ttd;
+    string_map_t* map;
 
     game_data = (game_data_t*) malloc(sizeof(game_data_t));
     game_data->data_path = copy_str(directory_name);
@@ -21,8 +23,14 @@ game_data_t* load_game_data(string directory_name) {
     ttd = load_tile_meta_data(game_data);
     tmd = load_meta_data(game_data);
     
+    map = make_string_map_u8(10, 1000, ttd->tile_ids);
+
+    printf("%s: %d\n", get_mapped_string(map, 6), get_mapped_u8(map, "dT"));
+    printf("%lu\n", map->string2int->size);
+
     free_temp_meta_data(tmd);
     free_temp_tile_data(ttd);
+    free_string_map(map);
     return game_data;
 }
 
