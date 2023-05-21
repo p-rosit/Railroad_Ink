@@ -199,7 +199,7 @@ void determine_tile_meta_data_scope(string line, temp_tile_data_t* ttd) {
         ttd->mode = VALID_CONNECTIONS_SCOPE;
         ttd->valid_connections_scope = true;
     } else if (!strstart("#", string) && !strstart("\n", string)) {
-        printf("Fatal error: Unknown read mode found, got \"%s\"", line);
+        printf("Fatal error: Unknown read mode found, got \"%s\".\n", line);
         exit(1);
     }
 }

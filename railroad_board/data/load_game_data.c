@@ -7,6 +7,7 @@
 
 #include "load_meta_data.c"
 #include "load_tile_meta_data.c"
+#include "load_expansion_data.c"
 #include <stdlib.h>
 
 game_data_t*    load_game_data(string);
@@ -17,6 +18,7 @@ game_data_t* load_game_data(string directory_name) {
     game_data_t* game_data;
     temp_meta_data_t* tmd;
     temp_tile_data_t* ttd;
+    temp_expansion_data_t* ted;
     string_map_t* map;
 
     game_data = malloc(sizeof(game_data_t));
@@ -29,13 +31,15 @@ game_data_t* load_game_data(string directory_name) {
     game_data->map->connection = make_string_map_u8(10, 1000, ttd->tile_connections);
 
     tmd = load_meta_data(game_data);
+    ted = init_temp_expansion_data();
 
     for (elm = tmd->expansion_files->frst; elm != NULL; elm = elm->next) {
-        printf("%s\n", (string) elm->data);
+        load_expansion_data(elm->data, game_data, ted);
     }
 
     free_temp_meta_data(tmd);
     free_temp_tile_data(ttd);
+    free_temp_expansion_data(ted);
     return game_data;
 }
 

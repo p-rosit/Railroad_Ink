@@ -1,5 +1,9 @@
 <std>   # This expansions identifier which can be used to refer
         # to tiles from this expansion outside this expansion.
+        # 
+        # If used, must be first line. Leave empty to have same 
+        # identifier as file name. Can also be left out completely
+        # and the identifier will also be the file name.
 
 TYPES { # Types a tile can have
     E   # Empty type
@@ -48,6 +52,11 @@ TILES { # Tiles that are included in this expansion
 }
 
 DICE { # Dice that are included in this expansion. A die always has six sides.
+# Dice are specified in the following way
+#
+#   <identifier> (<dice1 identifier>, <dice2>, ..., <dice6>)
+#
+# a die always six sides.
 
     # Classic dice
     <classic_simple>  (a, b, f, g, i, j)

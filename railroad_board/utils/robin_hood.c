@@ -22,6 +22,7 @@ struct robin_hash {
 union hash_data {
     uint8_t u8;
     uint16_t u16;
+    string str;
 };
 
 struct hash_element {
@@ -38,8 +39,10 @@ void                increase_robin_size(robin_hash_t*, size_t);
 
 void                add_key_u8(robin_hash_t*, size_t, uint8_t);
 void                add_key_u16(robin_hash_t*, size_t, uint16_t);
+void                add_key_str(robin_hash_t*, size_t, string);
 uint8_t             get_val_u8(robin_hash_t*, size_t);
 uint16_t            get_val_u16(robin_hash_t*, size_t);
+string              get_val_str(robin_hash_t*, size_t);
 
 void                free_robin_hash(robin_hash_t*);
 
@@ -79,13 +82,12 @@ void increase_robin_size(robin_hash_t* map, size_t updated_size) {
     size_t new_size;
     bool collisions, placed;
 
-    DEBUG_PRINT(INFO, "Increasing size of map from %lu ", map->size);
+    DEBUG_PRINT(DEBUG, "Increasing size of map from %lu ", map->size);
 
     new_map = malloc(sizeof(robin_hash_t));
     new_size = updated_size;
     collisions = true;
     while (collisions) {
-        //printf("%lu\n", new_size);
         new_map->max_size = map->max_size;
         new_map->max_dist = log2(new_size);
         new_map->size = new_size;
@@ -114,7 +116,7 @@ void increase_robin_size(robin_hash_t* map, size_t updated_size) {
         free(new_map->data);
     }
 
-    DEBUG_PRINT(INFO, "to %lu.\n", new_map->size);
+    DEBUG_PRINT(DEBUG, "to %lu.\n", new_map->size);
 
     free(map->data);
     map->size = new_map->size;
@@ -132,9 +134,7 @@ bool test_add_key(robin_hash_t* map, hash_element_t* data) {
     data->dist = 0;
     ind = data->hash % map->size;
     for (i = ind; i < map->size + map->max_dist; i++) {
-        //printf("- %d, %d\n", data->dist, i);
         if (map->data[i].dist < data->dist) {
-            //printf("swap: %d -> %d\n", data->data.u8, map->data[i].data.u8);
             temp_elm.data = map->data[i].data;
             temp_elm.hash = map->data[i].hash;
             temp_elm.dist = map->data[i].dist;
@@ -152,7 +152,6 @@ bool test_add_key(robin_hash_t* map, hash_element_t* data) {
             map->data[i].hash = data->hash;
             map->data[i].dist = data->dist;
             placed = true;
-            //printf("add dist: %d (%d, %d)\n", data->dist, i, data->data.u8);
             break;
         }
 
@@ -176,14 +175,11 @@ hash_data_t* get_val_robin(robin_hash_t* map, size_t hash) {
 #endif
     ind = hash % map->size;
     for (int i = ind; i < ind + map->max_dist; i++) {
-        //printf("ind: %d (%d, %d)\n", i, map->data[i].dist, map->max_dist);
         if (map->data[i].dist == map->max_dist || map->data[i].dist < i - ind) {
             break;
         }
-        //printf("hash: (%lu, %lu)\n", map->data[i].hash, hash);
         if (map->data[i].hash == hash) {
             data = &map->data[i].data;
-            //printf("get dist: %d\n", map->data[i].dist);
             break;
         }
     }
@@ -220,12 +216,24 @@ void add_key_u16(robin_hash_t* map, size_t hash, uint16_t val) {
     add_key_robin(map, elm);
 }
 
+void add_key_str(robin_hash_t* map, size_t hash, string val) {
+    hash_element_t elm;
+    elm.hash = hash;
+    elm.data.str = val;
+
+    add_key_robin(map, elm);
+}
+
 uint8_t get_val_u8(robin_hash_t* map, size_t hash) {
     return get_val_robin(map, hash)->u8;
 }
 
 uint16_t get_val_u16(robin_hash_t* map, size_t hash) {
     return get_val_robin(map, hash)->u16;
+}
+
+string get_val_str(robin_hash_t* map, size_t hash) {
+    return get_val_robin(map, hash)->str;
 }
 
 #endif

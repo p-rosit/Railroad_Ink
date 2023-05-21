@@ -27,10 +27,11 @@ enum debug_levels {
     FATAL = 4
 };
 
-string         join_path(int nargs, ...);
-string         copy_string(string);
-bool           strstart(string, string);
-bool           streq(string, string);
+string          join_path(int nargs, ...);
+string          str_concat(string sep, int nargs, ...);
+string          copy_string(string);
+bool            strstart(string, string);
+bool            streq(string, string);
 
 string join_path(int nargs, ...) {
     va_list valist;
@@ -66,6 +67,47 @@ string join_path(int nargs, ...) {
     res[k - 1] = '\0';
     return res;
 }
+string str_concat(string sep, int nargs, ...) {
+    va_list valist;
+    int i, j, k, l;
+    string *strs, res;
+    size_t total_size, sep_size;
+
+    strs = malloc(nargs * sizeof(string));
+    va_start(valist, nargs);
+
+    sep_size = 0;
+    while (sep[sep_size] != '\0') sep_size++;
+
+    total_size = 0;
+    for (i = 0; i < nargs; i++) {
+        j = 0;
+        strs[i] = va_arg(valist, string);
+
+        while (strs[i][j] != '\0') j++;
+        total_size += j + sep_size;
+    }
+
+    va_end(valist);
+
+    k = 0;
+    res = malloc((total_size - sep_size + 1) * sizeof(char));
+    for (i = 0; i < nargs; i++) {
+        j = 0;
+        while (strs[i][j] != '\0') {
+            res[k++] = strs[i][j++];
+        }
+        if (i != nargs - 1) {
+            for (l = 0; sep[l] != '\0'; l++) {
+                res[k++] = sep[l];
+            }
+        }
+    }
+
+    free(strs);
+    res[k] = '\0';
+    return res;
+} 
 
 string copy_str(string str) {
     size_t size;

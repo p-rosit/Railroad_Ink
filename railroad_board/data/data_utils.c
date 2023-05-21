@@ -1,6 +1,7 @@
 #ifndef DATA_UTILS_H
 #define DATA_UTILS_H
 
+#include <stdlib.h>
 #define IDENTIFIER_SIZE (20)
 #define NAME_SIZE       (20)
 
@@ -13,15 +14,18 @@
 #include "../utils/tuple.c"
 #include "../utils/string_map.c"
 
-typedef struct temp_meta_data   temp_meta_data_t;
-typedef struct temp_tile_data   temp_tile_data_t;
+typedef struct temp_meta_data           temp_meta_data_t;
+typedef struct temp_tile_data           temp_tile_data_t;
+typedef struct temp_expansion_data      temp_expansion_data_t;
+typedef struct temp_tile                temp_tile_t;
+typedef struct temp_dice                temp_dice_t;
 
-typedef struct settings         settings_t;
-typedef struct expansions       expansions_t;
-typedef struct name_mapping     name_mapping_t;
+typedef struct settings                 settings_t;
+typedef struct expansions               expansions_t;
+typedef struct name_mapping             name_mapping_t;
 
 // Game data struct
-typedef struct game_data        game_data_t;
+typedef struct game_data                game_data_t;
 
 struct game_data {
     string data_path;
@@ -65,6 +69,48 @@ struct temp_tile_data {
     linked_list_t* non_connections;
     linked_list_t* valid_connections;
 };
+
+struct temp_expansion_data {
+    int mode;
+    bool type_scope;
+    bool tile_scope;
+    bool dice_scope;
+    linked_list_t* types;
+    linked_list_t* tiles;
+    linked_list_t* dice;
+};
+
+struct temp_tile {
+    string identifier;
+    string id;
+    string type;
+    string connections[4];
+    bool station[2];
+};
+
+struct temp_dice {
+    string identifier;
+    string dice[6];
+};
+
+void free_temp_tile(void* data) {
+    temp_tile_t* tile = data;
+
+    free(tile->identifier);
+    free(tile->id);
+    free(tile->type);
+    for (int i = 0; i < 4; i++) {
+        free(tile->connections[i]);
+    }
+    free(tile);
+}
+
+void free_temp_dice(void* data) {
+    temp_dice_t* dice = data;
+
+    free(dice->identifier);
+    free(dice);
+}
 
 void free_name_mapping(game_data_t* game_data) {
     free_string_map(game_data->map->tile);
