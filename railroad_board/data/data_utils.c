@@ -11,18 +11,21 @@
 #include "../utils/debug_utils.c"
 #include "../utils/linked_list.c"
 #include "../utils/tuple.c"
+#include "../utils/string_map.c"
 
 typedef struct temp_meta_data   temp_meta_data_t;
 typedef struct temp_tile_data   temp_tile_data_t;
 
 typedef struct settings         settings_t;
 typedef struct expansions       expansions_t;
+typedef struct name_mapping     name_mapping_t;
 
 // Game data struct
 typedef struct game_data        game_data_t;
 
 struct game_data {
     string data_path;
+    name_mapping_t* map;
     settings_t* settings;
     expansions_t* expansions;
 };
@@ -34,6 +37,11 @@ struct settings {
 struct expansions {
     string* expansions;
     string* expansion_identifiers;
+};
+
+struct name_mapping {
+    string_map_t* tile;
+    string_map_t* connection;
 };
 
 struct temp_meta_data {
@@ -57,5 +65,11 @@ struct temp_tile_data {
     linked_list_t* non_connections;
     linked_list_t* valid_connections;
 };
+
+void free_name_mapping(game_data_t* game_data) {
+    free_string_map(game_data->map->tile);
+    free_string_map(game_data->map->connection);
+    free(game_data->map);
+}
 
 #endif

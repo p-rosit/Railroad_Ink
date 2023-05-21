@@ -107,7 +107,7 @@ temp_tile_data_t* load_tile_meta_data(game_data_t* game_data) {
         if (elm != lst->frst) {
             DEBUG_PRINT(INFO, ", ");
         }
-        DEBUG_PRINT(INFO, "%s ", (string) elm->data);
+        DEBUG_PRINT(INFO, "%s", (string) elm->data);
     }
     DEBUG_PRINT(INFO, "\n");
 
@@ -117,12 +117,12 @@ temp_tile_data_t* load_tile_meta_data(game_data_t* game_data) {
         if (elm != lst->frst) {
             DEBUG_PRINT(INFO, ", ");
         }
-        DEBUG_PRINT(INFO, "%s ", (string) elm->data);
+        DEBUG_PRINT(INFO, "%s", (string) elm->data);
     }
     DEBUG_PRINT(INFO, "\n");
 
     lst = ttd->tile_networks;
-    DEBUG_PRINT(INFO, "Corresponding tile networks for ids: ");
+    DEBUG_PRINT(INFO, "Corresponding tile networks for ids:\n");
     for (elm = lst->frst; elm != NULL; elm = elm->next) {
         tup = elm->data;
         nlst = tup->data2;
