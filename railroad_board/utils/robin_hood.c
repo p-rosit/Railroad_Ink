@@ -34,6 +34,7 @@ struct hash_element {
 robin_hash_t*       init_robin_hash(size_t, size_t);
 void                add_key_robin(robin_hash_t*, hash_element_t);
 bool                test_add_key(robin_hash_t*, hash_element_t*);
+bool                key_exists(robin_hash_t*, size_t);
 hash_data_t*        get_val_robin(robin_hash_t*, size_t);
 void                increase_robin_size(robin_hash_t*, size_t);
 
@@ -64,14 +65,22 @@ robin_hash_t* init_robin_hash(size_t size, size_t max_size) {
 }
 
 void add_key_robin(robin_hash_t* map, hash_element_t elm) {
-    bool added;
+    bool added, increasing;
 
+    increasing = false;
     while (!(added = test_add_key(map, &elm))) {
         if (map->size + 1 > map->max_size) {
             printf("Fatal error: Tried to increase hash map past %lu.\n", map->max_size);
             exit(1);
         }
+        if (!increasing) {
+            increasing = true;
+            DEBUG_PRINT(DEBUG, "Increasing size of map from %lu ", map->size);
+        }
         increase_robin_size(map, map->size + 1);
+    }
+    if (increasing) {
+        DEBUG_PRINT(DEBUG, "to %lu.\n", map->size);
     }
 }
 
@@ -81,8 +90,6 @@ void increase_robin_size(robin_hash_t* map, size_t updated_size) {
     hash_element_t elm;
     size_t new_size;
     bool collisions, placed;
-
-    DEBUG_PRINT(DEBUG, "Increasing size of map from %lu ", map->size);
 
     new_map = malloc(sizeof(robin_hash_t));
     new_size = updated_size;
@@ -115,8 +122,6 @@ void increase_robin_size(robin_hash_t* map, size_t updated_size) {
         new_size += 1;
         free(new_map->data);
     }
-
-    DEBUG_PRINT(DEBUG, "to %lu.\n", new_map->size);
 
     free(map->data);
     map->size = new_map->size;
@@ -166,6 +171,22 @@ bool test_add_key(robin_hash_t* map, hash_element_t* data) {
     return placed;
 }
 
+bool key_exists(robin_hash_t* map, size_t hash) {
+    size_t ind;
+
+    ind = hash % map->size;
+    for (int i = ind; i < ind + map->max_dist; i++) {
+        if (map->data[i].hash == hash) {
+            return true;
+        }
+        if (map->data[i].dist == map->max_dist || map->data[i].dist < i - ind) {
+            break;
+        }
+    }
+
+    return false;
+}
+
 hash_data_t* get_val_robin(robin_hash_t* map, size_t hash) {
     size_t ind;
     hash_data_t* data;
@@ -175,11 +196,11 @@ hash_data_t* get_val_robin(robin_hash_t* map, size_t hash) {
 #endif
     ind = hash % map->size;
     for (int i = ind; i < ind + map->max_dist; i++) {
-        if (map->data[i].dist == map->max_dist || map->data[i].dist < i - ind) {
-            break;
-        }
         if (map->data[i].hash == hash) {
             data = &map->data[i].data;
+            break;
+        }
+        if (map->data[i].dist == map->max_dist || map->data[i].dist < i - ind) {
             break;
         }
     }

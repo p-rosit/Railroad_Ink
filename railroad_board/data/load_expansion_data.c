@@ -16,6 +16,7 @@ typedef struct internal_expansion_data      internal_expansion_data_t;
 struct internal_expansion_data {
     string identifier;
     string expansion_name;
+    robin_hash_t* identifier2index;
 };
 
 temp_expansion_data_t*      init_temp_expansion_data();
@@ -43,6 +44,7 @@ void load_expansion_data(string expansion_name, game_data_t* game_data, temp_exp
 
     internal = malloc(sizeof(internal_expansion_data_t));
     internal->expansion_name = copy_str(expansion_name);
+    internal->identifier2index = init_robin_hash(10, 1000);
 
     ted->mode = OUTER_SCOPE;
     ted->type_scope = false;
@@ -82,6 +84,7 @@ void load_expansion_data(string expansion_name, game_data_t* game_data, temp_exp
 
     free(internal->identifier);
     free(internal->expansion_name);
+    free_robin_hash(internal->identifier2index);
     free(internal);
 }
 
@@ -241,6 +244,11 @@ void parse_expansion_tiles(string line, temp_expansion_data_t* ted, internal_exp
         line = strip_while(line + 1, ' ');
     }
 
+    temp = str_concat("_", 2, internal->identifier, tile->identifier);
+    add_key_u16(internal->identifier2index, hash_string(tile->identifier), ted->tiles->size);
+    add_key_u16(ted->identifier2index, hash_string(temp), ted->tiles->size);
+    free(temp);
+
     append(ted->tiles, tile);
 
     printf("<%s> %s: (", tile->identifier, tile->id);
@@ -266,6 +274,7 @@ temp_expansion_data_t* init_temp_expansion_data() {
     ted->tiles = init_list();
     ted->types = init_list();
     ted->dice = init_list();
+    ted->identifier2index = init_robin_hash(10, 1000);
     return ted;
 }
 
@@ -275,6 +284,7 @@ void free_temp_expansion_data(temp_expansion_data_t* ted) {
     free_list(ted->types, free);
     free_list(ted->tiles, free_temp_tile);
     free_list(ted->dice, free_temp_dice);
+    free_robin_hash(ted->identifier2index);
     free(ted);
 }
 

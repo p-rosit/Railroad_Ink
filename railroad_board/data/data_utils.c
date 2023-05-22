@@ -78,6 +78,7 @@ struct temp_expansion_data {
     linked_list_t* types;
     linked_list_t* tiles;
     linked_list_t* dice;
+    robin_hash_t* identifier2index;
 };
 
 struct temp_tile {
