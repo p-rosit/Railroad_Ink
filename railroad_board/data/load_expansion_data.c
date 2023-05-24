@@ -187,7 +187,7 @@ void parse_expansion_tiles(string line, temp_expansion_data_t* ted, internal_exp
     tile->identifier = copy_str(parse_identifier(line, ""));
    
     if (tile->identifier[0] == '\0') {
-        printf("Fatal error: Tile needs to start with an identifier.\n");
+        printf("Fatal error: Tile needs to start with a non-empty identifier.\n");
         exit(1);
     }
 
@@ -245,6 +245,16 @@ void parse_expansion_tiles(string line, temp_expansion_data_t* ted, internal_exp
     }
 
     temp = str_concat("_", 2, internal->identifier, tile->identifier);
+
+    if (key_exists(internal->identifier2index, hash_string(tile->identifier))) {
+        printf("Fatal error: Duplicate identifier found: \"%s\".\n", tile->identifier);
+        exit(1);
+    }
+
+    if (key_exists(ted->identifier2index, hash_string(tile->identifier))) {
+        DEBUG_PRINT(WARN, "Tile with internal identifier \"%s\" and external identifier \"%s\" has ambiguous name. The identifier \"%s\" appears in the external namespace.\n", tile->identifier, temp, tile->identifier);
+    }
+
     add_key_u16(internal->identifier2index, hash_string(tile->identifier), ted->tiles->size);
     add_key_u16(ted->identifier2index, hash_string(temp), ted->tiles->size);
     free(temp);
@@ -259,12 +269,65 @@ void parse_expansion_tiles(string line, temp_expansion_data_t* ted, internal_exp
     printf(") %d %d\n", tile->station[0], tile->station[1]);
 }
 
-void parse_expansion_dice(string line, temp_expansion_data_t* ted, internal_expansion_data_t* interal) {
+void parse_expansion_dice(string line, temp_expansion_data_t* ted, internal_expansion_data_t* internal) {
+    string temp;
+    int curr_dice, final_dice;
+    temp_dice_t* dice;
+
     line = strip_while(line, ' ');
     if (line[0] == '}') {
         ted->mode = OUTER_SCOPE;
         return;
     }
+
+    if (line[0] == '#' || line[0] == '\n' || line[0] == '\0') return;
+
+    dice = malloc(sizeof(temp_dice_t));
+    //printf("%s", line);
+    dice->identifier = copy_str(parse_identifier(line, ""));
+   
+    if (dice->identifier[0] == '\0') {
+        printf("Fatal error: Dice needs to start with a non-empty identifier.\n");
+        exit(1);
+    }
+
+    line = strip_to(strip_to(line, '\0') + 1, '(');
+    curr_dice = 0;
+    final_dice = false;
+    //printf("--%s", line);
+
+    while (true) {
+        temp = line;
+        while (*temp != ',' && *temp != ' ' && *temp != ')') temp++;
+        if (*strip_while(temp, ' ') == ')') final_dice = true;
+        *temp = '\0';
+
+        dice->dice[curr_dice] = copy_str(line);
+        //printf("(%s)\n", line);
+
+        if (final_dice) break;
+        line = strip_while(temp + 1, ' ');
+        curr_dice += 1;
+
+        if (curr_dice >= 6) {
+            printf("Fatal error: Encountered too many dice in dice with identifier %s in expansion %s.\n", dice->identifier, internal->expansion_name);
+            exit(1);
+        }
+    }
+
+    if (curr_dice < 5) {
+        printf("Fatal error: Encounterd too few connections (%d) in tile with identifier %s in expansion %s.\n", curr_dice + 1, dice->identifier, internal->expansion_name);
+        exit(1);
+    }
+
+    append(ted->dice, dice);
+
+    printf("<%s>: (", dice->identifier);
+    for (int i = 0; i < 6; i++) {
+        if (i > 0) printf(", ");
+        printf("%s", dice->dice[i]);
+    }
+    printf(")\n");
 }
 
 temp_expansion_data_t* init_temp_expansion_data() {

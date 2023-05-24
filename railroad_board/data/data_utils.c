@@ -46,6 +46,7 @@ struct expansions {
 struct name_mapping {
     string_map_t* tile;
     string_map_t* connection;
+    string_map_t* dice;
 };
 
 struct temp_meta_data {
@@ -110,6 +111,9 @@ void free_temp_dice(void* data) {
     temp_dice_t* dice = data;
 
     free(dice->identifier);
+    for (int i = 0; i < 6; i++) {
+        free(dice->dice[i]);
+    }
     free(dice);
 }
 
