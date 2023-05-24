@@ -23,6 +23,7 @@ game_data_t* load_game_data(string directory_name) {
 
     game_data = malloc(sizeof(game_data_t));
     game_data->map = malloc(sizeof(name_mapping_t));
+    game_data->map->dice = init_robin_hash(10, 1000);
     game_data->data_path = copy_str(directory_name);
 
     ttd = load_tile_meta_data(game_data);
@@ -36,6 +37,9 @@ game_data_t* load_game_data(string directory_name) {
     for (elm = tmd->expansion_files->frst; elm != NULL; elm = elm->next) {
         load_expansion_data(elm->data, game_data, ted);
     }
+
+    // Remake data
+    
 
     free_temp_meta_data(tmd);
     free_temp_tile_data(ttd);

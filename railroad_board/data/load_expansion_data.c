@@ -25,7 +25,7 @@ void                        load_expansion_data(string, game_data_t*, temp_expan
 void                        determine_expansion_data_scope(string, temp_expansion_data_t*, internal_expansion_data_t*);
 void                        parse_expansion_types(string, temp_expansion_data_t*, internal_expansion_data_t*);
 void                        parse_expansion_tiles(string, temp_expansion_data_t*, internal_expansion_data_t*);
-void                        parse_expansion_dice(string, temp_expansion_data_t*, internal_expansion_data_t*);
+void                        parse_expansion_dice(string, game_data_t*, temp_expansion_data_t*, internal_expansion_data_t*);
 string                      parse_identifier(string, string);
 
 void load_expansion_data(string expansion_name, game_data_t* game_data, temp_expansion_data_t* ted) {
@@ -73,7 +73,7 @@ void load_expansion_data(string expansion_name, game_data_t* game_data, temp_exp
                 parse_expansion_tiles(line, ted, internal);
                 break;
             case DICE_SCOPE:
-                parse_expansion_dice(line, ted, internal);
+                parse_expansion_dice(line, game_data, ted, internal);
                 break;
             default:
                 printf("Fatal error: Unknown read mode when parsing expansion data.\n");
@@ -269,8 +269,8 @@ void parse_expansion_tiles(string line, temp_expansion_data_t* ted, internal_exp
     printf(") %d %d\n", tile->station[0], tile->station[1]);
 }
 
-void parse_expansion_dice(string line, temp_expansion_data_t* ted, internal_expansion_data_t* internal) {
-    string temp;
+void parse_expansion_dice(string line, game_data_t* game_data, temp_expansion_data_t* ted, internal_expansion_data_t* internal) {
+    string temp, identifier;
     int curr_dice, final_dice;
     temp_dice_t* dice;
 
@@ -283,7 +283,6 @@ void parse_expansion_dice(string line, temp_expansion_data_t* ted, internal_expa
     if (line[0] == '#' || line[0] == '\n' || line[0] == '\0') return;
 
     dice = malloc(sizeof(temp_dice_t));
-    //printf("%s", line);
     dice->identifier = copy_str(parse_identifier(line, ""));
    
     if (dice->identifier[0] == '\0') {
@@ -294,7 +293,6 @@ void parse_expansion_dice(string line, temp_expansion_data_t* ted, internal_expa
     line = strip_to(strip_to(line, '\0') + 1, '(');
     curr_dice = 0;
     final_dice = false;
-    //printf("--%s", line);
 
     while (true) {
         temp = line;
@@ -302,8 +300,13 @@ void parse_expansion_dice(string line, temp_expansion_data_t* ted, internal_expa
         if (*strip_while(temp, ' ') == ')') final_dice = true;
         *temp = '\0';
 
-        dice->dice[curr_dice] = copy_str(line);
-        //printf("(%s)\n", line);
+        identifier = line;
+        if (key_exists(internal->identifier2index, hash_string(identifier))) {
+            identifier = str_concat("_", 2, internal->identifier, identifier);
+        } else {
+            identifier = copy_str(identifier);
+        }
+        dice->dice[curr_dice] = identifier;
 
         if (final_dice) break;
         line = strip_while(temp + 1, ' ');
@@ -320,6 +323,7 @@ void parse_expansion_dice(string line, temp_expansion_data_t* ted, internal_expa
         exit(1);
     }
 
+    add_key_u16(game_data->map->dice, hash_string(dice->identifier), ted->dice->size);
     append(ted->dice, dice);
 
     printf("<%s>: (", dice->identifier);

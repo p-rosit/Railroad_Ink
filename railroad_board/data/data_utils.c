@@ -23,6 +23,8 @@ typedef struct temp_dice                temp_dice_t;
 typedef struct settings                 settings_t;
 typedef struct expansions               expansions_t;
 typedef struct name_mapping             name_mapping_t;
+typedef struct dice_data                dice_data_t;
+typedef struct dice                     dice_t;
 
 // Game data struct
 typedef struct game_data                game_data_t;
@@ -32,6 +34,7 @@ struct game_data {
     name_mapping_t* map;
     settings_t* settings;
     expansions_t* expansions;
+    dice_data_t* dice;
 };
 
 struct settings {
@@ -43,10 +46,15 @@ struct expansions {
     string* expansion_identifiers;
 };
 
+struct dice_data {
+    robin_hash_t* map;
+    uint16_t tiles[];
+};
+
 struct name_mapping {
     string_map_t* tile;
     string_map_t* connection;
-    string_map_t* dice;
+    robin_hash_t* dice;
 };
 
 struct temp_meta_data {
@@ -120,6 +128,7 @@ void free_temp_dice(void* data) {
 void free_name_mapping(game_data_t* game_data) {
     free_string_map(game_data->map->tile);
     free_string_map(game_data->map->connection);
+    free_robin_hash(game_data->map->dice);
     free(game_data->map);
 }
 

@@ -54,9 +54,9 @@ TILES { # Tiles that are included in this expansion
 DICE { # Dice that are included in this expansion. A die always has six sides.
 # Dice are specified in the following way
 #
-#   <identifier> (<dice1 identifier>, <dice2>, ..., <dice6>)
+#   <identifier> (<dice1 identifier>, <dice2 identifier>, ..., <dice6 identifier>)
 #
-# a die always six sides.
+# a die always has six sides.
 
     # Classic dice
     <classic_simple>  (a, b, f, g, i, j)
