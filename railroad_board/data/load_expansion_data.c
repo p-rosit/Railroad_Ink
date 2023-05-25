@@ -23,7 +23,7 @@ temp_expansion_data_t*      init_temp_expansion_data();
 void                        free_temp_expansion_data(temp_expansion_data_t*);
 void                        load_expansion_data(string, game_data_t*, temp_expansion_data_t*);
 void                        determine_expansion_data_scope(string, temp_expansion_data_t*, internal_expansion_data_t*);
-void                        parse_expansion_types(string, temp_expansion_data_t*, internal_expansion_data_t*);
+void                        parse_expansion_types(string, game_data_t*, temp_expansion_data_t*, internal_expansion_data_t*);
 void                        parse_expansion_tiles(string, temp_expansion_data_t*, internal_expansion_data_t*);
 void                        parse_expansion_dice(string, game_data_t*, temp_expansion_data_t*, internal_expansion_data_t*);
 string                      parse_identifier(string, string);
@@ -33,6 +33,7 @@ void load_expansion_data(string expansion_name, game_data_t* game_data, temp_exp
     char                        line[MAX_LINE_LENGTH];
     internal_expansion_data_t*  internal;
     string                      path;
+    linked_list_t*              type_list;
 
     path = join_path(2, game_data->data_path, expansion_name);
 
@@ -50,6 +51,8 @@ void load_expansion_data(string expansion_name, game_data_t* game_data, temp_exp
     ted->type_scope = false;
     ted->tile_scope = false;
     ted->dice_scope = false;
+    type_list = init_list();
+    append(ted->types, type_list);
 
     if (fgets(line, sizeof line, fptr) == NULL) {
         printf("Fatal error: Unexpected EOF.\n");
@@ -67,7 +70,7 @@ void load_expansion_data(string expansion_name, game_data_t* game_data, temp_exp
                 determine_expansion_data_scope(line, ted, internal);
                 break;
             case TYPE_SCOPE:
-                parse_expansion_types(line, ted, internal);
+                parse_expansion_types(line, game_data, ted, internal);
                 break;
             case TILE_SCOPE:
                 parse_expansion_tiles(line, ted, internal);
@@ -81,6 +84,11 @@ void load_expansion_data(string expansion_name, game_data_t* game_data, temp_exp
         }
     }
     fclose(fptr);
+
+    type_list = ted->types->last->data;
+    if (type_list->size == 0) {
+        free_list(remove_last(ted->types), NULL);
+    }
 
     free(internal->identifier);
     free(internal->expansion_name);
@@ -140,9 +148,10 @@ void determine_expansion_data_scope(string line, temp_expansion_data_t* ted, int
     }
 }
 
-void parse_expansion_types(string line, temp_expansion_data_t* ted, internal_expansion_data_t* internal) {
+void parse_expansion_types(string line, game_data_t* game_data, temp_expansion_data_t* ted, internal_expansion_data_t* internal) {
     int i;
     char c;
+    linked_list_t* type_list;
     string type;
 
     line = strip_while(line, ' ');
@@ -151,17 +160,33 @@ void parse_expansion_types(string line, temp_expansion_data_t* ted, internal_exp
         return;
     }
 
+    if (line[0] == '#') return;
+
     type = line;
-    for (i = 0, c = line[i++]; line[i] != '\0'; c = line[i++]) {
+    for (i = 0, c = line[i]; line[i] != '\0'; c = line[++i]) {
         if (c == ' ' || c == '\n' || c == '\0' || c == '#') {
-            line[i-1] = '\0';
+            line[i] = '\0';
             break;
         }
     }
 
     if (*type == '\0') return;
 
-    append(ted->types, copy_str(type));
+    if (key_exists(game_data->map->type, hash_string(type))) {
+        printf("Fatal error: Tile type \"%s\" already exists.\n", type);
+        exit(1);
+    }
+
+    type_list = ted->types->last->data;
+
+    printf("(%s)\n", type);
+    add_key_u16(game_data->map->type, hash_string(type), ted->total_types);
+    append(type_list, copy_str(type));
+
+    printf("%s\n", (string) type_list->last->data);
+    printf("%d\n", get_val_u16(game_data->map->type, hash_string(type)));
+
+    ted->total_types += 1;
 }
 
 void parse_expansion_tiles(string line, temp_expansion_data_t* ted, internal_expansion_data_t* internal) {
@@ -338,6 +363,7 @@ temp_expansion_data_t* init_temp_expansion_data() {
     temp_expansion_data_t* ted;
 
     ted = malloc(sizeof(temp_expansion_data_t));
+    ted->total_types = 0;
     ted->tiles = init_list();
     ted->types = init_list();
     ted->dice = init_list();
@@ -346,9 +372,15 @@ temp_expansion_data_t* init_temp_expansion_data() {
 }
 
 void free_temp_expansion_data(temp_expansion_data_t* ted) {
+    list_element_t *elm, *nxt;
     if (ted == NULL) return;
 
-    free_list(ted->types, free);
+    for (elm = ted->types->frst; elm != NULL; elm = nxt) {
+        nxt = elm->next;
+        free_list(elm->data, free);
+        free(elm);
+    }
+    free(ted->types);
     free_list(ted->tiles, free_temp_tile);
     free_list(ted->dice, free_temp_dice);
     free_robin_hash(ted->identifier2index);

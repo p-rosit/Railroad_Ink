@@ -54,6 +54,7 @@ struct dice_data {
 struct name_mapping {
     string_map_t* tile;
     string_map_t* connection;
+    robin_hash_t* type;
     robin_hash_t* dice;
 };
 
@@ -84,6 +85,7 @@ struct temp_expansion_data {
     bool type_scope;
     bool tile_scope;
     bool dice_scope;
+    uint16_t total_types;
     linked_list_t* types;
     linked_list_t* tiles;
     linked_list_t* dice;
@@ -128,6 +130,7 @@ void free_temp_dice(void* data) {
 void free_name_mapping(game_data_t* game_data) {
     free_string_map(game_data->map->tile);
     free_string_map(game_data->map->connection);
+    free_robin_hash(game_data->map->type);
     free_robin_hash(game_data->map->dice);
     free(game_data->map);
 }

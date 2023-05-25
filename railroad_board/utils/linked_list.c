@@ -19,9 +19,10 @@ struct list_element {
     list_element_t* next;
 };
 
-linked_list_t* init_list();
-void           append(linked_list_t*, void*);
-void           free_list(linked_list_t*, free_func_t);
+linked_list_t*  init_list();
+void            append(linked_list_t*, void*);
+void*           remove_last(linked_list_t*);
+void            free_list(linked_list_t*, free_func_t);
 
 
 linked_list_t* init_list() {
@@ -42,6 +43,28 @@ void append(linked_list_t* list, void* data) {
     if (list->frst == NULL) list->frst = elm;
     if (list->last != NULL) list->last->next = elm;
     list->last = elm;
+}
+
+void* remove_last(linked_list_t* list) {
+    void* data;
+    list_element_t *elm, *nxt;
+
+    if (list->frst == NULL) return NULL;
+
+    elm = list->frst;
+    nxt = elm->next;
+    while (nxt->next != NULL) {
+        elm = nxt;
+        nxt = nxt->next;
+    }
+
+    list->last = elm;
+    elm->next = NULL;
+
+    data = nxt->data;
+    free(nxt);
+
+    return data;
 }
 
 void free_list(linked_list_t* list, free_func_t func) {
