@@ -42,12 +42,14 @@ game_data_t* load_game_data(string directory_name) {
     }
 
     /* Prepare data */
+    linked_list_t* ll;
     printf("Total types: %d\n", ted->total_types);
     for (elm = ted->types->frst; elm != NULL; elm = elm->next) {
-        printf("ttttt\n");
-        for (list_element_t* nelm = ((linked_list_t*) elm)->frst; nelm != NULL; nelm = nelm->next) {
-            printf("(%s)\n", (string) nelm->data);
-            //printf("%s: %d\n", (string) nelm->data, get_val_u16(game_data->map->type, hash_string(nelm->data)));
+        ll = elm->data;
+        //printf("size: %lu\n", ll->size);
+        for (list_element_t* nelm = ll->frst; nelm != NULL; nelm = nelm->next) {
+            //printf("(%s)\n", (string) nelm->data);
+            printf("%s: %d\n", (string) nelm->data, get_val_u16(game_data->map->type, hash_string(nelm->data)));
         }
     }
 

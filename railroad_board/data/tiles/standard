@@ -9,7 +9,6 @@ TYPES { # Types a tile can have
     E   # Empty type
     F
     G
-# More types *cannot* be added to this expansion
 }
 
 TILES { # Tiles that are included in this expansion

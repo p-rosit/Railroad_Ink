@@ -8,6 +8,7 @@
 #define DICE_SCOPE (3)
 
 #include "../utils/utils.c"
+#include "../utils/debug_utils.c"
 #include "../utils/linked_list.c"
 #include "data_utils.c"
 
@@ -179,12 +180,10 @@ void parse_expansion_types(string line, game_data_t* game_data, temp_expansion_d
 
     type_list = ted->types->last->data;
 
-    printf("(%s)\n", type);
     add_key_u16(game_data->map->type, hash_string(type), ted->total_types);
     append(type_list, copy_str(type));
 
-    printf("%s\n", (string) type_list->last->data);
-    printf("%d\n", get_val_u16(game_data->map->type, hash_string(type)));
+    DEBUG_PRINT(INFO, "Type %s with number %d.\n", (string) type_list->last->data, get_val_u16(game_data->map->type, hash_string(type_list->last->data)));
 
     ted->total_types += 1;
 }
@@ -204,11 +203,6 @@ void parse_expansion_tiles(string line, temp_expansion_data_t* ted, internal_exp
     if (line[0] == '#' || line[0] == '\n' || line[0] == '\0') return;
 
     tile = malloc(sizeof(temp_tile_t));
-    tile->type = NULL;
-    for (int j = 0; j < 4; j++) {
-        tile->connections[j] = NULL;
-    }
-
     tile->identifier = copy_str(parse_identifier(line, ""));
    
     if (tile->identifier[0] == '\0') {
@@ -226,6 +220,13 @@ void parse_expansion_tiles(string line, temp_expansion_data_t* ted, internal_exp
 
     *(temp - 1) = '\0';
     tile->id = copy_str(line);
+
+    line = strip_while(strip_to(line, '\0') + 1, ' ');
+    temp = strip_to(line, ',');
+    *(temp - 1) = '\0';
+
+    tile->type = copy_str(line);
+
     line = strip_to(temp, '(');
     curr_connection = 0;
     final_connection = false;
@@ -286,12 +287,12 @@ void parse_expansion_tiles(string line, temp_expansion_data_t* ted, internal_exp
 
     append(ted->tiles, tile);
 
-    printf("<%s> %s: (", tile->identifier, tile->id);
+    DEBUG_PRINT(INFO, "<%s> %2s: %s (", tile->identifier, tile->id, tile->type);
     for (int i = 0; i < 4; i++) {
-        printf("%s", tile->connections[i]);
-        if (i != 3) printf(", ");
+        DEBUG_PRINT(INFO, "%s", tile->connections[i]);
+        if (i != 3) DEBUG_PRINT(INFO, ", ");
     }
-    printf(") %d %d\n", tile->station[0], tile->station[1]);
+    DEBUG_PRINT(INFO, ") %d %d\n", tile->station[0], tile->station[1]);
 }
 
 void parse_expansion_dice(string line, game_data_t* game_data, temp_expansion_data_t* ted, internal_expansion_data_t* internal) {
