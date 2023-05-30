@@ -36,7 +36,7 @@ void load_expansion_data(string expansion_name, game_data_t* game_data, temp_exp
     string                      path;
     linked_list_t*              type_list;
 
-    path = join_path(2, game_data->data_path, expansion_name);
+    path = join_path(2, game_data->settings->data_path, expansion_name);
 
     if ((fptr = fopen(path, "r")) == NULL) {
         printf("Fatal error: Could not find expansion %s with file path %s.", expansion_name, path);

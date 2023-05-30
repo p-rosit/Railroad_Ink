@@ -23,7 +23,7 @@ temp_meta_data_t* load_meta_data(game_data_t* game_data) {
     temp_meta_data_t*   tmd;
     settings_t*         settings;
 
-    path = join_path(3, game_data->data_path, "meta_data", "expansions");
+    path = join_path(3, game_data->settings->data_path, "meta_data", "expansions");
 
     if ((fptr = fopen(path, "r")) == NULL) {
         printf("Fatal error: could not find expansion data.\n");
@@ -33,7 +33,7 @@ temp_meta_data_t* load_meta_data(game_data_t* game_data) {
 
     tmd = malloc(sizeof(temp_meta_data_t));
     tmd->expansion_files = init_list();
-    settings = malloc(sizeof(settings_t));
+    settings = game_data->settings;
 
     tmd->mode = OUTER_SCOPE;
     tmd->setting_scope = false;
@@ -123,7 +123,6 @@ void parse_settings(string line, settings_t* settings, temp_meta_data_t* tmd) {
         settings->max_combinations = parse_uint(strip_while(post_line, ' '));
     } else if (pre_line[0] != '\n' && pre_line[0] != '#') {
         *(post_line - 1) = '\0';
-        printf("Parse error: Skipping field \"%s\", not a known setting.\n", pre_line);
     }
 }
 
@@ -158,19 +157,18 @@ void parse_expansions(string line, settings_t* settings, temp_meta_data_t* tmd) 
     append(tmd->expansion_files, expansion);
 }
 
-void free_meta_data(game_data_t* game_data) {
-    settings_t* settings = game_data->settings;
-
-    if (settings == NULL) return;
-
-    free(settings);
-}
-
 void free_temp_meta_data(temp_meta_data_t* tmd) {
     if (tmd == NULL) return;
 
     free_list(tmd->expansion_files, free);
     free(tmd);
+}
+
+void free_settings(settings_t* settings) {
+    if (settings == NULL) return;
+
+    free(settings->data_path);
+    free(settings);
 }
 
 #endif

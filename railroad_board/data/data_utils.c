@@ -23,6 +23,8 @@ typedef struct temp_dice                temp_dice_t;
 typedef struct settings                 settings_t;
 typedef struct expansions               expansions_t;
 typedef struct name_mapping             name_mapping_t;
+typedef struct type_data                type_data_t;
+typedef struct tile_data                tile_data_t;
 typedef struct dice_data                dice_data_t;
 typedef struct dice                     dice_t;
 
@@ -30,20 +32,31 @@ typedef struct dice                     dice_t;
 typedef struct game_data                game_data_t;
 
 struct game_data {
-    string data_path;
-    name_mapping_t* map;
     settings_t* settings;
+    name_mapping_t* map;
     expansions_t* expansions;
+    type_data_t* types;
+    tile_data_t* tiles;
     dice_data_t* dice;
 };
 
 struct settings {
+    string data_path;
     uint8_t max_combinations;
 };
 
 struct expansions {
     string* expansions;
     string* expansion_identifiers;
+};
+
+struct type_data {
+    robin_hash_t* type2int;
+    uint16_t* int2type;
+};
+
+struct tile_data {
+
 };
 
 struct dice_data {

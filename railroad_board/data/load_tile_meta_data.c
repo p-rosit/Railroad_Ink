@@ -27,7 +27,7 @@ temp_tile_data_t* load_tile_meta_data(game_data_t* game_data) {
     temp_tile_data_t*   ttd;
     string              path;
 
-    path = join_path(3, game_data->data_path, "meta_data", "tile_info");
+    path = join_path(3, game_data->settings->data_path, "meta_data", "tile_info");
 
     if ((fptr = fopen(path, "r")) == NULL) {
         printf("Fatal error: Could not find tile meta data.");

@@ -27,7 +27,8 @@ game_data_t* load_game_data(string directory_name) {
     game_data->map = malloc(sizeof(name_mapping_t));
     game_data->map->dice = init_robin_hash(10, 1000);
     game_data->map->type = init_robin_hash(10, 1000);
-    game_data->data_path = copy_str(directory_name);
+    game_data->settings = malloc(sizeof(settings_t));
+    game_data->settings->data_path = copy_str(directory_name);
 
     ttd = load_tile_meta_data(game_data);
     
@@ -53,6 +54,9 @@ game_data_t* load_game_data(string directory_name) {
         }
     }
 
+    prepare_types(game_data, ted);
+    prepare_tiles(game_data);
+
     free_temp_meta_data(tmd);
     free_temp_tile_data(ttd);
     free_temp_expansion_data(ted);
@@ -62,11 +66,12 @@ game_data_t* load_game_data(string directory_name) {
 void free_game_data(game_data_t* game_data) {
     if (game_data == NULL) return;
 
-    free_meta_data(game_data);
     free_name_mapping(game_data);
     free_tile_meta_data(game_data);
 
-    free(game_data->data_path);
+    free_settings(game_data->settings);
+    free_type_data(game_data->types);
+    free_tile_data(game_data->tiles);
     free(game_data);
 }
 
