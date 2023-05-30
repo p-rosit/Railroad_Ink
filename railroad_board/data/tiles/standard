@@ -6,7 +6,7 @@
         # and the identifier will also be the file name.
 
 TYPES { # Types a tile can have
-    E   # Empty type
+    D
     F
     G
 }

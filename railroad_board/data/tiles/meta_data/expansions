@@ -1,5 +1,6 @@
 SETTINGS {
     max_combinations: 2     # The maximal amount of combined expansions that can be used in one game
+    empty_type: E           # The symbol for an empty type
 }
 
 EXPANSIONS {

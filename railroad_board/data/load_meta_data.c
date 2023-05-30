@@ -121,6 +121,12 @@ void parse_settings(string line, settings_t* settings, temp_meta_data_t* tmd) {
 
     if (strstart("max_combinations", pre_line)) {
         settings->max_combinations = parse_uint(strip_while(post_line, ' '));
+    } else if (strstart("empty_type", pre_line)) {
+        post_line = strip_while(post_line, ' ');
+        pre_line = post_line;
+        while (*pre_line != ' ' && *pre_line != '#' && *pre_line != '\n' && *pre_line != '\0') pre_line++;
+        *pre_line = '\0';
+        tmd->empty_type = copy_str(post_line);
     } else if (pre_line[0] != '\n' && pre_line[0] != '#') {
         *(post_line - 1) = '\0';
     }
@@ -160,6 +166,7 @@ void parse_expansions(string line, settings_t* settings, temp_meta_data_t* tmd) 
 void free_temp_meta_data(temp_meta_data_t* tmd) {
     if (tmd == NULL) return;
 
+    free(tmd->empty_type);
     free_list(tmd->expansion_files, free);
     free(tmd);
 }

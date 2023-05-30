@@ -75,6 +75,7 @@ struct temp_meta_data {
     int mode;
     bool setting_scope;
     bool expansion_scope;
+    string empty_type;
     linked_list_t* expansion_files;
 };
 

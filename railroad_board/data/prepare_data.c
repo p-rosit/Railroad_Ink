@@ -7,7 +7,7 @@
 #include <stdlib.h>
 
 void                prepare_types(game_data_t*, temp_expansion_data_t*);
-uint16_t            count_type_combinations(settings_t*, linked_list_t*);
+uint16_t            count_type_combinations(settings_t*, linked_list_t*, uint16_t*);
 uint16_t            count_combinations_of_n_types(uint16_t, uint16_t*);
 void                make_type_combinations(settings_t*, type_data_t*, linked_list_t*);
 void                make_combinations_of_n_types(type_data_t*, uint16_t, uint16_t*);
@@ -18,17 +18,23 @@ void free_tile_data(tile_data_t*);
 
 void prepare_types(game_data_t* game_data, temp_expansion_data_t* ted) {
     printf("Preparing\n");
-    uint8_t combinations;
+    uint16_t* combinations;
     settings_t* settings;
 
     settings = game_data->settings;
     game_data->types = malloc(sizeof(type_data_t));
 
-    combinations = count_type_combinations(settings, ted->types);
+    combinations = calloc(settings->max_combinations, sizeof(uint16_t));
+    count_type_combinations(settings, ted->types, combinations);
+
+    printf("Initializing\n");
+
     make_type_combinations(settings, game_data->types, ted->types);
+
+    free(combinations);
 }
 
-uint16_t count_type_combinations(settings_t* settings, linked_list_t* types) {
+uint16_t count_type_combinations(settings_t* settings, linked_list_t* types, uint16_t* combinations) {
     int i, j;
     uint16_t ind, type_ind;
 
@@ -47,7 +53,7 @@ uint16_t count_type_combinations(settings_t* settings, linked_list_t* types) {
     type_ind = 1;
     for (i = 0; i < settings->max_combinations; i++) {
         for (j = 0; j < types->size; j++) {
-            ind = count_combinations_of_n_types(ind, &type_ind);
+            ind = count_combinations_of_n_types(j, ind, &type_ind);
         }
     }
     return 0;

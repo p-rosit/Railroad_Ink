@@ -37,6 +37,8 @@ game_data_t* load_game_data(string directory_name) {
 
     tmd = load_meta_data(game_data);
     ted = init_temp_expansion_data();
+    ted->total_types = 1;
+    add_key_u16(game_data->map->type, hash_string(tmd->empty_type), 0);
 
     for (elm = tmd->expansion_files->frst; elm != NULL; elm = elm->next) {
         load_expansion_data(elm->data, game_data, ted);
@@ -45,6 +47,7 @@ game_data_t* load_game_data(string directory_name) {
     /* Prepare data */
     linked_list_t* ll;
     printf("Total types: %d\n", ted->total_types);
+    printf("%s: %d\n", tmd->empty_type, get_val_u16(game_data->map->type, hash_string(tmd->empty_type)));
     for (elm = ted->types->frst; elm != NULL; elm = elm->next) {
         ll = elm->data;
         //printf("size: %lu\n", ll->size);
