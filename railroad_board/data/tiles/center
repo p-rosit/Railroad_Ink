@@ -1,3 +1,5 @@
-EXTRA:
-C;           # Tile which belongs to center
+<cen>
 
+TYPES {
+    C           # Tile which belongs to center
+}

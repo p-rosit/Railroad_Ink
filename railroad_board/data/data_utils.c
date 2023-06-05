@@ -2,8 +2,9 @@
 #define DATA_UTILS_H
 
 #include <stdlib.h>
-#define IDENTIFIER_SIZE (20)
-#define NAME_SIZE       (20)
+#define MAX_COMBINATIONS (10)
+#define IDENTIFIER_SIZE  (20)
+#define NAME_SIZE        (20)
 
 #include <stdio.h>
 #include <stdint.h>
@@ -51,8 +52,10 @@ struct expansions {
 };
 
 struct type_data {
+    size_t total_types;
     robin_hash_t* type2int;
-    uint16_t* int2type;
+    uint16_t** int2type;
+    uint16_t* int2type_data;
 };
 
 struct tile_data {

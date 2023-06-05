@@ -118,7 +118,7 @@ string parse_identifier(string line, string expansion_name) {
 
 void determine_expansion_data_scope(string line, temp_expansion_data_t* ted, internal_expansion_data_t* internal) {
     string temp = strip_while(line, ' ');
-
+    
     if (strstart("TYPES", temp)) {
         if (ted->type_scope) {
             printf("Fatal error: Type scope encountered more than once in file \"%s\".\n", internal->expansion_name);

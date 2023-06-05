@@ -58,6 +58,7 @@ void* remove_last(linked_list_t* list) {
         nxt = nxt->next;
     }
 
+    list->size -= 1;
     list->last = elm;
     elm->next = NULL;
 
