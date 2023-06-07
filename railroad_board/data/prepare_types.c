@@ -1,5 +1,5 @@
-#ifndef PREPARE_DATA_H
-#define PREPARE_DATA_H
+#ifndef PREPARE_TYPES_H
+#define PREPARE_TYPES_H
 
 #include "../utils/linked_list.c"
 #include "data_utils.c"
@@ -18,9 +18,6 @@ void                make_combinations_of_n_types(type_data_t*, uint16_t, uint16_
 void                save_int2type(type_data_t*, uint16_t*, uint16_t*);
 void                free_type_data(type_data_t*);
 
-void prepare_tiles(game_data_t*, temp_expansion_data_t*);
-void free_tile_data(tile_data_t*);
-
 size_t hash_types(uint16_t* types) {
     int i;
     size_t hash;
@@ -36,7 +33,6 @@ size_t hash_types(uint16_t* types) {
 size_t hash_combined_types(uint16_t* types1, uint16_t* types2) {
     int i, j, k;
     uint16_t total, type, types[MAX_COMBINATIONS + 1];
-    size_t hash;
 
     total = *types1 + *types2;
     if (total > MAX_COMBINATIONS) {
@@ -153,7 +149,7 @@ uint16_t count_combinations_of_n_types(uint16_t amount, uint16_t ind, uint16_t e
 
 void make_type_combinations(settings_t* settings, type_data_t* type_data, uint16_t expansion_amount, uint16_t* type_ind) {
     int i, j, k;
-    uint16_t ind, *comb, current_ind;
+    uint16_t *comb, current_ind;
 
     current_ind = 2;
     comb = calloc(settings->max_combinations + 2, sizeof(uint16_t));
@@ -171,7 +167,6 @@ void make_type_combinations(settings_t* settings, type_data_t* type_data, uint16
 }
 
 void make_combinations_of_n_types(type_data_t* type_data, uint16_t ind, uint16_t type, uint16_t expansion_amount, uint16_t* type_ind, uint16_t* comb, uint16_t* current_ind) {
-    int i, j;
     uint16_t *amount, *n;
     n = comb;
     amount = comb + 1;
@@ -217,43 +212,6 @@ void free_type_data(type_data_t* type_data) {
     free(type_data->int2type_data);
     free_robin_hash(type_data->type2int);
     free(type_data);
-}
-
-void prepare_tiles(game_data_t* game_data, temp_expansion_data_t* ted) {
-    int i;
-    uint8_t* tiles;
-    linked_list_t* list;
-    list_element_t* elm;
-    temp_tile_t* tile;
-    tile_data_t* tile_data;
-
-    tile_data = malloc(sizeof(tile_data_t));
-    tile_data->total_tiles = ted->tiles->size;
-    tile_data->tiles = malloc(6 * tile_data->total_tiles * sizeof(uint8_t));
-    tiles = tile_data->tiles;
-
-    for (elm = ted->tiles->frst->next; elm != NULL; elm = elm->next) {
-        tile = elm->data;
-        
-        tiles[0] = get_mapped_u8(game_data->map->tile, tile->id);
-
-        for (i = 0; i < 4; i++) {
-            tiles[i + 1] = get_mapped_u8(game_data->map->connection, tile->connections[i]);
-        }
-
-        tiles[5] = tile->station[0] + 2 * tile->station[1];
-
-        tiles += 6;
-    }
-
-    game_data->tiles = tile_data;
-}
-
-void free_tile_data(tile_data_t* tile_data) {
-    if (tile_data == NULL) return;
-
-    free(tile_data->tiles);
-    free(tile_data);
 }
 
 #endif

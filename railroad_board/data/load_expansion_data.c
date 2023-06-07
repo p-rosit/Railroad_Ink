@@ -24,7 +24,7 @@ temp_expansion_data_t*      init_temp_expansion_data();
 void                        free_temp_expansion_data(temp_expansion_data_t*);
 void                        load_expansion_data(string, game_data_t*, temp_expansion_data_t*);
 void                        determine_expansion_data_scope(string, temp_expansion_data_t*, internal_expansion_data_t*);
-void                        parse_expansion_types(string, game_data_t*, temp_expansion_data_t*, internal_expansion_data_t*);
+void                        parse_expansion_types(string, temp_expansion_data_t*);
 void                        parse_expansion_tiles(string, temp_expansion_data_t*, internal_expansion_data_t*);
 void                        parse_expansion_dice(string, game_data_t*, temp_expansion_data_t*, internal_expansion_data_t*);
 string                      parse_identifier(string, string);
@@ -71,7 +71,7 @@ void load_expansion_data(string expansion_name, game_data_t* game_data, temp_exp
                 determine_expansion_data_scope(line, ted, internal);
                 break;
             case TYPE_SCOPE:
-                parse_expansion_types(line, game_data, ted, internal);
+                parse_expansion_types(line, ted);
                 break;
             case TILE_SCOPE:
                 parse_expansion_tiles(line, ted, internal);
@@ -149,7 +149,7 @@ void determine_expansion_data_scope(string line, temp_expansion_data_t* ted, int
     }
 }
 
-void parse_expansion_types(string line, game_data_t* game_data, temp_expansion_data_t* ted, internal_expansion_data_t* internal) {
+void parse_expansion_types(string line, temp_expansion_data_t* ted) {
     int i;
     char c;
     linked_list_t* type_list;
@@ -172,26 +172,17 @@ void parse_expansion_types(string line, game_data_t* game_data, temp_expansion_d
     }
 
     if (*type == '\0') return;
-    /*
-    if (key_exists(game_data->map->type, hash_string(type))) {
-        printf("Fatal error: Tile type \"%s\" already exists.\n", type);
-        exit(1);
-    }
-    */
+
     type_list = ted->types->last->data;
-
-    //add_key_u16(game_data->map->type, hash_string(type), ted->total_types);
-    //append(ted->types, type);
-    printf("%s\n", type);
     append(type_list, copy_str(type));
-
-    DEBUG_PRINT(INFO, "Type %s with number %lu.\n", (string) type_list->last->data, ted->types->size);
+    DEBUG_PRINT(INFO, "Type %s with number %d.\n", (string) type_list->last->data, ted->total_types);
 
     ted->total_types += 1;
 }
 
 void parse_expansion_tiles(string line, temp_expansion_data_t* ted, internal_expansion_data_t* internal) {
-    int curr_connection, station;
+    int curr_connection;
+    size_t station;
     bool final_connection;
     string temp;
     temp_tile_t* tile;
@@ -223,13 +214,7 @@ void parse_expansion_tiles(string line, temp_expansion_data_t* ted, internal_exp
     *(temp - 1) = '\0';
     tile->id = copy_str(line);
 
-    line = strip_while(strip_to(line, '\0') + 1, ' ');
-    temp = strip_to(line, ',');
-    *(temp - 1) = '\0';
-
-    tile->type = copy_str(line);
-
-    line = strip_to(temp, '(');
+    line = strip_to(strip_to(line, '\0') + 1, '(');
     curr_connection = 0;
     final_connection = false;
 
@@ -289,7 +274,7 @@ void parse_expansion_tiles(string line, temp_expansion_data_t* ted, internal_exp
 
     append(ted->tiles, tile);
 
-    DEBUG_PRINT(INFO, "<%s> %2s: %s (", tile->identifier, tile->id, tile->type);
+    DEBUG_PRINT(INFO, "<%s> %2s: (", tile->identifier, tile->id);
     for (int i = 0; i < 4; i++) {
         DEBUG_PRINT(INFO, "%s", tile->connections[i]);
         if (i != 3) DEBUG_PRINT(INFO, ", ");

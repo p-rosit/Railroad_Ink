@@ -7,12 +7,12 @@ TYPES {
 }
 
 TILES {
-    <a> Ep: E, (E, E, E, E), _ _     # One straight segment
-    <b> Ep: E, (E, E, E, E), _ _     # Two straight segments
-    <c> Ep: E, (E, E, E, E), _ _     # Three straight segments
-    <d> Ep: E, (E, E, E, E), _ _     # Two segment bend
-    <e> Ep: E, (E, E, E, E), _ _     # Three segment bend
-    <f> Ep: E, (E, E, E, E), _ _     # Four segment two bend
+    <a> Ep: (E, E, E, E), _ _     # One straight segment
+    <b> Ep: (E, E, E, E), _ _     # Two straight segments
+    <c> Ep: (E, E, E, E), _ _     # Three straight segments
+    <d> Ep: (E, E, E, E), _ _     # Two segment bend
+    <e> Ep: (E, E, E, E), _ _     # Three segment bend
+    <f> Ep: (E, E, E, E), _ _     # Four segment two bend
 }
 
 DICE {

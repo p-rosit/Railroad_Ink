@@ -5,16 +5,16 @@ TYPES {
 }
 
 TILES {
-    <a> E: E, (E, E, E, E), _ _      # Crater
+    <a> E: (E, E, E, E), _ _      # Crater
 
-    <b> Ep: E, (P, E, E, E), _ _     # Meteor movement north
-    <c> Ep: E, (E, P, E, E), _ _     # Meteor movement east
-    <d> Ep: E, (E, E, P, E), _ _     # Meteor movement south
-    <e> Ep: E, (E, E, E, P), _ _     # Meteor movement west
-    <f> Ep: E, (P, P, P, P), _ _     # Meteor movement, free choice
+    <b> Ep: (P, E, E, E), _ _     # Meteor movement north
+    <c> Ep: (E, P, E, E), _ _     # Meteor movement east
+    <d> Ep: (E, E, P, E), _ _     # Meteor movement south
+    <e> Ep: (E, E, E, P), _ _     # Meteor movement west
+    <f> Ep: (P, P, P, P), _ _     # Meteor movement, free choice
 
-    <g> Ep: E, (P, E, E, E), _ _     # Meteor crash 1 tile from current
-    <h> Ep: E, (P, P, E, E), _ _     # Meteor crash 2 tiles from current
-    <i> Ep: E, (P, P, P, E), _ _     # Meteor crash 3 tiles from current
+    <g> Ep: (P, E, E, E), _ _     # Meteor crash 1 tile from current
+    <h> Ep: (P, P, E, E), _ _     # Meteor crash 2 tiles from current
+    <i> Ep: (P, P, P, E), _ _     # Meteor crash 3 tiles from current
 }
 

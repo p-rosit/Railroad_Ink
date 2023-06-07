@@ -1,11 +1,11 @@
 <riv>
 
 TILES {
-    <a> C: E, (Ri, Ri, E, E), _ _
+    <a> C: (Ri, Ri, E, E), _ _
 
-    <b> I: E, (Ri, E, Ri, E), _ _
+    <b> I: (Ri, E, Ri, E), _ _
 
-    <c> O: E, (C, Ri, C, Ri), S _
-    <d> O: E, (R, Ri, R, Ri), S _
+    <c> O: (C, Ri, C, Ri), S _
+    <d> O: (R, Ri, R, Ri), S _
 }
 

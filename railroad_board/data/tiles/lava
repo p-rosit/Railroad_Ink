@@ -1,13 +1,13 @@
-<lva>
+<lava>
 
 TILES {
-    <a> C: E, (Lv, Lv, E, E), _ _
+    <a> C: (Lv, Lv, E, E), _ _
 
-    <b> I: E, (Lv, E, Lv, E), _ _
+    <b> I: (Lv, E, Lv, E), _ _
 
-    <c> T: E, (Lv, Lv, Lv, E), _ _
+    <c> T: (Lv, Lv, Lv, E), _ _
 
-    <d> dT: E, (C, Lv, C, E), S _
-    <e> dT: E, (R, Lv, R, E), S _
+    <d> dT: (C, Lv, C, E), S _
+    <e> dT: (R, Lv, R, E), S _
 }
 

@@ -6,7 +6,7 @@
         # and the identifier will also be the file name.
 
 #TYPES { # Types a tile can have
-#     E # single line with an identifier specifies a type.
+#     E  # single line with an identifier specifies a type.
 #}
 
 TILES { # Tiles that are included in this expansion
@@ -26,28 +26,28 @@ TILES { # Tiles that are included in this expansion
 # of the expansion and the identifier in the expansion. I.e. std_a
 # or std_f.
 
-    <a> C: C, (C, C, E, E), _ _
-    <b> C: V, (R, R, E, E), _ _
-    <c> C: F, (C, R, E, E), S _
+    <a> C: (C, C, E, E), _ _
+    <b> C: (R, R, E, E), _ _
+    <c> C: (C, R, E, E), S _
 
-    <d> i: E, (C, E, E, E), S _
-    <e> i: E, (R, E, E, E), S _
+    <d> i: (C, E, E, E), S _
+    <e> i: (R, E, E, E), S _
 
-    <f> I: E, (C, E, C, E), _ _
-    <g> I: E, (R, E, R, E), _ _
-    <h> I: E, (C, E, R, E), S _
+    <f> I: (C, E, C, E), _ _
+    <g> I: (R, E, R, E), _ _
+    <h> I: (C, E, R, E), S _
 
-    <i> T: E, (C, C, C, E), _ _
-    <j> T: E, (R, R, R, E), _ _
-    <k> T: E, (C, R, C, E), S _
-    <l> T: E, (R, C, R, E), S _
-    <m> T: E, (C, C, R, E), S _
-    <n> T: E, (C, R, R, E), S _
+    <i> T: (C, C, C, E), _ _
+    <j> T: (R, R, R, E), _ _
+    <k> T: (C, R, C, E), S _
+    <l> T: (R, C, R, E), S _
+    <m> T: (C, C, R, E), S _
+    <n> T: (C, R, R, E), S _
 
-    <o> CC: E, (C, C, C, C), _ _
-    <p> CC: E, (R, R, R, R), _ _
+    <o> CC: (C, C, C, C), _ _
+    <p> CC: (R, R, R, R), _ _
 
-    <q> O: E, (C, R, C, R), _ _
+    <q> O: (C, R, C, R), _ _
 }
 
 DICE { # Dice that are included in this expansion. A die always has six sides.

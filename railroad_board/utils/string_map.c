@@ -1,7 +1,6 @@
 #ifndef STRING_MAP_H
 #define STRING_MAP_H
 
-#include "hash_map.c"
 #include "linked_list.c"
 #include "robin_hood.c"
 #include <stdint.h>

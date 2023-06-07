@@ -1,17 +1,17 @@
 <spc>
 
 TILES {
-    <a> E: E, (E, E, E, E), _ _     # Empty tile
+    <a> E: (E, E, E, E), _ _     # Empty tile
 
-    <b> S: E, (C, C, C, C), _ _     # Special tiles
-    <c> S: E, (C, C, C, R), S _
-    <d> S: E, (C, C, R, R), S _
-    <e> S: E, (C, R, C, R), S _
-    <f> S: E, (C, R, R, R), S _
-    <g> S: E, (R, R, R, R), _ _
+    <b> S: (C, C, C, C), _ _     # Special tiles
+    <c> S: (C, C, C, R), S _
+    <d> S: (C, C, R, R), S _
+    <e> S: (C, R, C, R), S _
+    <f> S: (C, R, R, R), S _
+    <g> S: (R, R, R, R), _ _
 
-    <h> i: E, (C, E, E, E), _ _     # Goal tiles
-    <i> i: E, (R, E, E, E), _ _
+    <h> i: (C, E, E, E), _ _     # Goal tiles
+    <i> i: (R, E, E, E), _ _
 }
 
 DICE {

@@ -14,7 +14,7 @@
 temp_meta_data_t*   load_meta_data(game_data_t*);
 void                determine_expansion_scope(string, temp_meta_data_t*);
 void                parse_settings(string, settings_t*, temp_meta_data_t*);
-void                parse_expansions(string, settings_t*, temp_meta_data_t*);
+void                parse_expansions(string, temp_meta_data_t*);
 
 temp_meta_data_t* load_meta_data(game_data_t* game_data) {
     FILE*               fptr;
@@ -47,7 +47,7 @@ temp_meta_data_t* load_meta_data(game_data_t* game_data) {
                 parse_settings(line, settings, tmd);
                 break;
             case EXPANSION_SCOPE:
-                parse_expansions(line, settings, tmd);
+                parse_expansions(line, tmd);
                 break;
             default:
                 printf("Fatal error: Unkown read mode when parsing expansion data.\n");
@@ -75,7 +75,7 @@ temp_meta_data_t* load_meta_data(game_data_t* game_data) {
     DEBUG_PRINT(INFO, "Found %lu expansions to load:\n", tmd->expansion_files->size);
 
     list_element_t* elm = tmd->expansion_files->frst;
-    for (int i = 0; i < tmd->expansion_files->size; i++) {
+    for (size_t i = 0; i < tmd->expansion_files->size; i++) {
         DEBUG_PRINT(INFO, "%s", (string) elm->data);
         if (i != tmd->expansion_files->size - 1) DEBUG_PRINT(INFO, ", ");
         elm = elm->next;
@@ -132,7 +132,7 @@ void parse_settings(string line, settings_t* settings, temp_meta_data_t* tmd) {
     }
 }
 
-void parse_expansions(string line, settings_t* settings, temp_meta_data_t* tmd) {
+void parse_expansions(string line, temp_meta_data_t* tmd) {
     size_t size;
     char c;
     string expansion;
@@ -156,7 +156,7 @@ void parse_expansions(string line, settings_t* settings, temp_meta_data_t* tmd) 
     }
 
     expansion = malloc(size * sizeof(char));
-    for (int i = 0; i < size; i++) {
+    for (size_t i = 0; i < size; i++) {
         expansion[i] = line[i];
     }
     expansion[size - 1] = '\0';

@@ -31,6 +31,8 @@ struct hash_element {
     hash_data_t data;
 };
 
+size_t hash_string(string);
+
 robin_hash_t*       init_robin_hash(size_t, size_t);
 void                add_key_robin(robin_hash_t*, hash_element_t);
 bool                test_add_key(robin_hash_t*, hash_element_t*);
@@ -47,8 +49,20 @@ string              get_val_str(robin_hash_t*, size_t);
 
 void                free_robin_hash(robin_hash_t*);
 
+size_t hash_string(char* key) {
+    size_t hash;
+    char c;
+
+    hash = 5381;
+    while ((c = *key++) != '\0') {
+        hash = ((hash << 5) + hash) + c;
+    }
+
+    return hash;
+}
+
 robin_hash_t* init_robin_hash(size_t size, size_t max_size) {
-    int i;
+    size_t i;
     robin_hash_t* map;
 
     map = malloc(sizeof(robin_hash_t));
@@ -85,7 +99,7 @@ void add_key_robin(robin_hash_t* map, hash_element_t elm) {
 }
 
 void increase_robin_size(robin_hash_t* map, size_t updated_size) {
-    int i;
+    size_t i;
     robin_hash_t* new_map;
     hash_element_t elm;
     size_t new_size;
@@ -131,9 +145,8 @@ void increase_robin_size(robin_hash_t* map, size_t updated_size) {
 }
 
 bool test_add_key(robin_hash_t* map, hash_element_t* data) {
-    size_t ind;
+    size_t ind, i;
     hash_element_t temp_elm;
-    int i;
     bool placed;
 
     data->dist = 0;
@@ -175,7 +188,7 @@ bool key_exists(robin_hash_t* map, size_t hash) {
     size_t ind;
 
     ind = hash % map->size;
-    for (int i = ind; i < ind + map->max_dist; i++) {
+    for (size_t i = ind; i < ind + map->max_dist; i++) {
         if (map->data[i].hash == hash) {
             return true;
         }
@@ -195,7 +208,7 @@ hash_data_t* get_val_robin(robin_hash_t* map, size_t hash) {
     data = NULL;
 #endif
     ind = hash % map->size;
-    for (int i = ind; i < ind + map->max_dist; i++) {
+    for (size_t i = ind; i < ind + map->max_dist; i++) {
         if (map->data[i].hash == hash) {
             data = &map->data[i].data;
             break;

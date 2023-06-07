@@ -1,8 +1,8 @@
 <mnt>
 
 TILES {
-    <a> Ep: E, (M, M, M, M), _ _     # Mountain tile
-    <b> C:  E, (P, P, M, M), _ _     # Mountain tile that can have C placed in it
-    <c> I:  E, (P, M, P, M), _ _     # Mountain tile that can have I placed in it
+    <a> Ep: (M, M, M, M), _ _     # Mountain tile
+    <b> C:  (P, P, M, M), _ _     # Mountain tile that can have C placed in it
+    <c> I:  (P, M, P, M), _ _     # Mountain tile that can have I placed in it
 }
 

@@ -113,7 +113,6 @@ struct temp_expansion_data {
 struct temp_tile {
     string identifier;
     string id;
-    string type;
     string connections[4];
     bool station[2];
 };
@@ -128,7 +127,6 @@ void free_temp_tile(void* data) {
 
     free(tile->identifier);
     free(tile->id);
-    free(tile->type);
     for (int i = 0; i < 4; i++) {
         free(tile->connections[i]);
     }
@@ -145,12 +143,12 @@ void free_temp_dice(void* data) {
     free(dice);
 }
 
-void free_name_mapping(game_data_t* game_data) {
-    free_string_map(game_data->map->tile);
-    free_string_map(game_data->map->connection);
-    free_string_map(game_data->map->type);
-    free_robin_hash(game_data->map->dice);
-    free(game_data->map);
+void free_name_mapping(name_mapping_t* map) {
+    free_string_map(map->tile);
+    free_string_map(map->connection);
+    free_string_map(map->type);
+    free_robin_hash(map->dice);
+    free(map);
 }
 
 #endif

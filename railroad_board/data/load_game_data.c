@@ -9,7 +9,8 @@
 #include "load_meta_data.c"
 #include "load_tile_meta_data.c"
 #include "load_expansion_data.c"
-#include "prepare_data.c"
+#include "prepare_types.c"
+#include "prepare_tiles.c"
 #include <stdlib.h>
 
 game_data_t*    load_game_data(string);
@@ -23,7 +24,6 @@ game_data_t* load_game_data(string directory_name) {
     temp_meta_data_t* tmd;
     temp_tile_data_t* ttd;
     temp_expansion_data_t* ted;
-    string_map_t* map;
 
     game_data = malloc(sizeof(game_data_t));
     game_data->map = malloc(sizeof(name_mapping_t));
@@ -56,7 +56,7 @@ game_data_t* load_game_data(string directory_name) {
     for (elm = ted->types->frst; elm != NULL; elm = elm->next) {
         ll = elm->data;
         for (list_element_t* nelm = ll->frst; nelm != NULL; nelm = nelm->next) {
-            printf("%s: %d\n", (string) nelm->data, get_mapped_u16(game_data->map->type, nelm->data));
+            printf("%s: %d\n", (string) nelm->data, get_mapped_u8(game_data->map->type, nelm->data));
         }
     }
 
@@ -92,7 +92,7 @@ string_map_t* convert_types(linked_list_t* types) {
 void free_game_data(game_data_t* game_data) {
     if (game_data == NULL) return;
 
-    free_name_mapping(game_data);
+    free_name_mapping(game_data->map);
     free_tile_meta_data(game_data);
 
     free_settings(game_data->settings);

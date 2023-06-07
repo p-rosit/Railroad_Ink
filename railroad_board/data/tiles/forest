@@ -1,12 +1,12 @@
 <frst>
 
 TILES {
-    <a> C: E, (C, C, E, E), _ _
-    <b> C: E, (R, R, E, E), _ _
+    <a> C: (C, C, E, E), _ _
+    <b> C: (R, R, E, E), _ _
 
-    <c> I: E, (C, E, C, E), _ _
-    <d> I: E, (R, E, R, E), _ _
+    <c> I: (C, E, C, E), _ _
+    <d> I: (R, E, R, E), _ _
 
-    <e> Ep: E, (E, E, E, E), _ _     # Forest tile
+    <e> Ep: (E, E, E, E), _ _     # Forest tile
 }
 

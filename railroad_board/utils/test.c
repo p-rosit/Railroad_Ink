@@ -1,4 +1,4 @@
-#define DEBUG_LEVEL (0)
+#define DEBUG_LEVEL (1)
 
 #include "utils.c"
 #include "linked_list.c"

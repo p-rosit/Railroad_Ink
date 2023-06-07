@@ -118,7 +118,7 @@ string copy_str(string str) {
     while ((c = str[size++]) != '\0');
 
     copy = malloc(size * sizeof(char));
-    for (int i = 0; i < size; ++i) {
+    for (size_t i = 0; i < size; ++i) {
         copy[i] = str[i];
     }
 

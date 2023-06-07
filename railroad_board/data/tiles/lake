@@ -1,15 +1,15 @@
-<lak>
+<lake>
 
 TILES {
-    <a> C: E, (La, La, E, E), _ _
+    <a> C: (La, La, E, E), _ _
 
-    <b> i: E, (La, E, E, E), _ _
+    <b> i: (La, E, E, E), _ _
 
-    <c> I: E, (C, E, La, E), S _
-    <d> I: E, (R, E, La, E), S _
+    <c> I: (C, E, La, E), S _
+    <d> I: (R, E, La, E), S _
 
-    <e> T: E, (La, La, La, E), _ _
+    <e> T: (La, La, La, E), _ _
 
-    <f> S: E, (C, R, La, La), S _
+    <f> S: (C, R, La, La), S _
 }
 

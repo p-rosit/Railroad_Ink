@@ -275,15 +275,13 @@ void parse_tiles(string line, temp_tile_data_t* ttd) {
 }
 
 void parse_connections(string line, temp_tile_data_t* ttd) {
-    string temp;
-
     line = strip_while(line, ' ');
     if (line[0] == '}') {
         ttd->mode = OUTER_SCOPE;
         return;
     }
 
-    temp = separate_name(line);
+    separate_name(line);
     if (line[0] == '\0') {
         return;
     }
@@ -292,15 +290,13 @@ void parse_connections(string line, temp_tile_data_t* ttd) {
 }
 
 void parse_traversable(string line, temp_tile_data_t* ttd) {
-    string temp;
-
     line = strip_while(line, ' ');
     if (line[0] == '}') {
         ttd->mode = OUTER_SCOPE;
         return;
     }
 
-    temp = separate_name(line);
+    separate_name(line);
     if (line[0] == '\0') {
         return;
     }
@@ -309,15 +305,13 @@ void parse_traversable(string line, temp_tile_data_t* ttd) {
 }
 
 void parse_non_connections(string line, temp_tile_data_t* ttd) {
-    string temp;
-
     line = strip_while(line, ' ');
     if (line[0] == '}') {
         ttd->mode = OUTER_SCOPE;
         return;
     }
     
-    temp = separate_name(line);
+    separate_name(line);
     if (line[0] == '\0') {
         return;
     }
@@ -388,7 +382,7 @@ void free_tile_meta_data(game_data_t* game_data) {
 
 void free_temp_tile_data(temp_tile_data_t* ttd) {
     linked_list_t *list, *temp;
-    list_element_t *elm, *nxt, *e, *n;
+    list_element_t *elm, *nxt;
     tuple2_t* tup;
 
     free_list(ttd->tile_ids, free);

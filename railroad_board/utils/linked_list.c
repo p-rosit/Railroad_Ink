@@ -89,14 +89,14 @@ void free_list(linked_list_t* list, free_func_t func) {
 
 
     if (func != NULL) {
-        for (int i = 0; i < list->size; ++i) {
+        for (size_t i = 0; i < list->size; ++i) {
             nxt = elm->next;
             func(elm->data);
             free(elm);
             elm = nxt;
         }
     } else {
-        for (int i = 0; i < list->size; ++i) {
+        for (size_t i = 0; i < list->size; ++i) {
             nxt = elm->next;
             free(elm);
             elm = nxt;
