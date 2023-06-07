@@ -1,9 +1,13 @@
-C: E (C C E E)
-C: E (R R E E)
+<trl>
 
-I: E (C E C E)
-I: E (R E R E)
+TILES {
+    <a> C: E, (C, C, E, E), _ _
+    <b> C: E, (R, R, E, E), _ _
 
-T: E (C C C E)
-T: E (R R R E)
+    <c> I: E, (C, E, C, E), _ _
+    <d> I: E, (R, E, R, E), _ _
+
+    <e> T: E, (C, C, C, E), _ _
+    <f> T: E, (R, R, R, E), _ _
+}
 

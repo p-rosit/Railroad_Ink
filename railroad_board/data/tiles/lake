@@ -1,11 +1,15 @@
-C: E (La La E E)
+<lak>
 
-i: E (La E E E)
+TILES {
+    <a> C: E, (La, La, E, E), _ _
 
-I: E (C E La E) S
-I: E (R E La E) S
+    <b> i: E, (La, E, E, E), _ _
 
-T: E (La La La E)
+    <c> I: E, (C, E, La, E), S _
+    <d> I: E, (R, E, La, E), S _
 
-S: E (C R La La) S
+    <e> T: E, (La, La, La, E), _ _
+
+    <f> S: E, (C, R, La, La), S _
+}
 

@@ -5,11 +5,9 @@
         # identifier as file name. Can also be left out completely
         # and the identifier will also be the file name.
 
-TYPES { # Types a tile can have
-    D
-    F
-    G
-}
+#TYPES { # Types a tile can have
+#     E # single line with an identifier specifies a type.
+#}
 
 TILES { # Tiles that are included in this expansion
 # Tiles have the following structure:

@@ -1,11 +1,5 @@
 <spc>
 
-TYPES {
-    T
-    S
-    R
-}
-
 TILES {
     <a> E: E, (E, E, E, E), _ _     # Empty tile
 

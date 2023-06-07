@@ -1,15 +1,20 @@
-EXTRA:
-Mp;              # Meteor position
+<met>
 
-E: E (E E E E)      # Crater
+TYPES {
+    Mp                      # Meteor position
+}
 
-Ep: E (P E E E)     # Meteor movement north
-Ep: E (E P E E)     # Meteor movement east
-Ep: E (E E P E)     # Meteor movement south
-Ep: E (E E E P)     # Meteor movement west
-Ep: E (P P P P)     # Meteor movement, free choice
+TILES {
+    <a> E: E, (E, E, E, E), _ _      # Crater
 
-Ep: E (P E E E)     # Meteor crash 1 tile from current
-Ep: E (P P E E)     # Meteor crash 2 tiles from current
-Ep: E (P P P E)     # Meteor crash 3 tiles from current
+    <b> Ep: E, (P, E, E, E), _ _     # Meteor movement north
+    <c> Ep: E, (E, P, E, E), _ _     # Meteor movement east
+    <d> Ep: E, (E, E, P, E), _ _     # Meteor movement south
+    <e> Ep: E, (E, E, E, P), _ _     # Meteor movement west
+    <f> Ep: E, (P, P, P, P), _ _     # Meteor movement, free choice
+
+    <g> Ep: E, (P, E, E, E), _ _     # Meteor crash 1 tile from current
+    <h> Ep: E, (P, P, E, E), _ _     # Meteor crash 2 tiles from current
+    <i> Ep: E, (P, P, P, E), _ _     # Meteor crash 3 tiles from current
+}
 

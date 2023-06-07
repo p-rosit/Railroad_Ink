@@ -1,14 +1,18 @@
-C: E (C C E E)     # C with one cacti
-C: E (R R E E)     # C with one cacti
-C: E (C C E E)     # C with oasis
-C: E (R R E E)     # C with oasis
+<dsrt>
 
-I: E (C E C E)     # I with one cacti
-I: E (R E R E)     # I with one cacti
-I: E (C E C E)     # I with oasis
-I: E (R E R E)     # I with oasis
+TILES {
+    <q> C: E, (C, C, E, E), _ _     # C with one cacti
+    <b> C: E, (R, R, E, E), _ _     # C with one cacti
+    <c> C: E, (C, C, E, E), _ _     # C with oasis
+    <d> C: E, (R, R, E, E), _ _     # C with oasis
 
-Ep: E (E E E E)     # Two cacti on empty tile
+    <e> I: E, (C, E, C, E), _ _     # I with one cacti
+    <f> I: E, (R, E, R, E), _ _     # I with one cacti
+    <g> I: E, (C, E, C, E), _ _     # I with oasis
+    <h> I: E, (R, E, R, E), _ _     # I with oasis
 
-Ep: E (E E E E)     # Arid phase
+    <i> Ep: E, (E, E, E, E), _ _     # Two cacti on empty tile
+
+    <j> Ep: E, (E, E, E, E), _ _     # Arid phase
+}
 

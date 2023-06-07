@@ -1,8 +1,12 @@
-C: E (C C E E)
-C: E (R R E E)
+<frst>
 
-I: E (C E C E)
-I: E (R E R E)
+TILES {
+    <a> C: E, (C, C, E, E), _ _
+    <b> C: E, (R, R, E, E), _ _
 
-Ep: E (E E E E)
+    <c> I: E, (C, E, C, E), _ _
+    <d> I: E, (R, E, R, E), _ _
+
+    <e> Ep: E, (E, E, E, E), _ _     # Forest tile
+}
 

@@ -250,7 +250,7 @@ void parse_expansion_tiles(string line, temp_expansion_data_t* ted, internal_exp
     }
 
     if (curr_connection < 3) {
-        printf("Fatal error: Encounterd too few connections (%d) in tile with identifier %s in expansion %s.\n", curr_connection + 1, tile->identifier, internal->expansion_name);
+        printf("Fatal error: Encountered too few connections (%d) in tile with identifier %s in expansion %s.\n", curr_connection + 1, tile->identifier, internal->expansion_name);
         exit(1);
     }
 
@@ -263,7 +263,7 @@ void parse_expansion_tiles(string line, temp_expansion_data_t* ted, internal_exp
         } else if (*line == 'S') {
             tile->station[station] = true;
         } else {
-            printf("Fatal error: Unknown station type \"%c\".\n", *line);
+            printf("Fatal error: Unknown station type \"%c\" in tile with identifier %s in expansion %s.\n", *line, tile->identifier, internal->expansion_name);
             exit(1);
         }
 
@@ -273,7 +273,7 @@ void parse_expansion_tiles(string line, temp_expansion_data_t* ted, internal_exp
     temp = str_concat("_", 2, internal->identifier, tile->identifier);
 
     if (key_exists(internal->identifier2index, hash_string(tile->identifier))) {
-        printf("Fatal error: Duplicate identifier found: \"%s\".\n", tile->identifier);
+        printf("Fatal error: Duplicate identifier found: \"%s\" in expansion %s.\n", tile->identifier, internal->expansion_name);
         exit(1);
     }
 

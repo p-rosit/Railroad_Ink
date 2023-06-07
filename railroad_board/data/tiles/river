@@ -1,7 +1,11 @@
-C: E (Ri Ri E E)
+<riv>
 
-I: E (Ri E Ri E)
+TILES {
+    <a> C: E, (Ri, Ri, E, E), _ _
 
-O: E (C Ri C Ri)
-O: E (R Ri R Ri)
+    <b> I: E, (Ri, E, Ri, E), _ _
+
+    <c> O: E, (C, Ri, C, Ri), S _
+    <d> O: E, (R, Ri, R, Ri), S _
+}
 

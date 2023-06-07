@@ -1,5 +1,8 @@
-EXTRA:
-V           # Village
-F           # Factory
-U;          # University
+<bld>
+
+TYPES {
+    V           # Village
+    F           # Factory
+    U           # University
+}
 

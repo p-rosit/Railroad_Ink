@@ -1,9 +1,13 @@
-C: E (Lv Lv E E)
+<lva>
 
-I: E (Lv E Lv E)
+TILES {
+    <a> C: E, (Lv, Lv, E, E), _ _
 
-T: E (Lv Lv Lv E)
+    <b> I: E, (Lv, E, Lv, E), _ _
 
-dT: E (C Lv C E)
-dT: E (R Lv R E)
+    <c> T: E, (Lv, Lv, Lv, E), _ _
+
+    <d> dT: E, (C, Lv, C, E), S _
+    <e> dT: E, (R, Lv, R, E), S _
+}
 

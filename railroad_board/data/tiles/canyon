@@ -1,12 +1,17 @@
-EXTRA:
-C_N          # Canyon in north face of tile
-C_E          # Canyon in east face of tile
-C_NE;        # Canyons in north and east faces of tiles
+<cny>
 
-Ep: E (E E E E)  # One straight segment
-Ep: E (E E E E)  # Two straight segments
-Ep: E (E E E E)  # Three straight segments
-Ep: E (E E E E)  # Two segment bend
-Ep: E (E E E E)  # Three segment bend
-Ep: E (E E E E)  # Four segment two bend
+TYPES {
+    C_N                         # Canyon in north face of tile
+    C_E                         # Canyon in east face of tile
+    C_NE                        # Canyons in north and east faces of tiles
+}
+
+TILES {
+    <a> Ep: E, (E, E, E, E), _ _     # One straight segment
+    <b> Ep: E, (E, E, E, E), _ _     # Two straight segments
+    <c> Ep: E, (E, E, E, E), _ _     # Three straight segments
+    <d> Ep: E, (E, E, E, E), _ _     # Two segment bend
+    <e> Ep: E, (E, E, E, E), _ _     # Three segment bend
+    <f> Ep: E, (E, E, E, E), _ _     # Four segment two bend
+}
 
