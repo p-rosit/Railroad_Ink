@@ -14,8 +14,10 @@
 
 game_data_t*    load_game_data(string);
 void            free_game_data(game_data_t*);
+string_map_t*   convert_types(linked_list_t*);
 
 game_data_t* load_game_data(string directory_name) {
+    linked_list_t* list;
     list_element_t* elm;
     game_data_t* game_data;
     temp_meta_data_t* tmd;
@@ -26,7 +28,6 @@ game_data_t* load_game_data(string directory_name) {
     game_data = malloc(sizeof(game_data_t));
     game_data->map = malloc(sizeof(name_mapping_t));
     game_data->map->dice = init_robin_hash(10, 1000);
-    game_data->map->type = init_robin_hash(10, 1000);
     game_data->settings = malloc(sizeof(settings_t));
     game_data->settings->data_path = copy_str(directory_name);
 
@@ -38,32 +39,54 @@ game_data_t* load_game_data(string directory_name) {
     tmd = load_meta_data(game_data);
     ted = init_temp_expansion_data();
     ted->total_types = 1;
-    add_key_u16(game_data->map->type, hash_string(tmd->empty_type), 0);
+
+    list = init_list();
+    append(list, copy_str(tmd->empty_type));
+    append(ted->types, list);
 
     for (elm = tmd->expansion_files->frst; elm != NULL; elm = elm->next) {
         load_expansion_data(elm->data, game_data, ted);
     }
 
+    game_data->map->type = convert_types(ted->types);
+
     /* Prepare data */
     linked_list_t* ll;
     printf("Total types: %d\n", ted->total_types);
-    printf("%s: %d\n", tmd->empty_type, get_val_u16(game_data->map->type, hash_string(tmd->empty_type)));
     for (elm = ted->types->frst; elm != NULL; elm = elm->next) {
         ll = elm->data;
-        //printf("size: %lu\n", ll->size);
         for (list_element_t* nelm = ll->frst; nelm != NULL; nelm = nelm->next) {
-            //printf("(%s)\n", (string) nelm->data);
-            printf("%s: %d\n", (string) nelm->data, get_val_u16(game_data->map->type, hash_string(nelm->data)));
+            printf("%s: %d\n", (string) nelm->data, get_mapped_u16(game_data->map->type, nelm->data));
         }
     }
 
     prepare_types(game_data, ted);
-    prepare_tiles(game_data);
+    prepare_tiles(game_data, ted);
 
     free_temp_meta_data(tmd);
     free_temp_tile_data(ttd);
     free_temp_expansion_data(ted);
     return game_data;
+}
+
+string_map_t* convert_types(linked_list_t* types) {
+    linked_list_t *list, *flat_types;
+    list_element_t *elm, *temp;
+    string_map_t* map;
+
+    flat_types = init_list();
+
+    for (elm = types->frst; elm != NULL; elm = elm->next) {
+        list = elm->data;
+        for (temp = list->frst; temp != NULL; temp = temp->next) {
+            append(flat_types, temp->data);
+        }
+    }
+    
+    map = make_string_map_u8(10, 1000, flat_types);
+    free_list(flat_types, NULL);
+
+    return map;
 }
 
 void free_game_data(game_data_t* game_data) {

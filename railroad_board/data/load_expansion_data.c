@@ -172,18 +172,20 @@ void parse_expansion_types(string line, game_data_t* game_data, temp_expansion_d
     }
 
     if (*type == '\0') return;
-
+    /*
     if (key_exists(game_data->map->type, hash_string(type))) {
         printf("Fatal error: Tile type \"%s\" already exists.\n", type);
         exit(1);
     }
-
+    */
     type_list = ted->types->last->data;
 
-    add_key_u16(game_data->map->type, hash_string(type), ted->total_types);
+    //add_key_u16(game_data->map->type, hash_string(type), ted->total_types);
+    //append(ted->types, type);
+    printf("%s\n", type);
     append(type_list, copy_str(type));
 
-    DEBUG_PRINT(INFO, "Type %s with number %d.\n", (string) type_list->last->data, get_val_u16(game_data->map->type, hash_string(type_list->last->data)));
+    DEBUG_PRINT(INFO, "Type %s with number %lu.\n", (string) type_list->last->data, ted->types->size);
 
     ted->total_types += 1;
 }

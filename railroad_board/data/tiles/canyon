@@ -15,3 +15,6 @@ TILES {
     <f> Ep: E, (E, E, E, E), _ _     # Four segment two bend
 }
 
+DICE {
+    <canyon_dice_1> (a, b, c, d, e, f)
+}

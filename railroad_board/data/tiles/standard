@@ -26,9 +26,9 @@ TILES { # Tiles that are included in this expansion
 # of the expansion and the identifier in the expansion. I.e. std_a
 # or std_f.
 
-    <a> C: E, (C, C, E, E), _ _
-    <b> C: E, (R, R, E, E), _ _
-    <c> C: E, (C, R, E, E), S _
+    <a> C: C, (C, C, E, E), _ _
+    <b> C: V, (R, R, E, E), _ _
+    <c> C: F, (C, R, E, E), S _
 
     <d> i: E, (C, E, E, E), S _
     <e> i: E, (R, E, E, E), S _

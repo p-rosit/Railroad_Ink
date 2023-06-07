@@ -18,7 +18,7 @@ void                make_combinations_of_n_types(type_data_t*, uint16_t, uint16_
 void                save_int2type(type_data_t*, uint16_t*, uint16_t*);
 void                free_type_data(type_data_t*);
 
-void prepare_tiles(game_data_t*);
+void prepare_tiles(game_data_t*, temp_expansion_data_t*);
 void free_tile_data(tile_data_t*);
 
 size_t hash_types(uint16_t* types) {
@@ -219,13 +219,49 @@ void free_type_data(type_data_t* type_data) {
     free(type_data);
 }
 
-void prepare_tiles(game_data_t* game_data) {
-    game_data->tiles = malloc(sizeof(tile_data_t));
+void prepare_tiles(game_data_t* game_data, temp_expansion_data_t* ted) {
+    int i;
+    uint8_t* tiles;
+    uint16_t types[2];
+    linked_list_t* list;
+    list_element_t* elm;
+    temp_tile_t* tile;
+    tile_data_t* tile_data;
+
+    tile_data = malloc(sizeof(tile_data_t));
+    tile_data->total_tiles = ted->tiles->size;
+    tile_data->tiles = malloc(8 * tile_data->total_tiles * sizeof(uint8_t));
+    tiles = tile_data->tiles;
+
+    types[0] = 1;
+    for (elm = ted->tiles->frst->next; elm != NULL; elm = elm->next) {
+        tile = elm->data;
+        
+        types[1] = get_mapped_u8(game_data->map->type, tile->type);
+
+        tiles[0] = get_mapped_u8(game_data->map->tile, tile->id);
+        tiles[1] = get_val_u16(game_data->types->type2int, hash_types(types));
+        //printf("%d: %d ", tiles[0], tiles[1]);
+
+        for (i = 0; i < 4; i++) {
+            tiles[i + 2] = get_mapped_u8(game_data->map->connection, tile->connections[i]);
+        }
+        //printf("(%d, %d, %d, %d), ", tiles[2], tiles[3], tiles[4], tiles[5]);
+
+        tiles[6] = tile->station[0];
+        tiles[7] = tile->station[1];
+        //printf("%d %d\n", tiles[6], tiles[7]);
+
+        tiles += 8;
+    }
+
+    game_data->tiles = tile_data;
 }
 
 void free_tile_data(tile_data_t* tile_data) {
     if (tile_data == NULL) return;
 
+    free(tile_data->tiles);
     free(tile_data);
 }
 
