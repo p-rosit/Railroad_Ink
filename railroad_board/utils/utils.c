@@ -33,6 +33,18 @@ string          copy_string(string);
 bool            strstart(string, string);
 bool            streq(string, string);
 
+size_t hash_string(string key) {
+    size_t hash;
+    char c;
+
+    hash = 5381;
+    while ((c = *key++) != '\0') {
+        hash = ((hash << 5) + hash) + c;
+    }
+
+    return hash;
+}
+
 string join_path(int nargs, ...) {
     va_list valist;
     int i, j, k;
@@ -67,6 +79,7 @@ string join_path(int nargs, ...) {
     res[k - 1] = '\0';
     return res;
 }
+
 string str_concat(string sep, int nargs, ...) {
     va_list valist;
     int i, j, k, l;

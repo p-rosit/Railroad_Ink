@@ -1,109 +1,73 @@
 #ifndef STRING_MAP_H
 #define STRING_MAP_H
 
+#include "utils.c"
 #include "linked_list.c"
-#include "robin_hood.c"
+#include "hash_map.c"
 #include <stdint.h>
 #include <stdlib.h>
 
-typedef struct string_map       string_map_t;
-
-string_map_t*                   make_string_map(size_t, size_t, linked_list_t*);
-string_map_t*                   make_string_map_u8(size_t, size_t, linked_list_t*);
-string_map_t*                   make_string_map_u16(size_t, size_t, linked_list_t*);
-void                            free_string_map(string_map_t*);
-
-struct string_map {
-    string* int2string;
-    string vals;
-    robin_hash_t* string2int;
-};
-
-uint8_t get_mapped_u8(string_map_t* map, string str) {
-    return get_val_u8(map->string2int, hash_string(str));
-}
-
-uint16_t get_mapped_u16(string_map_t* map, string str) {
-    return get_val_u16(map->string2int, hash_string(str));
-}
-
-string get_mapped_string(string_map_t* map, uint16_t num) {
-    return map->int2string[num];
-}
-
-string_map_t* make_string_map_u8(size_t size, size_t max_size, linked_list_t* list) {
-    int i;
-    string_map_t* map;
-    list_element_t* elm;
-
-    map = make_string_map(size, max_size, list);
-
-    for (i = 0, elm = list->frst; elm != NULL; i++, elm = elm->next) {
-        add_key_u8(map->string2int, hash_string(elm->data), i);
-    }
-
-    return map;
-}
-
-string_map_t* make_string_map_u16(size_t size, size_t max_size, linked_list_t* list) {
-    int i;
-    string_map_t* map;
-    list_element_t* elm;
-
-    map = make_string_map(size, max_size, list);
-
-    for (i = 0, elm = list->frst; elm != NULL; i++, elm = elm->next) {
-        add_key_u16(map->string2int, hash_string(elm->data), i);
-    }
-
-    return map;
-}
-
-string_map_t* make_string_map(size_t size, size_t max_size, linked_list_t* list) {
-    string_map_t* map;
-    size_t num, total_length;
-    list_element_t* elm;
-    string str, tmp;
-
-    num = 0;
-    total_length = 0;
-    for (elm = list->frst; elm != NULL; elm = elm->next) {
-        str = elm->data;
-        while (*(str++) != '\0') {
-            total_length += 1;
-        }
-        total_length += 1;
-        num += 1;
-    }
-    
-    map = malloc(sizeof(string_map_t));
-    map->int2string = malloc(num * sizeof(string));
-    map->vals = malloc(total_length * sizeof(char));
-    map->string2int = init_robin_hash(size, max_size);
-
-    num = 0;
-    tmp = map->vals;
-    for (elm = list->frst; elm != NULL; elm = elm->next) {
-        map->int2string[num++] = tmp;
-
-        str = elm->data;
-        while (*str != '\0') {
-            *(tmp++) = *(str++);
-        }
-        *(tmp++) = '\0';
-    }
-
-    return map;
-}
-
-void free_string_map(string_map_t* map) {
-    if (map == NULL) return;
-
-    free(map->int2string);
-    free(map->vals);
-    free_robin_hash(map->string2int);
-    free(map);
-}
+#define MAKE_STRING_MAP(type) \
+ \
+typedef struct type##_string_map { \
+    string* data2string; \
+    string vals; \
+    type##_hash_map_t string2data; \
+} type##_string_map_t; \
+ \
+type##_string_map_t new_##type##_string_map(string_list_t* list, size_t initial_size, size_t maximal_size) { \
+    size_t i, num, total_length; \
+    string_list_element_t* elm; \
+    string str, tmp; \
+    type##_string_map_t map; \
+ \
+    num = 0; \
+    total_length = 0; \
+    for (elm = list->frst; elm != NULL; elm = elm->next) { \
+        str = elm->data; \
+        while (*(str++) != '\0') { \
+            total_length += 1; \
+        } \
+        total_length += 1; \
+        num += 1; \
+    } \
+ \
+    map.data2string = malloc(num * sizeof(string)); \
+    map.vals = malloc(total_length * sizeof(char)); \
+    map.string2data = type##_new_hash_map(initial_size, maximal_size); \
+ \
+    num = 0; \
+    tmp = map.vals; \
+    for (elm = list->frst; elm != NULL; elm = elm->next) { \
+        map.data2string[num++] = tmp; \
+ \
+        str = elm->data; \
+        while (*str != '\0') { \
+            *(tmp++) = *(str++); \
+        } \
+        *(tmp++) = '\0'; \
+    } \
+ \
+    for (i = 0, elm = list->frst; elm != NULL; i++, elm = elm->next) { \
+        type##_add_hash_val(&map.string2data, hash_string(elm->data), i, 1); \
+    } \
+ \
+    return map; \
+} \
+type get_string2##type(type##_string_map_t* map, string str) { \
+    return *type##_get_hash_val(&map->string2data, hash_string(str)); \
+} \
+ \
+string get_##type##2string(type##_string_map_t* map, type num) { \
+    return map->data2string[num]; \
+} \
+ \
+void free_##type##_string_map(type##_string_map_t* map) { \
+    free(map->data2string); \
+    free(map->vals); \
+    type##_free_hash_map(&map->string2data); \
+} \
+ \
 
 #endif
 
