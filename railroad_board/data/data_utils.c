@@ -3,8 +3,8 @@
 
 #include <stdlib.h>
 #define MAX_COMBINATIONS (10)
-#define IDENTIFIER_SIZE  (20)
-#define NAME_SIZE        (20)
+/* #define IDENTIFIER_SIZE  (20) */
+/* #define NAME_SIZE        (20) */
 
 #include <stdio.h>
 #include <stdint.h>
@@ -13,7 +13,16 @@
 #include "../utils/debug_utils.c"
 #include "../utils/linked_list.c"
 #include "../utils/tuple.c"
+#include "../utils/hash_map.c"
 #include "../utils/string_map.c"
+
+MAKE_LINKED_LIST(string);
+
+MAKE_HASH_MAP(uint8_t);
+MAKE_HASH_MAP(uint16_t);
+
+MAKE_STRING_MAP(uint8_t);
+MAKE_STRING_MAP(uint16_t);
 
 typedef struct temp_meta_data           temp_meta_data_t;
 typedef struct temp_tile_data           temp_tile_data_t;
@@ -32,15 +41,6 @@ typedef struct dice                     dice_t;
 // Game data struct
 typedef struct game_data                game_data_t;
 
-struct game_data {
-    settings_t* settings;
-    name_mapping_t* map;
-    expansions_t* expansions;
-    type_data_t* types;
-    tile_data_t* tiles;
-    dice_data_t* dice;
-};
-
 struct settings {
     string data_path;
     uint8_t max_combinations;
@@ -53,7 +53,7 @@ struct expansions {
 
 struct type_data {
     size_t total_types;
-    robin_hash_t* type2int;
+    uint16_t_hash_map_t type2int;
     uint16_t** int2type;
     uint16_t* int2type_data;
 };
@@ -64,23 +64,33 @@ struct tile_data {
 };
 
 struct dice_data {
-    robin_hash_t* map;
+    uint8_t_hash_map_t map;
     uint16_t tiles[];
 };
 
 struct name_mapping {
-    string_map_t* tile;
-    string_map_t* connection;
-    string_map_t* type;
-    robin_hash_t* dice;
+    uint16_t_string_map_t tile;
+    uint8_t_string_map_t connection;
+    uint8_t_hash_map_t type;
+    uint16_t_hash_map_t dice;
 };
+
+struct game_data {
+    settings_t settings;
+    name_mapping_t map;
+    expansions_t expansions;
+    type_data_t types;
+    tile_data_t tiles;
+    dice_data_t dice;
+};
+
 
 struct temp_meta_data {
     int mode;
     bool setting_scope;
     bool expansion_scope;
     string empty_type;
-    linked_list_t* expansion_files;
+    string_list_t expansion_files;
 };
 
 struct temp_tile_data {

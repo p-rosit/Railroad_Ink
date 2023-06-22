@@ -15,9 +15,10 @@
 #define true  (1)
 #define false (0)
 
-typedef uint8_t     bool;
-typedef char*       string;
-typedef void        (*free_func_t)(void*);
+typedef unsigned int    board_int;
+typedef board_int       bool;
+typedef char*           string;
+typedef void            (*free_func_t)(void*);
 
 enum debug_levels {
     DEBUG = 0,
@@ -203,9 +204,9 @@ bool streq(string a, string b) {
     return strcmp(a, b) == 0;
 }
 
-int parse_uint(string line) {
+unsigned int parse_uint(string line) {
     char c;
-    int num = 0;
+    unsigned int num = 0;
 
     c = *(line++);
     while (c != ' ' && c != '#' && c != '\n' && c != '\0') {
