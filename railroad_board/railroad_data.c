@@ -7,42 +7,60 @@
 #define MAX_COMBINATIONS        (4)
 
 /* Tile information */
-#define TOTAL_TILES             (100)
-#define TOTAL_CONNECTIONS       (8)
-#define TOTAL_DICE              (10)
-
-/************************************************************
-*                                                           *
-*   Data structures keeping track of all the information    *
-*   needed to play the game.                                *
-*                                                           *
-************************************************************/
+#define TOTAL_TILES             (37)
+#define TOTAL_DICE              (5)
 
 enum expansion {
-    expansion_STANDARD,
-    expansion_SPECIAL,
-    expansion_NETWORK,
-    expansion_LONGEST,
-    expansion_CENTER,
-    expansion_ERROR,
-    expansion_BUILDING,
-    expansion_MOUNTAIN,
-    expansion_RIVER,
+    e_STANDARD,
+    e_SPECIAL,
+    e_NETWORK,
+    e_LONGEST,
+    e_CENTER,
+    e_ERROR,
+    e_BUILDING,
+    e_MOUNTAIN,
+    e_RIVER,
+    e_LAKE,
+    e_LAVA,
+    e_METEOR,
+    e_FOREST,
+    e_TRAIL,
+    e_DESERT,
+    e_CANYON,
     TOTAL_EXPANSIONS,
 };
 
 enum tile_types {
-    tile_E,
-    tile_Ep,
-    tile_C,
-    tile_i,
-    tile_I,
-    tile_T,
-    tile_dT,
-    tile_CC,
-    tile_O,
-    tile_S,
+    t_E,
+    t_Ep,
+    t_C,
+    t_i,
+    t_I,
+    t_T,
+    t_dT,
+    t_CC,
+    t_O,
+    t_S,
     TOTAL_TYPES,
+};
+
+enum connections {
+    c_E,
+    c_C,
+    c_R,
+    c_M,
+    c_P,
+    c_Ri,
+    c_La,
+    c_Lv,
+    TOTAL_CONNECTIONS,
+};
+
+enum stations {
+    s___,
+    s_S_,
+    s__S,
+    s_SS,
 };
 
 /**
@@ -65,7 +83,7 @@ typedef struct TileData {
 
     /* Tiles */
     const size_t expansion_index[TOTAL_EXPANSIONS];
-    const board_data_t tiles[TOTAL_TILES];
+    const board_data_t tiles[6 * TOTAL_TILES];
 } TileData_t;
 
 /**
@@ -78,7 +96,7 @@ typedef struct TileData {
  *
  */
 typedef struct DiceData {
-    const size_t dice[TOTAL_DICE];
+    const size_t dice[2 * 6 * TOTAL_DICE];
 } DiceData_t;
 
 /**
@@ -137,27 +155,99 @@ const TileData_t tile_data = {
         /* S  */    1, 1, 1, 1,     0, 0, 0, 0,    
     },
     .expansion_index = {
-        0,  /* Standard */
-        4,  /*  Special */
+        0,      /* Standard */
+        17,     /* Special  */
+        24,     /* Network  */
+        24,     /* Longest  */
+        24,     /* Center   */
+        24,     /* Error    */
+        24,     /* Building */
+        24,     /* Mountain */
+        27,     /* River */
+        31,     /* Lake */
+        37,     /* Lava */
+        // 27,     /* Meteor */
+        // 27,     /* Forest */
+        // 27,     /* Trail */
+        // 27,     /* Desert */
+        // 27,     /* Canyon */
     },
     .tiles = {
-        /*                  Type     Connections    Stations */
-        /* 0 Standard */    2,       1, 1, 0, 0,    0,
-        /* 1          */    2,       2, 2, 0, 0,    0,
-        /* 2          */    2,       1, 2, 0, 0,    1,
-        /* 3          */    3,       1, 0, 0, 0,    1,
-        /* 4          */    3,       2, 0, 0, 0,    1,
-        /* 5          */    4,       1, 0, 1, 0,    0,
+        /*                  Type    Connections                 Stations */
+        /* Standard */
+        /*   0  0   */       t_C,    c_C,  c_C,  c_E,  c_E,     s___,
+        /*   1  1   */       t_C,    c_R,  c_R,  c_E,  c_E,     s___,
+        /*   2  2   */       t_C,    c_C,  c_R,  c_E,  c_E,     s_S_,
+        /*   3  3   */       t_i,    c_C,  c_E,  c_E,  c_E,     s_S_,
+        /*   4  4   */       t_i,    c_R,  c_E,  c_E,  c_E,     s_S_,
+        /*   5  5   */       t_I,    c_C,  c_E,  c_C,  c_E,     s___,
+        /*   6  6   */       t_I,    c_R,  c_E,  c_R,  c_E,     s___,
+        /*   7  7   */       t_I,    c_C,  c_E,  c_R,  c_E,     s_S_,
+        /*   8  8   */       t_T,    c_C,  c_C,  c_C,  c_E,     s___,
+        /*   9  9   */       t_T,    c_R,  c_R,  c_R,  c_E,     s___,
+        /*  10 10   */       t_T,    c_C,  c_R,  c_C,  c_E,     s_S_,
+        /*  11 11   */       t_T,    c_R,  c_C,  c_R,  c_E,     s_S_,
+        /*  12 12   */       t_T,    c_C,  c_C,  c_R,  c_E,     s_S_,
+        /*  13 13   */       t_T,    c_C,  c_R,  c_R,  c_E,     s_S_,
+        /*  14 14   */      t_CC,    c_C,  c_C,  c_C,  c_C,     s___,
+        /*  15 15   */      t_CC,    c_R,  c_R,  c_R,  c_R,     s___,
+        /*  16 16   */       t_O,    c_C,  c_R,  c_C,  c_R,     s___,
+
+        /* Special */
+        /*  17  0   */       t_E,    c_E,  c_E,  c_E,  c_E,     s___,
+        /*  18  1   */       t_S,    c_C,  c_C,  c_C,  c_C,     s___,
+        /*  19  2   */       t_S,    c_C,  c_C,  c_C,  c_R,     s_S_,
+        /*  20  3   */       t_S,    c_C,  c_C,  c_R,  c_R,     s_S_,
+        /*  21  4   */       t_S,    c_C,  c_R,  c_C,  c_R,     s_S_,
+        /*  22  5   */       t_S,    c_C,  c_R,  c_R,  c_R,     s_S_,
+        /*  23  6   */       t_S,    c_R,  c_R,  c_R,  c_R,     s___,
+
+        /* Mountain */
+        /*  24 0    */      t_Ep,    c_M,  c_M,  c_M,  c_M,     s___,
+        /*  25 1    */       t_C,    c_P,  c_P,  c_M,  c_M,     s___,
+        /*  26 2    */       t_I,    c_P,  c_M,  c_P,  c_M,     s___,
+
+        /* River */
+        /*  27 0    */       t_C,   c_Ri, c_Ri,  c_E,  c_E,     s___,
+        /*  28 1    */       t_I,   c_Ri,  c_E, c_Ri,  c_E,     s___,
+        /*  29 2    */       t_O,    c_C, c_Ri,  c_C, c_Ri,     s___,
+        /*  30 3    */       t_O,    c_R, c_Ri,  c_R, c_Ri,     s___,
+
+        /* Lake */
+        /*  31 0    */       t_C,   c_La, c_La,  c_E,  c_E,     s___,
+        /*  32 1    */       t_i,   c_La,  c_E,  c_E,  c_E,     s___,
+        /*  33 2    */       t_I,    c_C,  c_E, c_La,  c_E,     s_S_,
+        /*  34 3    */       t_I,    c_R,  c_E, c_La,  c_E,     s_S_,
+        /*  35 4    */       t_T,   c_La, c_La, c_La,  c_E,     s___,
+        /*  36 5    */       t_S,    c_C,  c_R, c_La, c_La,     s_S_,
     },
 };
 
 const DiceData_t dice_data = {
     .dice = {
-        /* Faces                1       2       3       5       6 */
-        /* classic_simple */    0, 0,   0, 0,   0, 0,   0, 0,   0, 0,
+        /* Faces                    1       2       3       4       5       6 */
+        /* classic_simple       */   0,  0,  0,  1,  0,  5,  0,  6,  0,  8,  0,  9,
+        /* classic_special      */   0,  2,  0,  2,  0,  7,  0,  7,  0, 16,  0, 16,
+        /* challenge_simple     */   0,  8,  0,  9,  0, 14,  0, 15,  0, 16,  0, 16,
+        /* challenge_special    */   0,  3,  0,  4,  0,  2,  0,  7,  0, 10,  0, 11,
+
+        /* special_dice         */   1,  1,  1,  2,  1,  3,  1,  4,  1,  5,  1,  6,
     },
 };
 
 const GameMapping_t game_mapping = {
 
 };
+
+const TileData_t* get_tile_data() {
+    return &tile_data;
+}
+
+const DiceData_t* get_dice_data() {
+    return &dice_data;
+}
+
+const GameMapping_t* get_game_mapping() {
+    return &game_mapping;
+}
+
