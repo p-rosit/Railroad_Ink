@@ -12,32 +12,36 @@
 ************************************************************/
 
 typedef struct Tile {
+    /* Expansion index and index in expansion */
     board_data_t expansion_index;
-    board_data_t index;
-    board_data_t type;
+    board_data_t local_index;
+
+    /* Info */
     board_data_t orientation;
+    board_data_t center;
+    board_data_t data[MAX_EXPANSIONS];
+
+    /* Connection types and networks */
+    board_data_t connections[4];
+    board_data_t networks[8];
 } Tile_t;
 
 /**
  * The game board. Contains the following fields
  *
- *      width:  The width of the board
- *      height: The height of the board
- *      board:  The data in the board, tile (i, j) is
- *              saved in the following way
- *
- *                  board[i, j, 0] = expansion
- *                  board[i, j, 1] = index
- *                  board[i, j, 2] = type
- *                  board[i, j, 3] = orientation
- *                  board[i, j, 4:8] = connections
- *                  board[i, j, 8:16] = network
- *
+ *      expansions:     The expansions on the board.
+ *      width:          The width of the board.
+ *      height:         The height of the board.
+ *      board:          A grid of tiles (width + 2) * (height + 2).
  */
 typedef struct Board {
-    board_size_t height;
-    board_size_t width;
-    Tile_t* board;
+    /* Included expansions and which index they have */
+    size_t expansion2index[TOTAL_EXPANSIONS];
+
+    /* Board and information about it */
+    board_size_t        height;
+    board_size_t        width;
+    Tile_t*             board;
 } Board_t;
 
 /**
@@ -63,16 +67,6 @@ typedef struct RandomizeSettings {
 * Data
 *
 **********************/
-
-/* Version */
-#define DATA_VERSION            (1)
-
-/* Settings */
-#define MAX_COMBINATIONS        (4)
-
-/* Tile information */
-#define TOTAL_TILES             (53)
-#define TOTAL_DICE              (5)
 
 /**
  *

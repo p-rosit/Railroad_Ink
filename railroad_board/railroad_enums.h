@@ -1,6 +1,13 @@
 #ifndef RAILROAD_ENUMS_H
 #define RAILROAD_ENUMS_H
 
+/* Maximal amount of expansions */
+#define MAX_EXPANSIONS (3)
+
+/* Tile information */
+#define TOTAL_TILES             (53)
+#define TOTAL_DICE              (5)
+
 enum expansion {
     e_STANDARD,
     e_SPECIAL,

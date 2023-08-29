@@ -20,4 +20,9 @@ typedef size_t board_size_t;
  */
 typedef size_t board_data_t;
 
+/**
+ * Index of an expansion
+ */
+typedef size_t expansion_index_t;
+
 #endif
