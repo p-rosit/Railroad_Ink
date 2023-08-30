@@ -1,8 +1,8 @@
-#ifndef BOARD_H
-#define BOARD_H
+#ifndef STRUCTS_H
+#define STRUCTS_H
 
 #include <stdlib.h>
-#include "railroad_enums.h"
+#include "railroad_constants.h"
 #include "railroad_types.h"
 
 /************************************************************
@@ -11,38 +11,6 @@
 *                                                           *
 ************************************************************/
 
-typedef struct Tile {
-    /* Expansion index and index in expansion */
-    board_data_t expansion_index;
-    board_data_t local_index;
-
-    /* Info */
-    board_data_t orientation;
-    board_data_t center;
-    board_data_t data[MAX_EXPANSIONS];
-
-    /* Connection types and networks */
-    board_data_t connections[4];
-    board_data_t networks[8];
-} Tile_t;
-
-/**
- * The game board. Contains the following fields
- *
- *      expansions:     The expansions on the board.
- *      width:          The width of the board.
- *      height:         The height of the board.
- *      board:          A grid of tiles (width + 2) * (height + 2).
- */
-typedef struct Board {
-    /* Included expansions and which index they have */
-    size_t expansion2index[TOTAL_EXPANSIONS];
-
-    /* Board and information about it */
-    board_size_t        height;
-    board_size_t        width;
-    Tile_t*             board;
-} Board_t;
 
 /**
  * A set of dice for the game board.
