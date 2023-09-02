@@ -1,8 +1,10 @@
 #ifndef RAILROAD_ENUMS_H
 #define RAILROAD_ENUMS_H
 
-/* Maximal amount of expansions */
-#define MAX_EXPANSIONS (3)
+/* Game constants */
+#define MAX_EXPANSIONS      (3)
+#define DIRECTIONS          (4)
+#define MAX_TILE_NETWORKS   (2)
 
 /* Tile information */
 #define TOTAL_TILES             (53)
@@ -26,6 +28,7 @@ enum expansion {
     e_DESERT,
     e_CANYON,
     TOTAL_EXPANSIONS,
+    NO_EXPANSION,
 };
 
 enum tile_types {

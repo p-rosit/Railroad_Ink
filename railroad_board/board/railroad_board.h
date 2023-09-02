@@ -1,8 +1,8 @@
 #ifndef BOARD_H
 #define BOARD_H
 
-#include "railroad_constants.h"
-#include "railroad_types.h"
+#include "../railroad_constants.h"
+#include "../railroad_types.h"
 
 /**
  * The index of the tile where each field starts.

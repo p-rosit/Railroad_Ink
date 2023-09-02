@@ -3,11 +3,11 @@
 #include <string.h>
 #include "../railroad_constants.h"
 #include "../railroad_types.h"
-#include "../railroad_structs.h"
+#include "../data/railroad_data.h"
 
 /* Functions and structs which are implemented */
-#include "../railroad_board.h"
-
+#include "../board/railroad_board.h"
+#include "../data/railroad_data.h"
 
 /**
  * The game board. Contains the following fields
@@ -20,6 +20,9 @@
 struct Board {
     /* Included expansions and which index they have */
     size_t expansions[MAX_EXPANSIONS];
+
+    /* Game data */
+    const GameData_t game_data;
 
     /* Board and information about it */
     board_size_t        height;

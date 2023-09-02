@@ -3,10 +3,10 @@
 #include <string.h>
 #include "../railroad_constants.h"
 #include "../railroad_types.h"
-#include "../railroad_structs.h"
+#include "../data/railroad_data.h"
 
 /* Functions and structs which are implemented */
-#include "../railroad_board.h"
+#include "../board/railroad_board.h"
 
 /**
  * The game board. Contains the following fields
@@ -76,6 +76,7 @@ void add_tile_to_board(Board_t board, Tile_t tile, size_t i, size_t j) {
     board->orientation[index] = tile.orientation;
     board->center[index] = tile.center;
 
+    /* TODO: switch major of data networks and such */
     index = i * board->width * MAX_EXPANSIONS + j;
     memcpy(&board->data[index], &tile.data, MAX_EXPANSIONS * sizeof(board_data_t));
     index = i * board->width * 4 + j;
@@ -85,14 +86,18 @@ void add_tile_to_board(Board_t board, Tile_t tile, size_t i, size_t j) {
 }
 
 void set_tile_data(Board_t board, board_data_t value, size_t index, size_t i, size_t j) {
+    /* TODO: switch major of data networks and such */
     board->data[i * (board->width + 2) * MAX_EXPANSIONS + j * MAX_EXPANSIONS + index] = value;
 }
 
 void print_board(Board_t board, size_t layer) {
     bool is_border, js_border;
+    int size;
     board_size_t i, j, k, index;
-    board_data_t local_index;
+    board_data_t local_index, value;
 
+    size = 2;
+    value = 0;
     for (i = 0; i < board->height + 2; i++) {
         is_border = i * (i - board->height - 1) == 0;
         for (j = 0; j < board->width + 2; j++) {
@@ -101,24 +106,27 @@ void print_board(Board_t board, size_t layer) {
             local_index = board->local_index[index];
 
             if (local_index != 0 || !js_border) {
-                switch (layer) {
-                    case 0:
-                        printf("%2lu ", board->expansion_index[index]); break;
-                    case 1:
-                        printf("%2lu ", board->local_index[index]); break;
-                    case 2:
-                        printf("%2lu ", board->orientation[index]); break;
-                    case 3:
-                        printf("%2lu ", board->center[index]); break;
+                if (layer == EXPANSION_INDEX_INDEX) {
+                    value = board->expansion_index[index];
+                } else if (layer == LOCAL_INDEX_INDEX) {
+                    value = board->local_index[index];
+                } else if (layer == ORIENTATION_INDEX) {
+                    value = board->orientation[index];
+                } else if (layer == CENTER_INDEX) {
+                    value = board->center[index];
+                } else if (DATA_INDEX <= layer && layer <= DATA_INDEX + MAX_EXPANSIONS) {
+                    index = 0;  /* TODO */
+                    value = board->connections[index];
+                } else if (CONNECTIONS_INDEX <= layer && layer <= CONNECTIONS_INDEX + 4) {
+                    index = 0;  /* TODO */
+                    value = board->connections[index];
+                } else if (NETWORKS_INDEX <= layer && layer <= NETWORKS_INDEX + 8) {
+                    index = 0;  /* TODO */
+                    value = board->connections[index];
                 }
-                if (3 < layer && layer < 3 + MAX_EXPANSIONS + 1) {
-                    index = i * (board->width + 2) * MAX_EXPANSIONS + j * MAX_EXPANSIONS + (layer - 3);
-                    printf("%2lu ", board->data[index]);
-                }
-                if (3 + MAX_EXPANSIONS + 1 < layer && layer < 3 + MAX_EXPANSIONS + 1 + 4 + 1) {
-                    index = i * (board->width + 2) * MAX_EXPANSIONS + j * MAX_EXPANSIONS + (layer - 3 - MAX_EXPANSIONS);
-                    printf("%2lu ", board->connections[index]);
-                }
+
+                printf("%*lu ", size, value);
+
             } else {
                 printf("   ");
             }

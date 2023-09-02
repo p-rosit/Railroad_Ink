@@ -1,9 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "railroad_types.h"
-#include "railroad_structs.h"
-#include "railroad_board.h"
+#include "../railroad_types.h"
+#include "../board/railroad_board.h"
 
 
 Tile_t make_tile() {
@@ -27,8 +26,8 @@ int main() {
     Tile_t tile;
     Board_t board;
 
-    height = 9;
-    width = 4;
+    height = 5;
+    width = 9;
 
     board = make_board(height, width);
     tile = make_tile();
