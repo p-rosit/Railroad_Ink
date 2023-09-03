@@ -8,11 +8,12 @@
 
 #define LOAD_EXPANSION_FUNCTION(name, amount, ...) \
 \
-void load_##name##_tiles(GameData_t game_data, size_t index) { \
-    const board_data_t tile_data[TILE_DATA_WIDTH * amount] = {__VA_ARGS__}; \
+size_t load_##name##_tiles(board_data_t* tile_data, size_t index) { \
+    const board_data_t data[TILE_DATA_WIDTH * amount] = {__VA_ARGS__}; \
     for (size_t i = index; i < index + TILE_DATA_WIDTH * amount; i++) { \
-        game_data.tile_data[i] = tile_data[i]; \
+        tile_data[i] = data[i - index]; \
     } \
+    return index + TILE_DATA_WIDTH * amount; \
 }
 
 #define TILE_DATA_WIDTH     (6)
@@ -38,19 +39,24 @@ struct ConnectionData {
 
 struct GameData {
     const ConnectionData_t connection_data;
-    board_data_t* tile_data;
+    const size_t expansion_index[DEFAULT_EXPANSIONS + MAX_EXPANSIONS];
+    const board_data_t* tile_data;
 };
 
 /**
- * Returns a struct containing all the tile information and
- * connection information needed to play the game.
+ * Load data for a game board.
  */
-const GameData_t load_expansions(size_t expansion_amount, ...);
+const GameData_t load_data(size_t, ...);
+
+/**
+ * Free game data.
+ */
+void free_data(const GameData_t);
 
 /**
  * Loads a tile from a particular expansion.
  */
-const Tile_t* load_tile(const GameData_t, size_t expansion_index, size_t local_index);
+Tile_t load_tile(const GameData_t, size_t, size_t);
 
 #endif
 

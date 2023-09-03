@@ -2,13 +2,14 @@
 #define RAILROAD_ENUMS_H
 
 /* Game constants */
+#define DEFAULT_EXPANSIONS  (2)
 #define MAX_EXPANSIONS      (3)
 #define DIRECTIONS          (4)
 #define MAX_TILE_NETWORKS   (2)
 
 /* Tile information */
-#define TOTAL_TILES             (53)
-#define TOTAL_DICE              (5)
+// #define TOTAL_TILES         (53)
+// #define TOTAL_DICE          (5)
 
 enum expansion {
     e_STANDARD,
@@ -18,6 +19,7 @@ enum expansion {
     e_CENTER,
     e_ERROR,
     e_BUILDING,
+
     e_MOUNTAIN,
     e_RIVER,
     e_LAKE,
