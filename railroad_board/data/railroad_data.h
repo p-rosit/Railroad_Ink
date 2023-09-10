@@ -3,6 +3,7 @@
 
 #include <stdlib.h>
 #include "../railroad_constants.h"
+#include "../railroad_expansions.h"
 #include "../railroad_types.h"
 #include "../board/railroad_board.h"
 
@@ -39,14 +40,14 @@ struct ConnectionData {
 
 struct GameData {
     const ConnectionData_t connection_data;
-    const size_t expansion_index[DEFAULT_EXPANSIONS + MAX_EXPANSIONS];
+    const size_t expansion_index[MAX_EXPANSIONS];
     const board_data_t* tile_data;
 };
 
 /**
  * Load data for a game board.
  */
-const GameData_t load_data(size_t, ...);
+const GameData_t load_data(expansion_index_t expansions[MAX_EXPANSIONS]);
 
 /**
  * Free game data.

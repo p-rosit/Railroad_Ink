@@ -3,6 +3,8 @@
 
 #include "../railroad_constants.h"
 #include "../railroad_types.h"
+#include "../railroad_expansions.h"
+
 
 /**
  * The index of the tile where each field starts.
@@ -13,8 +15,8 @@ enum TileDataIndex {
     ORIENTATION_INDEX       = 2,
     CENTER_INDEX            = 3,
     DATA_INDEX              = 4,
-    CONNECTIONS_INDEX       = 4 + MAX_EXPANSIONS,
-    NETWORKS_INDEX          = 4 + MAX_EXPANSIONS + 4,
+    CONNECTIONS_INDEX       = 4 + MAX_TYPE_EXPANSIONS,
+    NETWORKS_INDEX          = 4 + MAX_TYPE_EXPANSIONS + 4,
 };
 
 /**
@@ -28,7 +30,7 @@ typedef struct Tile {
     /* Info */
     board_data_t orientation;
     board_data_t center;
-    board_data_t data[MAX_EXPANSIONS];
+    board_data_t data[MAX_TYPE_EXPANSIONS];
 
     /* Connection types and networks */
     board_data_t connections[4];
@@ -41,10 +43,12 @@ typedef struct Tile {
  */
 typedef struct Board *Board_t;
 
+void print_game_data(Board_t);
+
 /**
  * Returns a board struct, the tiles will be allocated on the heap.
  */
-Board_t make_board(board_size_t, board_size_t);
+Board_t make_board(board_size_t, board_size_t, size_t, ...);
 
 /**
  * Frees the allocated board.
@@ -54,17 +58,17 @@ void free_board(Board_t);
 /**
  * Returns true if the supplied set of coordinates exists on the board.
  */
-bool coord_on_board(Board_t, size_t, size_t);
+bool coord_on_board(Board_t, board_size_t, board_size_t);
 
 /**
  * Add tile to board in position i, j.
  */
-void add_tile_to_board(Board_t, Tile_t, size_t, size_t);
+void add_tile_to_board(Board_t, Tile_t, board_size_t, board_size_t);
 
 /**
  * Sets the data at some index of a tile at some coordinate to some value
  */
-void set_tile_data(Board_t, board_data_t, size_t, size_t, size_t);
+void set_tile_data(Board_t, board_data_t, size_t, board_size_t, board_size_t);
 
 /**
  * Rudimentary print of a board. Prints a specific layer.

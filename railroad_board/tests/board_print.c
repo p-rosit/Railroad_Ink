@@ -29,7 +29,7 @@ int main() {
     height = 5;
     width = 9;
 
-    board = make_board(height, width);
+    board = make_board(height, width, 0);
     tile = make_tile();
 
     add_tile_to_board(board, tile, 0, 2);

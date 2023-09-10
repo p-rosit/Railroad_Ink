@@ -1,14 +1,15 @@
 #include <stdio.h>
+#include "../board/railroad_board.h"
 #include "../data/railroad_data.h"
 
 int main() {
     size_t i;
-    const GameData_t game_data = load_data(3, e_RIVER, e_METEOR, e_LAKE);
+    Board_t board;
 
-    for (i = 0; i < DEFAULT_EXPANSIONS + MAX_EXPANSIONS; i++) {
-        printf("%lu: %lu\n", i, game_data.expansion_index[i]);
-    }
+    board = make_board(4, 5, 2, e_STANDARD, e_SPECIAL);
 
-    free_data(game_data);
+    print_board(board, 0);
+    print_game_data(board);
+    free_board(board);
     return 0;
 }

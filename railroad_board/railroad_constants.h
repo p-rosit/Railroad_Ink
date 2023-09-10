@@ -1,37 +1,9 @@
-#ifndef RAILROAD_ENUMS_H
-#define RAILROAD_ENUMS_H
+#ifndef RAILROAD_CONSTANTS_H
+#define RAILROAD_CONSTANTS_H
 
-/* Game constants */
-#define DEFAULT_EXPANSIONS  (2)
-#define MAX_EXPANSIONS      (3)
 #define DIRECTIONS          (4)
 #define MAX_TILE_NETWORKS   (2)
 
-/* Tile information */
-// #define TOTAL_TILES         (53)
-// #define TOTAL_DICE          (5)
-
-enum expansion {
-    e_STANDARD,
-    e_SPECIAL,
-    e_NETWORK,
-    e_LONGEST,
-    e_CENTER,
-    e_ERROR,
-    e_BUILDING,
-
-    e_MOUNTAIN,
-    e_RIVER,
-    e_LAKE,
-    e_LAVA,
-    e_METEOR,
-    e_FOREST,
-    e_TRAIL,
-    e_DESERT,
-    e_CANYON,
-    TOTAL_EXPANSIONS,
-    NO_EXPANSION,
-};
 
 enum tile_types {
     t_E,
