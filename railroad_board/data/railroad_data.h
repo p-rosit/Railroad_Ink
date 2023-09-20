@@ -1,11 +1,12 @@
 #ifndef RAILROAD_DATA_H
 #define RAILROAD_DATA_H
 
+#define AOS
 #include <stdlib.h>
 #include "../railroad_constants.h"
 #include "../railroad_expansions.h"
 #include "../railroad_types.h"
-#include "../board/railroad_board.h"
+#include "../board/railroad_board_structs.h"
 
 #define LOAD_EXPANSION_FUNCTION(name, amount, ...) \
 \
@@ -57,7 +58,7 @@ void free_data(const GameData_t);
 /**
  * Loads a tile from a particular expansion.
  */
-Tile_t load_tile(const GameData_t, size_t, size_t);
+tile_t load_tile(const GameData_t, tile_data_t);
 
 #endif
 

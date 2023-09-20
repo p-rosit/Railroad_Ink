@@ -4,7 +4,10 @@
 #include "../railroad_constants.h"
 #include "../railroad_types.h"
 #include "../railroad_expansions.h"
+#include "../data/railroad_data.h"
+#include "railroad_board_structs.h"
 
+typedef struct board *board_t;
 
 /**
  * The index of the tile where each field starts.
@@ -19,61 +22,38 @@ enum TileDataIndex {
     NETWORKS_INDEX          = 4 + MAX_TYPE_EXPANSIONS + 4,
 };
 
-/**
- * A structure which holds information about a tile.
- */
-typedef struct Tile {
-    /* Expansion index and index in expansion */
-    board_data_t expansion_index;
-    board_data_t local_index;
 
-    /* Info */
-    board_data_t orientation;
-    board_data_t center;
-    board_data_t data[MAX_TYPE_EXPANSIONS];
-
-    /* Connection types and networks */
-    board_data_t connections[4];
-    board_data_t networks[8];
-} Tile_t;
-
-/**
- * The board which contains a set of tiles. The board must have a
- * width and a height.
- */
-typedef struct Board *Board_t;
-
-void print_game_data(Board_t);
+void print_game_data(board_t);
 
 /**
  * Returns a board struct, the tiles will be allocated on the heap.
  */
-Board_t make_board(board_size_t, board_size_t, size_t, ...);
+board_t make_board(board_load_info_t);
 
 /**
  * Frees the allocated board.
  */
-void free_board(Board_t);
+void free_board(board_t);
 
 /**
  * Returns true if the supplied set of coordinates exists on the board.
  */
-bool coord_on_board(Board_t, board_size_t, board_size_t);
+bool coord_on_board(board_t, board_coord_t);
 
 /**
  * Add tile to board in position i, j.
  */
-void add_tile_to_board(Board_t, Tile_t, board_size_t, board_size_t);
+void add_tile_to_board(board_t, tile_t, board_coord_t);
 
 /**
  * Sets the data at some index of a tile at some coordinate to some value
  */
-void set_tile_data(Board_t, board_data_t, size_t, board_size_t, board_size_t);
+void set_tile_data(board_t, board_data_t, size_t, board_coord_t);
 
 /**
  * Rudimentary print of a board. Prints a specific layer.
  */
-void print_board(Board_t, size_t);
+void print_board(board_t, size_t);
 
 #endif
 
