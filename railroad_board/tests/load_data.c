@@ -3,10 +3,19 @@
 #include "../data/railroad_data.h"
 
 int main() {
-    size_t i;
-    Board_t board;
+    tile_t tile;
+    board_t board;
+    board_load_info_t info;
 
-    board = make_board(4, 5, 2, e_STANDARD, e_SPECIAL);
+    info.height = 5;
+    info.width = 9;
+    for (size_t i = 0; i < MAX_EXPANSIONS; i++) {
+        info.expansions[i] = NO_EXPANSION;
+    }
+    info.expansions[0] = e_STANDARD;
+    info.expansions[1] = e_SPECIAL;
+
+    board = make_board(info);
 
     print_board(board, 0);
     print_game_data(board);

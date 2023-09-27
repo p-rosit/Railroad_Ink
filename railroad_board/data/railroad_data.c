@@ -2,6 +2,7 @@
 #include "../railroad_types.h"
 #include "../railroad_expansions.h"
 #include "../railroad_constants.h"
+#include "data_utils.h"
 #include "expansion_data.c"
 #include "railroad_data.h"
 
@@ -9,7 +10,7 @@ size_t count_expansion_tiles(expansion_index_t);
 size_t load_expansion(board_data_t*, expansion_index_t, size_t);
 
 
-const GameData_t load_data(expansion_index_t expansions[MAX_EXPANSIONS]) {
+const game_data_t load_data(expansion_index_t expansions[MAX_EXPANSIONS]) {
     size_t i, tile_amount, index, expansion_index[MAX_EXPANSIONS];
     board_data_t* tile_data;
 
@@ -27,52 +28,12 @@ const GameData_t load_data(expansion_index_t expansions[MAX_EXPANSIONS]) {
         index = load_expansion(tile_data, expansions[i], index);
     }
 
-    GameData_t game_data = (GameData_t) {
-        .connection_data = (ConnectionData_t) {
-            .traversable = {
-                0,  /*  E */
-                1,  /*  C */
-                1,  /*  R */
-                0,  /*  M */
-                0,  /*  P */
-                0,  /* Ri */
-                0,  /* La */
-                0,  /* Lv */
-            },
-            .non_connections = {
-                1,  /*  E */
-                0,  /*  C */
-                0,  /*  R */
-                1,  /*  M */
-                1,  /*  P */
-                0,  /* Ri */
-                0,  /* La */
-                0,  /* Lv */
-            },
-            .valid_connections = {
-                /*          E   C   R   M   P   Ri  La  Lv  */
-                /*  E */    1,  1,  1,  1,  1,  1,  1,  1,
-                /*  C */    1,  1,  0,  1,  1,  0,  0,  0,
-                /*  R */    1,  0,  1,  1,  1,  0,  0,  0,
-                /*  M */    1,  0,  0,  0,  0,  0,  0,  0,
-                /*  P */    0,  1,  1,  0,  0,  1,  0,  0,
-                /* Ri */    1,  0,  0,  1,  1,  1,  0,  0,
-                /* La */    1,  0,  0,  1,  1,  0,  1,  0,
-                /* Lv */    1,  0,  0,  1,  1,  0,  0,  1,
-            },
-            .networks = {
-                /*          First network       Second network */
-                /*  E */    0,  0,  0,  0,      0,  0,  0,  0,
-                /* Ep */    0,  0,  0,  0,      0,  0,  0,  0,
-                /*  C */    1,  1,  0,  0,      0,  0,  0,  0,
-                /*  i */    1,  0,  0,  0,      0,  0,  0,  0, 
-                /*  I */    1,  0,  1,  0,      0,  0,  0,  0,
-                /*  T */    1,  1,  1,  0,      0,  0,  0,  0,
-                /* dT */    1,  0,  1,  0,      0,  1,  0,  0,
-                /* CC */    1,  1,  0,  0,      0,  0,  1,  1,
-                /*  O */    1,  0,  1,  0,      0,  1,  0,  1,
-                /*  S */    1,  1,  1,  1,      0,  0,  0,  0,
-            },
+    game_data_t game_data = (game_data_t ) {
+        .connection_data = (connection_data_t) {
+            .traversable = TRAVERSABLE_DATA,
+            .non_connections = NON_CONNECTION_DATA,
+            .valid_connections = VALID_CONNECTIONS_DATA,
+            .networks = CONNECTION_DATA,
         },
         .tile_data = tile_data,
     };
@@ -84,12 +45,29 @@ const GameData_t load_data(expansion_index_t expansions[MAX_EXPANSIONS]) {
     return game_data;
 }
 
-void free_data(const GameData_t game_data) {
+void free_data(const game_data_t game_data) {
     free((board_data_t*) game_data.tile_data);
 }
 
-Tile_t load_tile(const GameData_t game_data, size_t expansion_index, size_t local_index) {
-    return (Tile_t) {};
+tile_t load_tile(const game_data_t game_data, tile_data_t index) {
+    size_t i;
+    tile_t tile;
+
+    tile.expansion_index = index.expansion_index;
+    tile.local_index = index.local_index;
+    tile.orientation = 0; /* TODO */
+    tile.center = 0; /* TODO */
+    for (i = 0; i < MAX_TYPE_EXPANSIONS; i++) {
+        tile.data[i] = 0; /* TODO*/
+    }
+    for (i = 0; i < DIRECTIONS; i++) {
+        tile.connections[i] = 0; /* TODO */
+    }
+    for (i = 0; i < MAX_TILE_NETWORKS * DIRECTIONS; i++) {
+        tile.networks[i] = 0; /* TODO */
+    }
+
+    return tile;
 }
 
 size_t load_expansion(board_data_t* tile_data, expansion_index_t expansion, size_t index) {

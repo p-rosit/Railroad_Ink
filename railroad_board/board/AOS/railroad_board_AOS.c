@@ -12,16 +12,10 @@
 #include "../railroad_board.h"
 
 
-void free_board(board_t board) {
-    free((board_data_t *) board->game_data.tile_data);
-    free(board->tiles);
-    free(board);
-}
-
 bool coord_on_board(board_t board, board_coord_t coord) {
     bool in_cols = (1 <= coord.col) && (coord.col <= board->height);
     bool in_rows = (1 <= coord.row) && (coord.row <= board->width);
-    return in_cols && in_cols;
+    return in_cols && in_rows;
 }
 
 void add_tile_to_board(board_t board, tile_t tile, board_coord_t coord) {

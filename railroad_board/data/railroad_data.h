@@ -8,17 +8,6 @@
 #include "../railroad_types.h"
 #include "../board/railroad_board_structs.h"
 
-#define LOAD_EXPANSION_FUNCTION(name, amount, ...) \
-\
-size_t load_##name##_tiles(board_data_t* tile_data, size_t index) { \
-    const board_data_t data[TILE_DATA_WIDTH * amount] = {__VA_ARGS__}; \
-    for (size_t i = index; i < index + TILE_DATA_WIDTH * amount; i++) { \
-        tile_data[i] = data[i - index]; \
-    } \
-    return index + TILE_DATA_WIDTH * amount; \
-}
-
-#define TILE_DATA_WIDTH     (6)
 
 #define STANDARD_TILES      (17)
 #define SPECIAL_TILES       (9)
@@ -28,37 +17,33 @@ size_t load_##name##_tiles(board_data_t* tile_data, size_t index) { \
 #define LAVA_TILES          (5)
 #define METEOR_TILES        (9)
 
-typedef struct GameData         GameData_t;
-typedef struct ConnectionData   ConnectionData_t;
-typedef struct TileData         TileData_t;
-
-struct ConnectionData {
+typedef struct connection_data {
     const bool traversable[TOTAL_CONNECTIONS];
     const bool non_connections[TOTAL_CONNECTIONS];
     const bool valid_connections[TOTAL_CONNECTIONS * TOTAL_CONNECTIONS];
     const bool networks[DIRECTIONS * MAX_TILE_NETWORKS * TOTAL_TYPES];
-};
+} connection_data_t;
 
-struct GameData {
-    const ConnectionData_t connection_data;
+typedef struct game_data {
+    const connection_data_t connection_data;
     const size_t expansion_index[MAX_EXPANSIONS];
     const board_data_t* tile_data;
-};
+} game_data_t;
 
 /**
  * Load data for a game board.
  */
-const GameData_t load_data(expansion_index_t expansions[MAX_EXPANSIONS]);
+const game_data_t load_data(expansion_index_t expansions[MAX_EXPANSIONS]);
 
 /**
  * Free game data.
  */
-void free_data(const GameData_t);
+void free_data(const game_data_t);
 
 /**
  * Loads a tile from a particular expansion.
  */
-tile_t load_tile(const GameData_t, tile_data_t);
+tile_t load_tile(const game_data_t, tile_data_t);
 
 #endif
 

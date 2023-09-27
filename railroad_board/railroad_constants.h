@@ -3,6 +3,7 @@
 
 #define DIRECTIONS          (4)
 #define MAX_TILE_NETWORKS   (2)
+#define TILE_DATA_WIDTH     (6)
 
 
 enum tile_types {

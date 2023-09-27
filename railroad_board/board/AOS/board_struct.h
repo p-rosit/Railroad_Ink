@@ -1,3 +1,5 @@
+#ifndef BOARD_STRUCT_H
+#define BOARD_STRUCT_H
 #include "../../railroad_types.h"
 #include "../../railroad_expansions.h"
 #include "../../railroad_constants.h"
@@ -18,11 +20,13 @@ struct board {
     size_t expansion_type_index[MAX_EXPANSIONS];
 
     /* Game data */
-    const GameData_t game_data;
+    const game_data_t game_data;
 
     /* Board and information about it */
     board_size_t        height;
     board_size_t        width;
     tile_t*             tiles;
 };
+
+#endif
 

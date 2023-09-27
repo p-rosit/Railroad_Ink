@@ -12,7 +12,7 @@ typedef struct board *board_t;
 /**
  * The index of the tile where each field starts.
  */
-enum TileDataIndex {
+enum tile_data_index {
     EXPANSION_INDEX_INDEX   = 0,
     LOCAL_INDEX_INDEX       = 1,
     ORIENTATION_INDEX       = 2,
@@ -48,7 +48,7 @@ void add_tile_to_board(board_t, tile_t, board_coord_t);
 /**
  * Sets the data at some index of a tile at some coordinate to some value
  */
-void set_tile_data(board_t, board_data_t, size_t, board_coord_t);
+void set_tile_data(board_t, size_t, board_data_t, board_coord_t);
 
 /**
  * Rudimentary print of a board. Prints a specific layer.

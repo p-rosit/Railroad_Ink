@@ -5,9 +5,9 @@
 #include "../board/railroad_board.h"
 
 
-Tile_t make_tile() {
+tile_t make_tile() {
     size_t i;
-    Tile_t tile;
+    tile_t tile;
     
     tile.expansion_index = 1;
     tile.local_index = 2;
@@ -21,20 +21,32 @@ Tile_t make_tile() {
 }
 
 
+board_coord_t mc(board_size_t i, board_size_t j) {
+    board_coord_t coord;
+    coord.row = i;
+    coord.col = j;
+    return coord;
+}
+
+
 int main() {
-    board_size_t height, width;
-    Tile_t tile;
-    Board_t board;
+    tile_t tile;
+    board_t board;
+    board_load_info_t info;
 
-    height = 5;
-    width = 9;
+    info.height = 5;
+    info.width = 9;
+    for (size_t i = 0; i < MAX_EXPANSIONS; i++) {
+        info.expansions[i] = NO_EXPANSION;
+    }
+    info.expansions[0] = e_STANDARD;
 
-    board = make_board(height, width, 0);
+    board = make_board(info);
     tile = make_tile();
 
-    add_tile_to_board(board, tile, 0, 2);
-    add_tile_to_board(board, tile, 1, 2);
-    add_tile_to_board(board, tile, 2, 2);
+    add_tile_to_board(board, tile, mc(0, 2));
+    add_tile_to_board(board, tile, mc(1, 2));
+    add_tile_to_board(board, tile, mc(2, 2));
 
     printf("0\n"); print_board(board, 0);
     printf("1\n"); print_board(board, 1);
