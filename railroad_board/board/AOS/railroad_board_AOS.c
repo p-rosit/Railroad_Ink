@@ -11,6 +11,13 @@
 /* Functions and structs which are implemented */
 #include "../railroad_board.h"
 
+board_size_t board_height(board_t board) {
+    return board->height;
+}
+
+board_size_t board_width(board_t board) {
+    return board->width;
+}
 
 bool coord_on_board(board_t board, board_coord_t coord) {
     bool in_cols = (1 <= coord.col) && (coord.col <= board->height);

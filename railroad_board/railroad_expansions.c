@@ -17,6 +17,8 @@ EXPANSION_HAS(tiles,
     1, /* Trail */
     1, /* Desert */
     1, /* Canyon */
+    0,
+    0,
 )
 
 EXPANSION_HAS(types,
@@ -36,4 +38,6 @@ EXPANSION_HAS(types,
     0, /* Trail */
     1, /* Desert */
     1, /* Canyon */
+    0,
+    0,
 )

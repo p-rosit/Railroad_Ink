@@ -11,7 +11,7 @@ bool expansion_has_##name(expansion_index_t expansion)
 
 #define EXPANSION_HAS(name, ...) \
 bool expansion_has_##name(expansion_index_t expansion) { \
-    const bool data[TOTAL_EXPANSIONS] = {__VA_ARGS__}; \
+    const bool data[TOTAL_EXPANSIONS + 2] = {__VA_ARGS__}; \
     return data[expansion]; \
 }
 

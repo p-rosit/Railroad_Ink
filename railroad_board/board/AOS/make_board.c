@@ -64,7 +64,7 @@ void load_board_data(board_t board, board_load_info_t info) {
 }
 
 void free_board(board_t board) {
-    free((board_data_t *) (board->game_data.tile_data));
+    // free((board_data_t *) (board->game_data.tile_data));
     free(board->tiles);
     free(board);
 }
