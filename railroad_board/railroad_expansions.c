@@ -13,10 +13,10 @@ EXPANSION_HAS(tiles,
     1, /* Lake */
     1, /* Lava */
     1, /* Meteor */
-    1, /* Forest */
-    1, /* Trail */
-    1, /* Desert */
-    1, /* Canyon */
+    0, /* TODO: Forest */
+    0, /* TODO: Trail */
+    0, /* TODO: Desert */
+    0, /* TODO: Canyon */
     0,
     0,
 )
@@ -36,8 +36,8 @@ EXPANSION_HAS(types,
     1, /* Meteor */
     0, /* Forest */
     0, /* Trail */
-    1, /* Desert */
-    1, /* Canyon */
+    0, /* TODO: Desert */
+    0, /* TODO: Canyon */
     0,
     0,
 )
