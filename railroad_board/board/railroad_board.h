@@ -23,8 +23,6 @@ enum tile_data_index {
 };
 
 
-void print_game_data(board_t);
-
 /**
  * Returns a board struct, the tiles will be allocated on the heap.
  */
@@ -34,6 +32,11 @@ board_t make_board(board_load_info_t);
  * Frees the allocated board.
  */
 void free_board(board_t);
+
+/**
+ * Returns the expansions a board has
+ */
+expansion_index_t* get_board_expansions(board_t);
 
 /**
  * Returns true if the supplied set of coordinates exists on the board.
