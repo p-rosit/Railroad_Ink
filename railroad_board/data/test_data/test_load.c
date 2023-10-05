@@ -32,6 +32,8 @@ UNIT_TEST(load_max_expansions) {
     expansion_index_t expansion_index;
     expansion_index_t expansions[MAX_EXPANSIONS];
 
+    clear_expansion_list(expansions);
+
     index = 0;
     expansion_index = 0;
     while (index < MAX_EXPANSIONS && expansion_index < TOTAL_EXPANSIONS) {
