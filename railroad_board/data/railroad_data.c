@@ -3,7 +3,7 @@
 #include "../railroad_expansions.h"
 #include "../railroad_constants.h"
 #include "data_utils.h"
-#include "expansion_data.c"
+#include "expansion_data.h"
 #include "railroad_data.h"
 
 size_t count_expansion_tiles(expansion_index_t);

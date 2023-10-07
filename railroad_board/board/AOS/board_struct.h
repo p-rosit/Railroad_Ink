@@ -16,8 +16,8 @@
 struct board {
     /* Included expansions and which index they have */
     size_t expansions[MAX_EXPANSIONS];
-    size_t expansion_tile_index[MAX_EXPANSIONS];
-    size_t expansion_type_index[MAX_EXPANSIONS];
+    size_t tile_expansions[MAX_EXPANSIONS];
+    size_t type_expansions[MAX_EXPANSIONS];
 
     /* Game data */
     const game_data_t game_data;

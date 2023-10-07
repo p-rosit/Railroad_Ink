@@ -6,8 +6,8 @@
 #include "board_struct.h"
 
 bool    save_expansions(board_load_info_t, board_t);
-size_t  mark_tile_index(board_t);
-size_t  mark_type_index(board_t);
+size_t  mark_tile_expansions(board_t);
+size_t  mark_type_expansions(board_t);
 void    load_board_data(board_t);
 
 
@@ -29,11 +29,11 @@ board_t make_board(board_load_info_t info) {
         return NULL;
     }
 
-    marked = mark_tile_index(board);
-    marked = mark_type_index(board);
+    marked = mark_tile_expansions(board);
+    marked = mark_type_expansions(board);
 
     if (marked > MAX_TYPE_EXPANSIONS) {
-        // printf("WARNING: Tried to load more than %lu expansions with types.", marked);
+        // printf("WARNING: Tried to load more than %d expansions with types.", MAX_TYPE_EXPANSIONS);
         return NULL;
     }
 
@@ -53,7 +53,7 @@ bool save_expansions(board_load_info_t info, board_t board) {
         if (!(index < MAX_TYPE_EXPANSIONS) && index != NO_EXPANSION) {
             // printf("WARNING: Trying to load unknown expansions %lu.", index);
             expansions_ok = false;
-            continue;
+            break;
         } 
 
         if (index != NO_EXPANSION) {
@@ -64,26 +64,30 @@ bool save_expansions(board_load_info_t info, board_t board) {
     return expansions_ok;
 }
 
-size_t mark_tile_index(board_t board) {
+size_t mark_tile_expansions(board_t board) {
     size_t i, total;
+    expansion_index_t exp;
     bool has_tiles;
 
     for (i = 0, total = 0; i < MAX_EXPANSIONS; i++) {
-        has_tiles = expansion_has_tiles(board->expansions[i]);
-        board->expansion_tile_index[i] = has_tiles * i + !has_tiles * MAX_EXPANSIONS;
+        exp = board->expansions[i];
+        has_tiles = expansion_has_tiles(exp);
+        board->tile_expansions[i] = has_tiles * exp + !has_tiles * NO_EXPANSION;
         total += has_tiles;
     }
 
     return total;
 }
 
-size_t mark_type_index(board_t board) {
+size_t mark_type_expansions(board_t board) {
     size_t i, total;
+    expansion_index_t exp;
     bool has_types;
 
     for (i = 0, total = 0; i < MAX_EXPANSIONS; i++) {
-        has_types = expansion_has_types(board->expansions[i]);
-        board->expansion_type_index[i] = has_types * i + !has_types * MAX_EXPANSIONS;
+        exp = board->expansions[i];
+        has_types = expansion_has_types(exp);
+        board->type_expansions[i] = has_types * exp + !has_types * NO_EXPANSION;
         total += has_types;
     }
 
@@ -92,12 +96,12 @@ size_t mark_type_index(board_t board) {
 
 void load_board_data(board_t board) {
     /* Bypass C type system to assign to const once */
-    game_data_t game_data = load_data(board->expansions);
+    game_data_t game_data = load_data(board->tile_expansions);
     memcpy((game_data_t*) &(board->game_data), &game_data, sizeof(game_data_t));
 }
 
 void free_board(board_t board) {
-    // free((board_data_t *) (board->game_data.tile_data));
+    free((board_data_t *) (board->game_data.tile_data));
     free(board->tiles);
     free(board);
 }

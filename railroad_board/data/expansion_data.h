@@ -1,3 +1,5 @@
+#ifndef EXPANSION_DATA_H
+#define EXPANSION_DATA_H
 #include "data_utils.h"
 #include "../railroad_constants.h"
 #include "railroad_data.h"
@@ -82,4 +84,6 @@ LOAD_EXPANSION_FUNCTION(meteor, METEOR_TILES,
     /* 7 */     t_Ep,       c_P,    c_P,    c_E,    c_E,        s__,
     /* 8 */     t_Ep,       c_P,    c_P,    c_P,    c_E,        s__,
 )
+
+#endif
 

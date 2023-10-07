@@ -72,5 +72,5 @@ fi
 print_name=$(echo $file_name | grep -o "[^/]*\.c" | cut -d '.' -f 1)
 echo "Compiling:" $print_name "-> a.out"
 
-$compiler $flags -o a.out $file_name ../board/$board_dir/*.c ../data/railroad_data.c ../railroad_expansions.c
+$compiler $flags -o a.out $file_name ../board/$board_dir/*.c ../data/*.c ../railroad_expansions.c
 
