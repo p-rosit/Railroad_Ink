@@ -5,6 +5,7 @@
 #define MAX_TILE_NETWORKS   (2)
 #define TILE_DATA_WIDTH     (6)
 
+#define NO_TYPE             (0)
 
 enum tile_types {
     t_E,
@@ -37,6 +38,13 @@ enum stations {
     sS_,
     s_S,
     sSS,
+};
+
+enum directions {
+    NORTH,
+    WEST,
+    SOUTH,
+    EAST,
 };
 
 #endif

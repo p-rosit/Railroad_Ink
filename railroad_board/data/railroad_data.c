@@ -55,10 +55,10 @@ tile_t load_tile(const game_data_t game_data, tile_data_t index) {
 
     tile.expansion_index = index.expansion_index;
     tile.local_index = index.local_index;
-    tile.orientation = 0; /* TODO */
-    tile.center = 0; /* TODO */
+    tile.orientation = NORTH;
+    tile.center = false;
     for (i = 0; i < MAX_TYPE_EXPANSIONS; i++) {
-        tile.data[i] = 0; /* TODO*/
+        tile.data[i] = NO_TYPE;
     }
     for (i = 0; i < DIRECTIONS; i++) {
         tile.connections[i] = 0; /* TODO */
