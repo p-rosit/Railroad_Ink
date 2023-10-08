@@ -8,8 +8,8 @@
  * Boolean
  */
 typedef size_t bool;
-#define true (1);
-#define false (0);
+#define true (1)
+#define false (0)
 
 /**
  *  Size of the game board.

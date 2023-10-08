@@ -24,7 +24,7 @@ typedef struct tile {
 } tile_t;
 
 typedef struct tile_load_data {
-    size_t expansion_index;
+    size_t global_expansion_index;
     size_t local_expansion_index;
     size_t local_index;
 } tile_load_data_t;

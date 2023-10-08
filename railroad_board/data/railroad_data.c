@@ -6,9 +6,10 @@
 #include "expansion_data.h"
 #include "railroad_data.h"
 
-size_t count_expansion_tiles(expansion_index_t*);
-size_t expansion_tile_amount(expansion_index_t);
-size_t load_expansion(board_data_t*, expansion_index_t, size_t);
+size_t              count_expansion_tiles(expansion_index_t[MAX_EXPANSIONS]);
+size_t              expansion_tile_amount(expansion_index_t);
+board_data_t*       load_expansion_list(size_t, expansion_index_t[MAX_EXPANSIONS], expansion_index_t[MAX_EXPANSIONS]);
+size_t              load_expansion(board_data_t*, expansion_index_t, size_t);
 
 
 const game_data_t load_data(expansion_index_t expansions[MAX_EXPANSIONS]) {
@@ -16,15 +17,7 @@ const game_data_t load_data(expansion_index_t expansions[MAX_EXPANSIONS]) {
     board_data_t* tile_data;
 
     tile_amount = count_expansion_tiles(expansions);
-
-    index = 0;
-    tile_data = malloc(TILE_DATA_WIDTH * tile_amount * sizeof(board_data_t));
-    for (i = 0; i < MAX_EXPANSIONS; i++) {
-        if (expansion_has_tiles(expansions[i])) {
-            expansion_index[i] = index;
-            index = load_expansion(tile_data, expansions[i], index);
-        }
-    }
+    tile_data = load_expansion_list(tile_amount, expansions, expansion_index);
 
     game_data_t game_data = (game_data_t ) {
         .connection_data = (connection_data_t) {
@@ -53,26 +46,53 @@ size_t count_expansion_tiles(expansion_index_t* expansions) {
     return tile_amount;
 }
 
+board_data_t* load_expansion_list(size_t tile_amount, expansion_index_t expansions[MAX_EXPANSIONS], expansion_index_t expansion_index[MAX_EXPANSIONS]) {
+    size_t index;
+    board_data_t* tile_data;
+
+    index = 0;
+    tile_data = malloc(TILE_DATA_WIDTH * tile_amount * sizeof(board_data_t));
+    for (size_t i = 0; i < MAX_EXPANSIONS; i++) {
+        if (expansion_has_tiles(expansions[i])) {
+            expansion_index[i] = index;
+            index = load_expansion(tile_data, expansions[i], index);
+        }
+    }
+
+    return tile_data;
+}
+
+
 void free_data(const game_data_t game_data) {
     free((board_data_t*) game_data.tile_data);
 }
 
-tile_t load_tile(const game_data_t game_data, tile_load_data_t index) {
-    size_t i;
+tile_t load_tile(const game_data_t game_data, tile_load_data_t tile_data) {
+    size_t i, expansion_start_index, tile_start_index, index;
+    board_data_t tile_type;
     tile_t tile;
 
-    tile.expansion_index = index.expansion_index;
-    tile.local_index = index.local_index;
+    tile.expansion_index = tile_data.global_expansion_index;
+    tile.local_index = tile_data.local_index;
     tile.orientation = NORTH;
     tile.center = false;
     for (i = 0; i < MAX_TYPE_EXPANSIONS; i++) {
         tile.data[i] = NO_TYPE;
     }
+
+    expansion_start_index = game_data.expansion_index[tile_data.local_expansion_index];
+    tile_start_index = expansion_start_index + 6 * tile_data.local_index;
+
+    tile_type = game_data.tile_data[tile_start_index];
+
     for (i = 0; i < DIRECTIONS; i++) {
-        tile.connections[i] = 0; /* TODO */
+        tile.connections[i] = game_data.tile_data[tile_start_index + 1 + i];
     }
+
     for (i = 0; i < MAX_TILE_NETWORKS * DIRECTIONS; i++) {
-        tile.networks[i] = 0; /* TODO */
+        tile.networks[i] = game_data.connection_data.networks[
+            MAX_TILE_NETWORKS * DIRECTIONS * tile_type + i
+        ];
     }
 
     return tile;

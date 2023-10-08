@@ -11,7 +11,7 @@ void clear_expansion_list(expansion_index_t* expansions) {
 
 tile_load_data_t make_tile_data(expansion_index_t exp, expansion_index_t local_exp, size_t local) {
     return (tile_load_data_t) {
-        .expansion_index = exp,
+        .global_expansion_index = exp,
         .local_expansion_index = local_exp,
         .local_index = local
     };
