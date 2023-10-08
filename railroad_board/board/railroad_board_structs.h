@@ -23,10 +23,11 @@ typedef struct tile {
     board_data_t networks[MAX_TILE_NETWORKS * DIRECTIONS];
 } tile_t;
 
-typedef struct tile_data {
+typedef struct tile_load_data {
     size_t expansion_index;
+    size_t local_expansion_index;
     size_t local_index;
-} tile_data_t;
+} tile_load_data_t;
 
 typedef struct board_load_info {
     board_size_t height;

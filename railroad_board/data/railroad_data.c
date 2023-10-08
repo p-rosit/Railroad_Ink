@@ -6,7 +6,8 @@
 #include "expansion_data.h"
 #include "railroad_data.h"
 
-size_t count_expansion_tiles(expansion_index_t);
+size_t count_expansion_tiles(expansion_index_t*);
+size_t expansion_tile_amount(expansion_index_t);
 size_t load_expansion(board_data_t*, expansion_index_t, size_t);
 
 
@@ -14,18 +15,15 @@ const game_data_t load_data(expansion_index_t expansions[MAX_EXPANSIONS]) {
     size_t i, tile_amount, index, expansion_index[MAX_EXPANSIONS];
     board_data_t* tile_data;
 
-    tile_amount = 0;
-    for (i = 0; i < MAX_EXPANSIONS; i++) {
-        if (expansion_has_tiles(expansions[i])) {
-            tile_amount += count_expansion_tiles(expansions[i]);
-        }
-    }
+    tile_amount = count_expansion_tiles(expansions);
 
     index = 0;
     tile_data = malloc(TILE_DATA_WIDTH * tile_amount * sizeof(board_data_t));
     for (i = 0; i < MAX_EXPANSIONS; i++) {
-        expansion_index[i] = index;
-        index = load_expansion(tile_data, expansions[i], index);
+        if (expansion_has_tiles(expansions[i])) {
+            expansion_index[i] = index;
+            index = load_expansion(tile_data, expansions[i], index);
+        }
     }
 
     game_data_t game_data = (game_data_t ) {
@@ -45,11 +43,21 @@ const game_data_t load_data(expansion_index_t expansions[MAX_EXPANSIONS]) {
     return game_data;
 }
 
+size_t count_expansion_tiles(expansion_index_t* expansions) {
+    size_t tile_amount = 0;
+    for (size_t i = 0; i < MAX_EXPANSIONS; i++) {
+        if (expansion_has_tiles(expansions[i])) {
+            tile_amount += expansion_tile_amount(expansions[i]);
+        }
+    }
+    return tile_amount;
+}
+
 void free_data(const game_data_t game_data) {
     free((board_data_t*) game_data.tile_data);
 }
 
-tile_t load_tile(const game_data_t game_data, tile_data_t index) {
+tile_t load_tile(const game_data_t game_data, tile_load_data_t index) {
     size_t i;
     tile_t tile;
 
@@ -97,7 +105,7 @@ size_t load_expansion(board_data_t* tile_data, expansion_index_t expansion, size
     }
 }
 
-size_t count_expansion_tiles(expansion_index_t expansion) {
+size_t expansion_tile_amount(expansion_index_t expansion) {
     switch (expansion) {
         case e_STANDARD:
             return STANDARD_TILES;

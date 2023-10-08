@@ -43,7 +43,7 @@ void free_data(const game_data_t);
 /**
  * Loads a tile from a particular expansion.
  */
-tile_t load_tile(const game_data_t, tile_data_t);
+tile_t load_tile(const game_data_t, tile_load_data_t);
 
 #endif
 
