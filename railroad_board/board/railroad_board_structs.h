@@ -1,9 +1,9 @@
 #ifndef RAILROAD_BOARD_STRUCTS_H
 #define RAILROAD_BOARD_STRUCTS_H
 
-#include "../railroad_types.h"
-#include "../railroad_expansions.h"
-#include "../railroad_constants.h"
+#include "../utils/railroad_types.h"
+#include "../utils/railroad_expansions.h"
+#include "../utils/railroad_constants.h"
 
 /**
  * A structure which holds information about a tile.

@@ -1,8 +1,8 @@
 #ifndef BOARD_STRUCT_H
 #define BOARD_STRUCT_H
-#include "../../railroad_types.h"
-#include "../../railroad_expansions.h"
-#include "../../railroad_constants.h"
+#include "../../utils/railroad_types.h"
+#include "../../utils/railroad_expansions.h"
+#include "../../utils/railroad_constants.h"
 #include "../../data/railroad_data.h"
 
 /**

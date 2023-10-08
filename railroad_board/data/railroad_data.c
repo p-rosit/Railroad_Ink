@@ -1,7 +1,7 @@
 #include <stdio.h>
-#include "../railroad_types.h"
-#include "../railroad_expansions.h"
-#include "../railroad_constants.h"
+#include "../utils/railroad_types.h"
+#include "../utils/railroad_expansions.h"
+#include "../utils/railroad_constants.h"
 #include "data_utils.h"
 #include "expansion_data.h"
 #include "railroad_data.h"

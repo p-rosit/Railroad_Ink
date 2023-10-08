@@ -3,8 +3,8 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "../../railroad_constants.h"
-#include "../../railroad_types.h"
+#include "../../utils/railroad_constants.h"
+#include "../../utils/railroad_types.h"
 #include "../../data/railroad_data.h"
 #include "board_struct.h"
 

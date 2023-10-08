@@ -1,6 +1,6 @@
 #include "../../../cut/cut.h"
 
-#include "../../railroad_types.h"
+#include "../../utils/railroad_types.h"
 #include "../railroad_board.h"
 
 

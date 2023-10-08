@@ -1,7 +1,7 @@
 #ifndef EXPANSION_DATA_H
 #define EXPANSION_DATA_H
 #include "data_utils.h"
-#include "../railroad_constants.h"
+#include "../utils/railroad_constants.h"
 #include "railroad_data.h"
 
 LOAD_EXPANSION_FUNCTION(standard, STANDARD_TILES,
