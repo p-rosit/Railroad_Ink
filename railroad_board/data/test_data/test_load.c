@@ -38,7 +38,7 @@ UNIT_TEST(load_max_expansions) {
     index = 0;
     expansion_index = 0;
     while (index < MAX_EXPANSIONS && expansion_index < TOTAL_EXPANSIONS) {
-        if (expansion_has_tiles(expansion_index)) {
+        if (true) {
             expansions[index++] = expansion_index;
         }
         expansion_index += 1;

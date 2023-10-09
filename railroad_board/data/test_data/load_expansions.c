@@ -57,7 +57,7 @@
         for (j = 0; j < DIRECTIONS; j++) {                                      \
             ASSERT_TRUE(                                                        \
                 tile.connections[j] < TOTAL_CONNECTIONS,                        \
-                "Invalid connection saved in tile %lu. Got %lu.",               \
+                "Tile %lu, Invalid connection saved, got %lu.",                 \
                 index, tile.connections[j]                                      \
             );                                                                  \
         }                                                                       \
@@ -68,15 +68,15 @@
                                                                                 \
         ASSERT_TRUE(                                                            \
             sum <= DIRECTIONS,                                                  \
-            "Some directions belong to more than one inner "                    \
-            "tile network. In tile %lu.",                                       \
+            "Tile %lu: Some directions belong to more than "                    \
+            "one inner tile network.",                                          \
             index                                                               \
         );                                                                      \
                                                                                 \
         for (j = 0; j < MAX_TYPE_EXPANSIONS; j++) {                             \
             ASSERT_EQUAL(                                                       \
                 tile.data[j], NO_TYPE,                                          \
-                "Type information of tile %lu has already been "                \
+                "Tile %lu: type information has already been "                  \
                 "filled in. Got %lu.",                                          \
                 index, tile.data[j]                                             \
             );                                                                  \
