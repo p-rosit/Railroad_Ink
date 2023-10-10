@@ -26,3 +26,7 @@ void set_tile_data(board_t board, board_data_t value, size_t index, board_coord_
     board->tiles[coord.row * (board->width + 2) + coord.col].data[index] = value;
 }
 
+expansion_index_t* get_board_expansions(board_t board) {
+    return board->expansions;
+}
+
