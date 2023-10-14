@@ -26,15 +26,15 @@ board_t make_board(board_load_info_t info) {
     expansions_ok = save_expansions(info, board);
 
     if (!expansions_ok) {
+        /* Tried to load unknown expansion. */
         return NULL;
     }
 
     marked = mark_tile_expansions(board);
     marked = mark_type_expansions(board);
 
-    // printf("D: %lu\n", marked);
     if (marked > MAX_TYPE_EXPANSIONS) {
-        // printf("WARNING: Tried to load more than %d expansions with types.", MAX_TYPE_EXPANSIONS);
+        /* Tried to load more than MAX_TYPE_EXPANSIONS expansions with types. */
         return NULL;
     }
 
@@ -52,7 +52,7 @@ bool save_expansions(board_load_info_t info, board_t board) {
         index = info.expansions[i];
 
         if (!(index < TOTAL_EXPANSIONS) && index != NO_EXPANSION) {
-            // printf("WARNING: Trying to load unknown expansions %lu.", index);
+            /* Trying to load unknown expansion. */
             expansions_ok = false;
             break;
         } 
@@ -60,6 +60,10 @@ bool save_expansions(board_load_info_t info, board_t board) {
         if (index != NO_EXPANSION) {
             board->expansions[curr++] = index;
         }
+    }
+
+    for (i = curr; i < MAX_EXPANSIONS; i++) {
+        board->expansions[i] = NO_EXPANSION;
     }
 
     return expansions_ok;
