@@ -5,10 +5,11 @@
 #include "../railroad_board.h"
 
 
+/* Helper functions */
+
 void copy_expansions(expansion_index_t dst[TOTAL_EXPANSIONS], const expansion_index_t src[TOTAL_EXPANSIONS]) {
     memcpy(dst, src, MAX_EXPANSIONS * sizeof(expansion_index_t));
 }
-
 
 board_coord_t make_coord(board_size_t row, board_size_t col) {
     return (board_coord_t) {.row = row, .col = col};
@@ -20,7 +21,6 @@ void clear_expansion_list(expansion_index_t expansions[MAX_EXPANSIONS]) {
         expansions[i] = NO_EXPANSION;
     }
 }
-
 
 board_load_info_t new_info(board_size_t height, board_size_t width) {
     board_load_info_t info;
@@ -60,6 +60,8 @@ bool has_duplicates(expansion_index_t expansions[MAX_EXPANSIONS], expansion_inde
     return false;
 }
 
+
+/* Unit tests */
 
 UNIT_TEST(test_coord_on_board) {
     size_t i, j;
@@ -150,6 +152,6 @@ UNIT_TEST(get_expansions) {
 
 LIST_TESTS(
     test_coord_on_board,
-    get_expansions
+    get_expansions,
 )
 

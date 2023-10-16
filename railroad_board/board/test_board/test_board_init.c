@@ -92,11 +92,32 @@ UNIT_TEST(init_with_invalid_expansion) {
     TEST_END;
 }
 
+UNIT_TEST(test_free_board) {
+    board_t board;
+    board_load_info_t info;
+
+    info = new_info(1, 1);
+    info.expansions[0] = e_STANDARD;
+
+    board = make_board(info);
+    ASSERT_NOT_NULL(board, "Previous test failed.");
+    free_board(board);
+
+    TEST_END;
+}
+
+UNIT_TEST(test_free_no_board) {
+    free_board(NULL);
+    TEST_END;
+}
+
 LIST_TESTS(
     init_board,
     too_many_type_expansions,
     init_normal,
     init_with_buildings,
     init_with_invalid_expansion,
+    test_free_board,
+    test_free_no_board,
 )
 

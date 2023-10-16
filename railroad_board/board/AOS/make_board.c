@@ -10,6 +10,7 @@ size_t  mark_tile_expansions(board_t);
 size_t  mark_type_expansions(board_t);
 void    load_board_data(board_t);
 
+/* Implementation of railroad_board.h */
 
 board_t make_board(board_load_info_t info) {
     size_t total_entries, marked;
@@ -42,6 +43,17 @@ board_t make_board(board_load_info_t info) {
 
     return board;
 }
+
+
+void free_board(board_t board) {
+    if (board == NULL) return;
+    free((board_data_t *) (board->game_data.tile_data));
+    free(board->tiles);
+    free(board);
+}
+
+
+/* Helper functions */
 
 bool save_expansions(board_load_info_t info, board_t board) {
     size_t i, curr;
@@ -103,11 +115,5 @@ void load_board_data(board_t board) {
     /* Bypass C type system to assign to const once */
     game_data_t game_data = load_data(board->tile_expansions);
     memcpy((game_data_t*) &(board->game_data), &game_data, sizeof(game_data_t));
-}
-
-void free_board(board_t board) {
-    free((board_data_t *) (board->game_data.tile_data));
-    free(board->tiles);
-    free(board);
 }
 
