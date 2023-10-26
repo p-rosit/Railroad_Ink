@@ -11,6 +11,9 @@ board_load_info_t   new_info(board_size_t, board_size_t);
 bool                expansion_exists(expansion_index_t[MAX_EXPANSIONS], expansion_index_t);
 bool                has_duplicates(expansion_index_t[MAX_EXPANSIONS], expansion_index_t);
 
+SUB_TEST(check_coord_on, board_t, board_coord_t, board_size_t, board_size_t);
+SUB_TEST(check_coord_off, board_t, board_coord_t, board_size_t, board_size_t);
+
 
 /* Unit tests */
 
@@ -29,27 +32,33 @@ UNIT_TEST(test_coord_on_board) {
 
     for (i = 0; i < height; i++) {
         for (j = 0; j < width; j++) {
-            exists = coord_on_board(board, make_coord(i + 1, j + 1));
-            ASSERT_TRUE(exists, "Coordinate (%d, %d) does not exist on board of size (%d, %d).", i+1, j+1, height, width);
+            CALL_TEST(check_coord_on, board, make_coord(i + 1, j + 1), height, width);
         }
     }
 
     for (i = 0; i < height + 2; i++) {
-        exists = coord_on_board(board, make_coord(i, 0));
-        ASSERT_FALSE(exists, "Coordinate (%d, 0) should not exist on board of size (%d, %d).", i, height, width);
-
-        exists = coord_on_board(board, make_coord(i, width + 1));
-        ASSERT_FALSE(exists, "Coordinate (%d, %d) should not exist on board of size (%d, %d).", i, width + 1, height, width);
+        CALL_TEST(check_coord_off, board, make_coord(i, 0), height, width);
+        CALL_TEST(check_coord_off, board, make_coord(i, width + 1), height, width);
     }
 
     for (j = 0; j < width + 2; j++) {
-        exists = coord_on_board(board, make_coord(0, j));
-        ASSERT_FALSE(exists, "Coordinate (0, %d) should not exist on board of size (%d, %d).", j, height, width);
-
-        exists = coord_on_board(board, make_coord(height + 1, j));
-        ASSERT_FALSE(exists, "Coordinate (%d, %d) should not exist on board of size (%d, %d).", height + 1, j, height, width);
+        CALL_TEST(check_coord_off, board, make_coord(0, j), height, width);
+        CALL_TEST(check_coord_off, board, make_coord(height + 1, j), height, width);
     }
 
+    TEST_END;
+}
+
+
+SUB_TEST(check_coord_on, board_t board, board_coord_t coords, board_size_t height, board_size_t width) {
+    bool exists = coord_on_board(board, coords);
+    ASSERT_TRUE(exists, "Coordinate (%lu, %lu) should exist on board of size (%lu, %lu)", coords.col, coords.row, height, width);
+    TEST_END;
+}
+
+SUB_TEST(check_coord_off, board_t board, board_coord_t coord, board_size_t height, board_size_t width) {
+    bool exists = coord_on_board(board, coord);
+    ASSERT_FALSE(exists, "Coordinate (%lu, %lu) should not exist on board of size (%lu, %lu)", coord.col, coord.row, height, width);
     TEST_END;
 }
 
