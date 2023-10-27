@@ -20,11 +20,10 @@ struct board {
     size_t type_expansions[MAX_EXPANSIONS];
 
     /* Game data */
-    const game_data_t game_data;
+    const game_data_t   game_data;
 
     /* Board and information about it */
-    board_size_t        height;
-    board_size_t        width;
+    board_shape_t       shape;
     tile_t*             tiles;
 };
 

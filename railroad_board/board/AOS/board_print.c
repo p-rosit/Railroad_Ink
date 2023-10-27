@@ -12,14 +12,16 @@ void print_board(board_t board, size_t layer) {
     board_size_t i, j;
     tile_t tile;
     board_data_t value;
+    board_shape_t shape;
 
     value = 0;
     size = 2;
-    for (i = 0; i < board->height + 2; i++) {
-        is_border = i * (i - board->height - 1) == 0;
-        for (j = 0; j < board->width + 2; j++) {
-            js_border = is_border || j * (j - board->width - 1) == 0;
-            tile = board->tiles[i * (board->width + 2) + j];
+    shape = board->shape;
+    for (i = 0; i < shape.height + 2; i++) {
+        is_border = i * (i - shape.height - 1) == 0;
+        for (j = 0; j < shape.width + 2; j++) {
+            js_border = is_border || j * (j - shape.width - 1) == 0;
+            tile = board->tiles[i * (shape.width + 2) + j];
 
             if (tile.local_index != 0 || !js_border) {
                 if (layer == EXPANSION_INDEX_INDEX) {
@@ -54,6 +56,6 @@ void print_game_data(board_t board) {
     }
     printf("\n");
 
-    printf(":) (%lu, %lu)\n", board->height, board->width);
+    printf(":) (%lu, %lu)\n", board->shape.height, board->shape.width);
 }
 

@@ -39,6 +39,11 @@ void free_board(board_t);
 expansion_index_t* get_board_expansions(board_t);
 
 /**
+ * Returns the shape of a board
+ */
+board_shape_t get_board_shape(board_t);
+
+/**
  * Returns true if the supplied set of coordinates exists on the board.
  */
 bool coord_on_board(board_t, board_coord_t);

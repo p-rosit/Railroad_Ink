@@ -23,6 +23,16 @@ typedef struct tile {
     board_data_t networks[MAX_TILE_NETWORKS * DIRECTIONS];
 } tile_t;
 
+typedef struct board_coord {
+    board_size_t row;
+    board_size_t col;
+} board_coord_t;
+
+typedef struct board_shape {
+    board_size_t height;
+    board_size_t width;
+} board_shape_t;
+
 typedef struct tile_load_data {
     size_t global_expansion_index;
     size_t local_expansion_index;
@@ -30,15 +40,9 @@ typedef struct tile_load_data {
 } tile_load_data_t;
 
 typedef struct board_load_info {
-    board_size_t height;
-    board_size_t width;
+    board_shape_t shape;
     expansion_index_t expansions[MAX_EXPANSIONS];
 } board_load_info_t;
-
-typedef struct board_coord {
-    board_size_t row;
-    board_size_t col;
-} board_coord_t;
 
 #endif
 

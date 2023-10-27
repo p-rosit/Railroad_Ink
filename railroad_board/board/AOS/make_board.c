@@ -17,11 +17,11 @@ board_t make_board(board_load_info_t info) {
     board_t board;
     bool expansions_ok;
 
-    total_entries = (info.height + 2) * (info.width * 2);
+    total_entries = (info.shape.height + 2) * (info.shape.width * 2);
 
     board = malloc(sizeof(struct board));
-    board->width = info.width;
-    board->height = info.height;
+    board->shape.width = info.shape.width;
+    board->shape.height = info.shape.height;
     board->tiles = calloc(total_entries, sizeof(tile_t));
 
     expansions_ok = save_expansions(info, board);

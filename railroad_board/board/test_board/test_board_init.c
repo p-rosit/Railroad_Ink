@@ -7,8 +7,8 @@
 board_load_info_t new_info(board_size_t height, board_size_t width) {
     board_load_info_t info;
 
-    info.height = height;
-    info.width = width;
+    info.shape.height = height;
+    info.shape.width = width;
     for (size_t i = 0; i < MAX_EXPANSIONS; i++) {
         info.expansions[i] = NO_EXPANSION;
     }

@@ -13,20 +13,24 @@
 
 
 bool coord_on_board(board_t board, board_coord_t coord) {
-    bool in_cols = (1 <= coord.row) && (coord.row <= board->height);
-    bool in_rows = (1 <= coord.col) && (coord.col <= board->width);
+    bool in_cols = (1 <= coord.row) && (coord.row <= board->shape.height);
+    bool in_rows = (1 <= coord.col) && (coord.col <= board->shape.width);
     return in_cols && in_rows;
 }
 
 void add_tile_to_board(board_t board, tile_t tile, board_coord_t coord) {
-    memcpy(&board->tiles[coord.row * (board->width + 2) + coord.col], &tile, sizeof(tile_t));
+    memcpy(&board->tiles[coord.row * (board->shape.width + 2) + coord.col], &tile, sizeof(tile_t));
 }
 
 void set_tile_data(board_t board, board_data_t value, size_t index, board_coord_t coord) {
-    board->tiles[coord.row * (board->width + 2) + coord.col].data[index] = value;
+    board->tiles[coord.row * (board->shape.width + 2) + coord.col].data[index] = value;
 }
 
 expansion_index_t* get_board_expansions(board_t board) {
     return board->expansions;
+}
+
+board_shape_t get_board_shape(board_t board) {
+    return board->shape;
 }
 
